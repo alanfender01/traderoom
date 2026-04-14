@@ -1072,14 +1072,26 @@ function assinar() {
 }
 
 function entrarLobby() {
-  isVisitor = false
-  const email = document.getElementById('c-email')?.value?.trim() || document.getElementById('l-email')?.value?.trim() || ''
-  currentUser.email = email
-  currentUser.trader_id = currentId || currentUser.trader_id
-  updateUserUI()
-  go('s-lobby')
-  renderRooms()
-  toast('Bem-vindo, ' + currentUser.trader_id + '!', 't-g')
+  const email = document.getElementById('l-email')?.value?.trim() || ''
+  const senha = document.getElementById('l-pwd')?.value?.trim() || ''
+  if (!email || !senha) { toast('Informe email e senha','t-r'); return }
+  fetch(BACKEND + '/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, senha })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.erro) { toast(data.erro, 't-r'); return }
+    isVisitor = false
+    currentUser.trader_id = data.trader_id
+    currentUser.email = email
+    updateUserUI()
+    go('s-lobby')
+    renderRooms()
+    toast('Bem-vindo, ' + data.trader_id + '!', 't-g')
+  })
+  .catch(() => toast('Erro de conexao', 't-r'))
 }
 
 function resetCad() {
