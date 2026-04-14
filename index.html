@@ -959,11 +959,11 @@ canvas{display:block;width:100%;height:100%}
     </div>
     <div style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:1.2rem">Dúvidas ou quer fazer parceria? Fale diretamente:</div>
     <div style="display:flex;flex-direction:column;gap:10px">
-      <a href="mailto:alanfender@proton.me" style="display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;text-decoration:none;transition:border-color .15s" onmouseover="this.style.borderColor='var(--g)'" onmouseout="this.style.borderColor='var(--border2)'">
+      <a href="/cdn-cgi/l/email-protection#fb9a979a959d9e959f9e89bb8b89948f9495d5969e" style="display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;text-decoration:none;transition:border-color .15s" onmouseover="this.style.borderColor='var(--g)'" onmouseout="this.style.borderColor='var(--border2)'">
         <div style="width:38px;height:38px;border-radius:8px;background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">✉</div>
         <div>
           <div style="font-family:var(--mono);font-size:10px;color:var(--g);letter-spacing:1px;margin-bottom:3px">EMAIL</div>
-          <div style="font-family:var(--mono);font-size:13px;color:var(--t1)">alanfender@proton.me</div>
+          <div style="font-family:var(--mono);font-size:13px;color:var(--t1)"><span class="__cf_email__" data-cfemail="aacbc6cbc4cccfc4cecfd8eadad8c5dec5c484c7cf">[email&#160;protected]</span></div>
         </div>
       </a>
       <a href="https://wa.me/5511941855616" target="_blank" style="display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;text-decoration:none;transition:border-color .15s" onmouseover="this.style.borderColor='#25D366'" onmouseout="this.style.borderColor='var(--border2)'">
@@ -1034,7 +1034,7 @@ canvas{display:block;width:100%;height:100%}
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ==================== STATE ====================
 let currentUser = { trader_id: 'trader_7k4x', email: '' }
 let isVisitor = true
@@ -1080,8 +1080,8 @@ function entrarLobby() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, senha })
   })
-  .then(r => r.json())
-  .then(data => {
+  .then(function(r) { return r.json() })
+  .then(function(data) {
     if (data.erro) { toast(data.erro, 't-r'); return }
     isVisitor = false
     currentUser.trader_id = data.trader_id
@@ -1091,7 +1091,7 @@ function entrarLobby() {
     renderRooms()
     toast('Bem-vindo, ' + data.trader_id + '!', 't-g')
   })
-  .catch(() => toast('Erro de conexao', 't-r'))
+  .catch(function() { toast('Erro de conexao', 't-r') })
 }
 
 function resetCad() {
@@ -1181,7 +1181,7 @@ function cadNext() {
   document.getElementById('cad-step2').style.display = ''
 }
 
-function function cadFinalizar() {
+function cadFinalizar() {
   const p1 = document.getElementById('c-pwd1').value
   const p2 = document.getElementById('c-pwd2').value
   if (p1.length < 8) { toast('Senha muito curta','t-r'); return }
@@ -1190,32 +1190,20 @@ function function cadFinalizar() {
   fetch(BACKEND + '/auth/cadastro', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, senha: p1, trader_id: currentId })
+    body: JSON.stringify({ email: email, senha: p1, trader_id: currentId })
   })
-  .then(r => r.json())
-  .then(data => {
+  .then(function(r) { return r.json() })
+  .then(function(data) {
     if (data.erro) { toast(data.erro, 't-r'); return }
-    localStorage.setItem('tr_token', data.token)
-    localStorage.setItem('tr_id', data.trader_id)
+    isVisitor = false
     currentUser.trader_id = data.trader_id
     document.getElementById('final-id').textContent = '#' + data.trader_id
     document.getElementById('final-email').textContent = email
-    document.getElementById('final-pwd').textContent = '••••••••'
+    document.getElementById('final-pwd').textContent = '........'
     document.getElementById('cad-step2').style.display = 'none'
     document.getElementById('cad-step3').style.display = ''
   })
-  .catch(() => toast('Erro de conexao', 't-r'))
-}() {
-  const p1 = document.getElementById('c-pwd1').value
-  const p2 = document.getElementById('c-pwd2').value
-  if (p1.length < 8) { toast('Senha muito curta','t-r'); return }
-  if (p1 !== p2) { toast('Senhas não conferem','t-r'); return }
-  document.getElementById('final-id').textContent = '#' + currentId
-  document.getElementById('final-email').textContent = document.getElementById('c-email').value
-  document.getElementById('final-pwd').textContent = p1
-  document.getElementById('cad-step2').style.display = 'none'
-  document.getElementById('cad-step3').style.display = ''
-  currentUser.trader_id = currentId
+  .catch(function() { toast('Erro de conexao', 't-r') })
 }
 
 // ==================== LOBBY ====================
@@ -1685,14 +1673,4 @@ function renderAdminList(users) {
 
 function admFilter(v) {
   var filtered = ADM_USERS.filter(function(u) {
-    return u.id.includes(v.toLowerCase()) || u.email.includes(v.toLowerCase())
-  })
-  renderAdminList(filtered)
-}
-
-document.addEventListener('keydown', function(e) {
-  if (e.ctrlKey && e.shiftKey && e.key === 'A') openAdmin()
-})
-</script>
-</body>
-</html>
+    retur
