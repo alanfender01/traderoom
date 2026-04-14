@@ -1038,6 +1038,7 @@ canvas{display:block;width:100%;height:100%}
 // ==================== STATE ====================
 let currentUser = { trader_id: 'trader_7k4x', email: '' }
 let isVisitor = true
+const BACKEND = 'https://traderoom-backend-production.up.railway.app'
 let isAssinante = false
 let currentMkt = 'b3'
 let isHost = true
@@ -1168,7 +1169,31 @@ function cadNext() {
   document.getElementById('cad-step2').style.display = ''
 }
 
-function cadFinalizar() {
+function function cadFinalizar() {
+  const p1 = document.getElementById('c-pwd1').value
+  const p2 = document.getElementById('c-pwd2').value
+  if (p1.length < 8) { toast('Senha muito curta','t-r'); return }
+  if (p1 !== p2) { toast('Senhas nao conferem','t-r'); return }
+  const email = document.getElementById('c-email').value
+  fetch(BACKEND + '/auth/cadastro', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, senha: p1, trader_id: currentId })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.erro) { toast(data.erro, 't-r'); return }
+    localStorage.setItem('tr_token', data.token)
+    localStorage.setItem('tr_id', data.trader_id)
+    currentUser.trader_id = data.trader_id
+    document.getElementById('final-id').textContent = '#' + data.trader_id
+    document.getElementById('final-email').textContent = email
+    document.getElementById('final-pwd').textContent = '••••••••'
+    document.getElementById('cad-step2').style.display = 'none'
+    document.getElementById('cad-step3').style.display = ''
+  })
+  .catch(() => toast('Erro de conexao', 't-r'))
+}() {
   const p1 = document.getElementById('c-pwd1').value
   const p2 = document.getElementById('c-pwd2').value
   if (p1.length < 8) { toast('Senha muito curta','t-r'); return }
