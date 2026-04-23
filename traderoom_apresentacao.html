@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeRoom — Apresentação do Projeto</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#080a0c;--bg1:#0d1014;--bg2:#121518;--bg3:#181c22;--bg4:#1e232b;
+  --g:#00e5a0;--b:#0af;--r:#ff4560;--y:#f5a623;--p:#a78bfa;--o:#ff6b35;
+  --gold:#c9a84c;--gold2:#e8c76a;
+  --t1:#edf0f4;--t2:#8892a0;--t3:#454e5c;--t4:#2a303a;
+  --border:#1a1f28;--border2:#252d38;
+  --mono:'JetBrains Mono',monospace;
+  --display:'Syne',sans-serif;
+  --serif:'Playfair Display',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg0);color:var(--t1);font-family:var(--display);overflow-x:hidden}
+
+/* GRID BG */
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,160,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,160,.025) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;z-index:0}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;background:rgba(8,10,12,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-size:20px;font-weight:800;letter-spacing:-1px;color:var(--t1)}
+.nav-logo span{color:var(--g)}
+.nav-links{display:flex;gap:6px}
+.nav-link{font-family:var(--mono);font-size:10px;color:var(--t3);padding:5px 12px;border-radius:4px;cursor:pointer;transition:all .15s;letter-spacing:.5px;text-decoration:none}
+.nav-link:hover{color:var(--t1);background:var(--bg3)}
+.nav-badge{font-family:var(--mono);font-size:10px;padding:5px 14px;border-radius:4px;background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.25);color:var(--g)}
+
+/* SECTIONS */
+section{position:relative;z-index:1}
+.wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 24px}
+.hero-inner{max-width:800px}
+.hero-eyebrow{font-family:var(--mono);font-size:10px;color:var(--g);letter-spacing:4px;margin-bottom:1.2rem;opacity:.8}
+.hero-title{font-family:var(--serif);font-size:clamp(48px,7vw,88px);font-weight:900;line-height:1.0;letter-spacing:-2px;margin-bottom:1.2rem}
+.hero-title .accent{color:var(--g)}
+.hero-sub{font-size:18px;color:var(--t2);line-height:1.7;max-width:540px;margin:0 auto 2.5rem}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+.btn-p{padding:14px 32px;background:var(--g);border:none;border-radius:7px;color:#080a0c;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:opacity .15s;text-decoration:none;display:inline-block}
+.btn-p:hover{opacity:.85}
+.btn-g{padding:14px 28px;background:transparent;border:1px solid var(--border2);border-radius:7px;color:var(--t2);font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block}
+.btn-g:hover{border-color:var(--t2);color:var(--t1)}
+.hero-stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;padding-top:2.5rem;border-top:1px solid var(--border)}
+.hs-item{text-align:center}
+.hs-val{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--t1)}
+.hs-val.green{color:var(--g)}
+.hs-val.blue{color:var(--b)}
+.hs-val.yellow{color:var(--y)}
+.hs-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:1px;margin-top:3px}
+
+/* ── SECTION HEADER ── */
+.sec-header{text-align:center;margin-bottom:48px}
+.sec-eyebrow{font-family:var(--mono);font-size:9px;color:var(--g);letter-spacing:3px;margin-bottom:10px}
+.sec-title{font-family:var(--serif);font-size:clamp(28px,4vw,44px);font-weight:900;line-height:1.1;margin-bottom:10px}
+.sec-sub{font-size:15px;color:var(--t2);line-height:1.6;max-width:500px;margin:0 auto}
+
+/* ── O QUE É ── */
+#oque{padding:100px 0}
+.oque-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:0}
+.oque-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;position:relative;overflow:hidden;transition:all .2s}
+.oque-card:hover{border-color:var(--border2);background:var(--bg3)}
+.oque-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .2s}
+.oque-card:hover::before{opacity:1}
+.card-g::before{background:var(--g)}
+.card-b::before{background:var(--b)}
+.card-y::before{background:var(--y)}
+.card-p::before{background:var(--p)}
+.oc-icon{font-size:24px;margin-bottom:12px}
+.oc-title{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--t1);margin-bottom:6px}
+.oc-desc{font-size:13px;color:var(--t2);line-height:1.6}
+
+/* ── FUNCIONALIDADES ── */
+#funcionalidades{padding:100px 0;background:var(--bg1)}
+.func-list{display:flex;flex-direction:column;gap:16px}
+.func-item{display:flex;gap:20px;align-items:flex-start;padding:20px 24px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;transition:all .2s}
+.func-item:hover{border-color:var(--border2);transform:translateX(4px)}
+.fi-num{font-family:var(--mono);font-size:11px;color:var(--g);min-width:28px;margin-top:2px;opacity:.6}
+.fi-content{flex:1}
+.fi-title{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--t1);margin-bottom:5px}
+.fi-desc{font-size:13px;color:var(--t2);line-height:1.6}
+.fi-tags{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
+.fi-tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px}
+.tag-g{background:rgba(0,229,160,.08);color:var(--g);border:1px solid rgba(0,229,160,.15)}
+.tag-b{background:rgba(0,170,255,.08);color:var(--b);border:1px solid rgba(0,170,255,.15)}
+.tag-y{background:rgba(245,166,35,.08);color:var(--y);border:1px solid rgba(245,166,35,.15)}
+.tag-p{background:rgba(167,139,250,.08);color:var(--p);border:1px solid rgba(167,139,250,.15)}
+.tag-r{background:rgba(255,69,96,.08);color:var(--r);border:1px solid rgba(255,69,96,.15)}
+.tag-o{background:rgba(255,107,53,.08);color:var(--o);border:1px solid rgba(255,107,53,.15)}
+
+/* ── MERCADOS ── */
+#mercados{padding:100px 0}
+.mkt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mkt-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;transition:all .2s}
+.mkt-card:hover{background:var(--bg3)}
+.mkt-card.b3{border-top:3px solid var(--g)}
+.mkt-card.fx{border-top:3px solid var(--b)}
+.mkt-card.cr{border-top:3px solid var(--p)}
+.mkt-title{font-family:var(--mono);font-size:16px;font-weight:700;margin-bottom:8px}
+.mkt-title.g{color:var(--g)}
+.mkt-title.b{color:var(--b)}
+.mkt-title.p{color:var(--p)}
+.mkt-desc{font-size:12px;color:var(--t2);margin-bottom:14px;line-height:1.5}
+.mkt-ativos{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.at{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;font-weight:700}
+.at-b3{background:rgba(0,229,160,.1);color:var(--g);border:1px solid rgba(0,229,160,.2)}
+.at-fx{background:rgba(0,170,255,.1);color:var(--b);border:1px solid rgba(0,170,255,.2)}
+.at-cr{background:rgba(167,139,250,.1);color:var(--p);border:1px solid rgba(167,139,250,.2)}
+.mkt-horario{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:10px}
+
+/* ── MODELO SOCIAL ── */
+#social{padding:100px 0;background:var(--bg1)}
+.social-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.social-text .st-title{font-family:var(--serif);font-size:32px;font-weight:900;line-height:1.15;margin-bottom:14px}
+.social-text .st-desc{font-size:14px;color:var(--t2);line-height:1.7;margin-bottom:20px}
+.social-steps{display:flex;flex-direction:column;gap:10px}
+.ss-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:8px}
+.ss-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.ss-text{font-size:13px;color:var(--t2);line-height:1.5}
+.ss-text b{color:var(--t1)}
+.social-visual{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.sv-title{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;margin-bottom:4px}
+.sv-room{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:11px 13px}
+.svr-name{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.svr-meta{font-family:var(--mono);font-size:10px;color:var(--t3);margin-bottom:7px}
+.svr-at{display:flex;gap:4px;margin-bottom:7px}
+.svr-members{display:flex;gap:-4px}
+.member-av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;font-weight:700;border:1.5px solid var(--bg3)}
+.svr-sessions{font-family:var(--mono);font-size:10px;color:var(--g);margin-top:5px}
+
+/* ── MONETIZAÇÃO ── */
+#monetizacao{padding:100px 0}
+.mono-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px}
+.mono-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;transition:all .2s;position:relative}
+.mono-card:hover{background:var(--bg3)}
+.mono-card.destaque{border-color:rgba(201,168,76,.35);background:rgba(201,168,76,.03)}
+.mono-phase{font-family:var(--mono);font-size:9px;letter-spacing:2px;margin-bottom:10px;padding:3px 8px;border-radius:10px;display:inline-block}
+.ph-g{background:rgba(0,229,160,.1);color:var(--g)}
+.ph-b{background:rgba(0,170,255,.1);color:var(--b)}
+.ph-gold{background:rgba(201,168,76,.12);color:var(--gold)}
+.mono-icon{font-size:28px;margin-bottom:10px}
+.mono-title{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--t1);margin-bottom:6px}
+.mono-val{font-family:var(--serif);font-size:28px;font-weight:900;margin-bottom:4px}
+.mono-desc{font-size:12px;color:var(--t2);line-height:1.5}
+.mono-summary{background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.15);border-radius:10px;padding:20px 24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.ms-item{text-align:center;flex:1;min-width:120px}
+.ms-val{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--t1)}
+.ms-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:2px;letter-spacing:1px}
+.ms-sep{width:1px;height:40px;background:var(--border2)}
+
+/* ── PATROCINADORES ── */
+#patrocinadores{padding:100px 0;background:var(--bg1)}
+.pat-card{background:var(--bg2);border:1px solid rgba(255,107,53,.25);border-radius:12px;padding:28px;margin-bottom:20px}
+.pat-top{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.pat-icon{width:44px;height:44px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700;color:#fff}
+.pat-title{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--t1)}
+.pat-sub{font-size:13px;color:var(--t2)}
+.pat-benefits{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pb-item{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;background:var(--bg3);border-radius:6px}
+.pb-check{font-size:12px;color:var(--g);flex-shrink:0;margin-top:1px}
+.pb-text{font-size:12px;color:var(--t2);line-height:1.4}
+.pat-price{margin-top:16px;display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.15);border-radius:7px}
+.pp-label{font-family:var(--mono);font-size:10px;color:var(--t3);flex:1}
+.pp-val{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--o)}
+.pat-corps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:20px}
+.corp{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:12px;text-align:center;transition:all .2s}
+.corp:hover{border-color:var(--border2)}
+.corp-name{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--t1);margin-bottom:3px}
+.corp-type{font-size:10px;color:var(--t3)}
+
+/* ── TRADERCALC ── */
+#tradercalc{padding:100px 0}
+.tc-hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:40px}
+.tc-title{font-family:var(--serif);font-size:32px;font-weight:900;line-height:1.15;margin-bottom:12px}
+.tc-title span{color:var(--gold)}
+.tc-desc{font-size:14px;color:var(--t2);line-height:1.7;margin-bottom:16px}
+.tc-price-pill{display:inline-flex;align-items:baseline;gap:6px;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:100px;padding:8px 20px}
+.tpp-from{font-size:11px;color:var(--t3)}
+.tpp-val{font-family:var(--serif);font-size:26px;font-weight:900;color:var(--gold)}
+.tpp-per{font-size:12px;color:var(--t2)}
+.tc-visual{background:var(--bg2);border:1px solid rgba(201,168,76,.2);border-radius:10px;overflow:hidden}
+.tcv-header{padding:12px 16px;background:rgba(201,168,76,.05);border-bottom:1px solid rgba(201,168,76,.12);display:flex;align-items:center;gap:8px}
+.tcv-icon{width:26px;height:26px;background:linear-gradient(135deg,var(--g),var(--b));border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px}
+.tcv-name{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--t1)}
+.tcv-body{padding:16px}
+.tcv-feat{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
+.tcv-check{font-size:11px;color:var(--gold);flex-shrink:0;margin-top:1px}
+.tcv-text{font-size:12px;color:var(--t2);line-height:1.4}
+.tc-features{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tcf{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.tcf-icon{font-size:20px;margin-bottom:8px}
+.tcf-title{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.tcf-desc{font-size:11px;color:var(--t2);line-height:1.4}
+
+/* ── STACK TÉCNICA ── */
+#stack{padding:100px 0;background:var(--bg1)}
+.stack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.stack-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center;transition:all .2s}
+.stack-card:hover{border-color:var(--border2);background:var(--bg3)}
+.sc-name{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.sc-role{font-size:11px;color:var(--t2);line-height:1.4;margin-bottom:8px}
+.sc-tag{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px}
+.cost-bar{background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.15);border-radius:8px;padding:16px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.cb-item{text-align:center;flex:1;min-width:100px}
+.cb-phase{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:1px;margin-bottom:4px}
+.cb-val{font-family:var(--mono);font-size:18px;font-weight:700}
+.cb-val.free{color:var(--g)}
+.cb-val.low{color:var(--b)}
+.cb-val.mid{color:var(--y)}
+.cb-desc{font-size:10px;color:var(--t3);margin-top:2px}
+
+/* ── ROADMAP ── */
+#roadmap{padding:100px 0}
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:1px;background:var(--border2)}
+.tl-item{position:relative;margin-bottom:20px}
+.tl-dot{position:absolute;left:-23px;top:6px;width:10px;height:10px;border-radius:50%;border:2px solid}
+.tl-dot.g{border-color:var(--g);background:var(--bg0)}
+.tl-dot.b{border-color:var(--b);background:var(--bg0)}
+.tl-dot.y{border-color:var(--y);background:var(--bg0)}
+.tl-content{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
+.tl-phase{font-family:var(--mono);font-size:9px;letter-spacing:1px;margin-bottom:5px}
+.tl-title{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:5px}
+.tl-items{font-size:12px;color:var(--t2);line-height:1.7}
+
+/* ── CTA FINAL ── */
+#cta{padding:120px 24px;text-align:center}
+.cta-inner{max-width:600px;margin:0 auto}
+.cta-title{font-family:var(--serif);font-size:clamp(32px,5vw,56px);font-weight:900;line-height:1.1;margin-bottom:16px}
+.cta-title span{color:var(--g)}
+.cta-sub{font-size:16px;color:var(--t2);line-height:1.6;margin-bottom:32px}
+.cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* ── FOOTER ── */
+footer{background:var(--bg1);border-top:1px solid var(--border);padding:24px;text-align:center}
+.footer-logo{font-size:16px;font-weight:800;letter-spacing:-1px;color:var(--t1);margin-bottom:6px}
+.footer-logo span{color:var(--g)}
+.footer-note{font-family:var(--mono);font-size:10px;color:var(--t3)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .oque-grid,.mkt-grid,.mono-grid,.tc-hero,.tc-features,.pat-benefits,.pat-corps,.social-grid,.stack-grid{grid-template-columns:1fr}
+  .hero-stats{gap:24px}
+  nav{padding:0 16px}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">TRADE<span>ROOM</span></div>
+  <div class="nav-links">
+    <a class="nav-link" href="#oque">O Produto</a>
+    <a class="nav-link" href="#funcionalidades">Funcionalidades</a>
+    <a class="nav-link" href="#monetizacao">Monetização</a>
+    <a class="nav-link" href="#tradercalc">TraderCalc</a>
+    <a class="nav-link" href="#roadmap">Roadmap</a>
+  </div>
+  <div class="nav-badge">PITCH DECK · 2025</div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">APRESENTAÇÃO DO PROJETO · CONFIDENCIAL</div>
+    <h1 class="hero-title">
+      A sala de operações<br>que os traders<br><span class="accent">sempre quiseram</span>
+    </h1>
+    <p class="hero-sub">Plataforma de análise coletiva em tempo real para day traders de mini índice, mini dólar, forex e cripto. Salas persistentes, vínculos sociais, gráficos ao vivo e comunidade que se forma naturalmente.</p>
+    <div class="hero-btns">
+      <a class="btn-p" href="#oque">CONHECER O PRODUTO →</a>
+      <a class="btn-g" href="#monetizacao">VER MONETIZAÇÃO</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hs-item"><div class="hs-val green">R$0</div><div class="hs-lbl">Custo inicial</div></div>
+      <div class="hs-item"><div class="hs-val blue">8 sem</div><div class="hs-lbl">MVP ao vivo</div></div>
+      <div class="hs-item"><div class="hs-val yellow">R$10</div><div class="hs-lbl">Produto pago</div></div>
+      <div class="hs-item"><div class="hs-val">3</div><div class="hs-lbl">Fontes de receita</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- O QUE É -->
+<section id="oque" style="padding:100px 0">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow">O PRODUTO</div>
+      <h2 class="sec-title">Não é só um chat.<br>É uma comunidade de trading.</h2>
+      <p class="sec-sub">Traders desconhecidos entram, analisam juntos, criam vínculos e voltam todo pregão — como uma república de day traders.</p>
+    </div>
+    <div class="oque-grid reveal">
+      <div class="oque-card card-g">
+        <div class="oc-icon">📊</div>
+        <div class="oc-title">Gráfico ao vivo compartilhado</div>
+        <div class="oc-desc">O criador da sala controla o gráfico — timeframe, indicadores, anotações de suporte e resistência, Fibonacci. Os membros visualizam em espelho em tempo real, sem poder alterar.</div>
+      </div>
+      <div class="oque-card card-b">
+        <div class="oc-icon">💬</div>
+        <div class="oc-title">Chat e áudio em tempo real</div>
+        <div class="oc-desc">Todos os membros da sala podem conversar por texto ou áudio enquanto acompanham o gráfico. Cada um opera na sua própria corretora — a plataforma é só para análise.</div>
+      </div>
+      <div class="oque-card card-y">
+        <div class="oc-icon">🔗</div>
+        <div class="oc-title">Turma fixa e vínculos sociais</div>
+        <div class="oc-desc">O criador pina os melhores membros. Na próxima abertura de pregão, a sala já está disponível para a turma automaticamente. Os vínculos se formam naturalmente ao longo das sessões.</div>
+      </div>
+      <div class="oque-card card-p">
+        <div class="oc-icon">🏠</div>
+        <div class="oc-title">Salas persistentes com identidade</div>
+        <div class="oc-desc">Cada sala tem um nome dado pelo criador — "VENCEDORES", "OS FODÕES" — e acumula histórico de sessões. Uma sala com 47 pregões realizados é um ativo valioso por si só.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNCIONALIDADES -->
+<section id="funcionalidades">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow">FUNCIONALIDADES</div>
+      <h2 class="sec-title">Tudo que foi planejado</h2>
+      <p class="sec-sub">Cada funcionalidade foi pensada para criar engajamento real e recorrência diária.</p>
+    </div>
+    <div class="func-list reveal">
+      <div class="func-item">
+        <div class="fi-num">01</div>
+        <div class="fi-content">
+          <div class="fi-title">Cadastro com ID único de trader</div>
+          <div class="fi-desc">O trader se cadastra com nome, email e telefone. Um ID único é gerado automaticamente — ex: scalp_rx, day_z9. Este ID é público, permanente e aparece em todas as salas. O telefone entra para a base de marketing via WhatsApp.</div>
+          <div class="fi-tags"><span class="fi-tag tag-g">LOGIN ÚNICO</span><span class="fi-tag tag-b">BASE DE WHATSAPP</span></div>
+        </div>
+      </div>
+      <div class="func-item">
+        <div class="fi-num">02</div>
+        <div class="fi-content">
+          <div class="fi-title">Lobby com abas por mercado</div>
+          <div class="fi-desc">Três abas fixas: B3, Forex e Cripto. Dentro de cada aba, as salas criadas pela comunidade — com nome e os ativos operados (AT). Ex: sala "VENCEDORES · AT WIN WDO". Salas da turma aparecem primeiro.</div>
+          <div class="fi-tags"><span class="fi-tag tag-g">B3</span><span class="fi-tag tag-b">FOREX</span><span class="fi-tag tag-p">CRIPTO</span></div>
+        </div>
+      </div>
+      <div class="func-item">
+        <div class="fi-num">03</div>
+        <div class="fi-content">
+          <div class="fi-title">Criação de sala com múltiplos ativos</div>
+          <div class="fi-desc">O criador escolhe o mercado, o nome da sala e os ativos que vai operar naquela sessão. Pode marcar um ou vários — WIN e WDO juntos, EUR/USD e XAU/USD, BTC e ETH. Limite de 10 traders por sala.</div>
+          <div class="fi-tags"><span class="fi-tag tag-g">ATÉ 10 TRADERS</span><span class="fi-tag tag-y">MULTI-ATIVO</span></div>
+        </div>
+      </div>
+      <div class="func-item">
+        <div class="fi-num">04</div>
+        <div class="fi-content">
+          <div class="fi-title">Gráfico com permissões por perfil</div>
+          <div class="fi-desc">Criador: controle total — muda timeframe, adiciona indicadores, desenha suportes, resistências e Fibonacci. Membros: somente visualização em espelho do que o criador está vendo. Cada operação o trader executa na sua própria corretora.</div>
+          <div class="fi-tags"><span class="fi-tag tag-y">CRIADOR: CONTROLE TOTAL</span><span class="fi-tag tag-b">MEMBROS: ESPELHO</span></div>
+        </div>
+      </div>
+      <div class="func-item">
+        <div class="fi-num">05</div>
+        <div class="fi-content">
+          <div class="fi-title">Sistema de turma fixa (vínculos sociais)</div>
+          <div class="fi-desc">O criador pode pinar membros frequentes, que passam a fazer parte da turma fixa. A sala fica disponível automaticamente para eles no próximo pregão. Com o tempo, a sala vira uma "república" de traders que se conhecem e voltam todo dia.</div>
+          <div class="fi-tags"><span class="fi-tag tag-p">VÍNCULOS PERMANENTES</span><span class="fi-tag tag-g">RETENÇÃO ORGÂNICA</span></div>
+        </div>
+      </div>
+      <div class="func-item">
+        <div class="fi-num">06</div>
+        <div class="fi-content">
+          <div class="fi-title">Perfil do trader com histórico</div>
+          <div class="fi-desc">Cada trader acumula um histórico — quantas sessões fez, em quais salas participa, quais são os membros da turma fixa e há quantos pregões estão juntos. Isso vira reputação orgânica sem nenhum sistema artificial de pontos.</div>
+          <div class="fi-tags"><span class="fi-tag tag-b">REPUTAÇÃO</span><span class="fi-tag tag-g">HISTÓRICO</span></div>
+        </div>
+      </div>
+      <div class="func-item">
+        <div class="fi-num">07</div>
+        <div class="fi-content">
+          <div class="fi-title">Notificações inteligentes</div>
+          <div class="fi-desc">Quando a sala da turma abrir no pregão, o trader recebe notificação push. Futuramente via WhatsApp também. Isso garante que a turma se encontre todo dia sem precisar combinar fora da plataforma.</div>
+          <div class="fi-tags"><span class="fi-tag tag-y">PUSH</span><span class="fi-tag tag-g">WHATSAPP</span></div>
+        </div>
+      </div>
+      <div class="func-item">
+        <div class="fi-num">08</div>
+        <div class="fi-content">
+          <div class="fi-title">Sala patrocinada (corretoras e casas de análise)</div>
+          <div class="fi-desc">Slot especial no topo do lobby. Sem limite de usuários. Embed de YouTube Live do analista da corretora. Chat ao vivo com os traders. CTA rastreável para abertura de conta. Relatório mensal de audiência para o patrocinador.</div>
+          <div class="fi-tags"><span class="fi-tag tag-o">B2B</span><span class="fi-tag tag-r">YOUTUBE LIVE</span><span class="fi-tag tag-b">SEM LIMITE</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MERCADOS -->
+<section id="mercados" style="padding:100px 0">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow">MERCADOS</div>
+      <h2 class="sec-title">Três mercados, uma plataforma</h2>
+      <p class="sec-sub">B3 no horário comercial, Forex e Cripto 24 horas. A plataforma fica ativa o tempo todo.</p>
+    </div>
+    <div class="mkt-grid reveal">
+      <div class="mkt-card b3">
+        <div class="mkt-title g">B3 — Futuros</div>
+        <div class="mkt-desc">Mini contratos da Bolsa brasileira. O mercado principal — onde a maioria dos day traders brasileiros opera.</div>
+        <div class="mkt-ativos">
+          <span class="at at-b3">WIN</span>
+          <span class="at at-b3">WDO</span>
+          <span class="at at-b3">WINV25</span>
+          <span class="at at-b3">WDOV25</span>
+        </div>
+        <div class="mkt-horario">⏰ 09h00 – 18h00 BRT · Dias úteis</div>
+      </div>
+      <div class="mkt-card fx">
+        <div class="mkt-title b">Forex</div>
+        <div class="mkt-desc">Pares de moedas internacionais. Abre possibilidade de salas ativas fora do horário da B3.</div>
+        <div class="mkt-ativos">
+          <span class="at at-fx">EUR/USD</span>
+          <span class="at at-fx">GBP/USD</span>
+          <span class="at at-fx">USD/JPY</span>
+          <span class="at at-fx">XAU/USD</span>
+          <span class="at at-fx">USD/BRL</span>
+          <span class="at at-fx">WTI</span>
+        </div>
+        <div class="mkt-horario">⏰ 24h · Domingo – Sexta</div>
+      </div>
+      <div class="mkt-card cr">
+        <div class="mkt-title p">Cripto</div>
+        <div class="mkt-desc">Bitcoin, Ethereum e altcoins. Mercado 24/7 que atrai traders mais jovens e aumenta o tempo de uso da plataforma.</div>
+        <div class="mkt-ativos">
+          <span class="at at-cr">BTC/USD</span>
+          <span class="at at-cr">ETH/USD</span>
+          <span class="at at-cr">SOL/USD</span>
+          <span class="at at-cr">BNB/USD</span>
+          <span class="at at-cr">XRP/USD</span>
+        </div>
+        <div class="mkt-horario">⏰ 24h · 7 dias por semana</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODELO SOCIAL -->
+<section id="social">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow">MODELO SOCIAL</div>
+      <h2 class="sec-title">Por que as pessoas voltam todo dia</h2>
+    </div>
+    <div class="social-grid reveal">
+      <div class="social-text">
+        <div class="st-title">A sala vira uma "república" de traders</div>
+        <div class="st-desc">Day trade é psicologicamente pesado. Ter uma turma que você conhece — que ri junto quando a trade vai mal, que comemora junto quando vai bem — é o diferencial que nenhuma corretora oferece. Você não está vendendo gráfico, está vendendo pertencimento.</div>
+        <div class="social-steps">
+          <div class="ss-item"><div class="ss-dot" style="background:var(--g)"></div><div class="ss-text"><b>Dia 1:</b> Trader entra em uma sala aleatória, conhece o grupo.</div></div>
+          <div class="ss-item"><div class="ss-dot" style="background:var(--b)"></div><div class="ss-text"><b>Semana 1:</b> Volta todo dia, cria vínculo com os outros traders.</div></div>
+          <div class="ss-item"><div class="ss-dot" style="background:var(--y)"></div><div class="ss-text"><b>Mês 1:</b> É pinado pelo criador, entra na turma fixa.</div></div>
+          <div class="ss-item"><div class="ss-dot" style="background:var(--p)"></div><div class="ss-text"><b>Sempre:</b> A sala fica disponível automaticamente. Vira rotina.</div></div>
+        </div>
+      </div>
+      <div class="social-visual">
+        <div class="sv-title">EXEMPLO REAL — SALA "VENCEDORES"</div>
+        <div class="sv-room">
+          <div class="svr-name">VENCEDORES</div>
+          <div class="svr-meta">Criador: trader_rx · Sala B3</div>
+          <div class="svr-at">
+            <span class="at at-b3">WIN</span>
+            <span class="at at-b3">WDO</span>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:6px">
+            <div class="member-av" style="background:rgba(0,229,160,.15);color:var(--g)">TR</div>
+            <div class="member-av" style="background:rgba(0,170,255,.15);color:var(--b)">KL</div>
+            <div class="member-av" style="background:rgba(167,139,250,.15);color:var(--p)">NZ</div>
+            <div class="member-av" style="background:rgba(245,166,35,.15);color:var(--y)">FM</div>
+            <div class="member-av" style="background:rgba(138,146,160,.15);color:var(--t2)">+4</div>
+          </div>
+          <div class="svr-sessions">✦ 47 sessões realizadas · turma de 8 traders fixos</div>
+        </div>
+        <div style="padding:10px;background:var(--bg3);border-radius:7px;font-size:11px;color:var(--t2);line-height:1.6">
+          <span style="font-family:var(--mono);font-size:9px;color:var(--g)">trader_rx</span> 09:31<br>
+          "Gap pra cima, 134.900 é resistência."<br><br>
+          <span style="font-family:var(--mono);font-size:9px;color:var(--b)">_klx47</span> 09:32<br>
+          "Book pesado na venda aí. Cuidado."<br><br>
+          <span style="font-family:var(--mono);font-size:9px;color:var(--p)">nova_z9</span> 09:33<br>
+          "Fluxo comprador aparecendo. Vou entrar no meu."
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MONETIZAÇÃO -->
+<section id="monetizacao" style="padding:100px 0">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow">MONETIZAÇÃO</div>
+      <h2 class="sec-title">Três fontes de receita</h2>
+      <p class="sec-sub">Gratuito no início para crescer a base. Monetização entra naturalmente quando o produto já tem tração.</p>
+    </div>
+    <div class="mono-grid reveal">
+      <div class="mono-card">
+        <div class="mono-phase ph-g">FASE 1 — AGORA</div>
+        <div class="mono-icon">🆓</div>
+        <div class="mono-title">Plataforma Gratuita</div>
+        <div class="mono-val" style="color:var(--g)">R$0</div>
+        <div class="mono-desc">Tudo gratuito para crescer a base. Traders entram, se divertem, criam vínculos. O produto se vende pela experiência.</div>
+      </div>
+      <div class="mono-card destaque">
+        <div class="mono-phase ph-gold">FASE 2 — ATIVO</div>
+        <div class="mono-icon">🧮</div>
+        <div class="mono-title">TraderCalc — IR</div>
+        <div class="mono-val" style="color:var(--gold)">R$10<span style="font-size:14px;color:var(--t2)">/mês</span></div>
+        <div class="mono-desc">Calculadora de IR integrada. Dor real de todo trader B3. Recorrência mensal garantida — IR é todo mês.</div>
+      </div>
+      <div class="mono-card">
+        <div class="mono-phase ph-b">FASE 3 — ESCALA</div>
+        <div class="mono-icon">🏢</div>
+        <div class="mono-title">Salas Patrocinadas</div>
+        <div class="mono-val" style="color:var(--b)">R$3k–15k<span style="font-size:14px;color:var(--t2)">/mês</span></div>
+        <div class="mono-desc">XP, Clear, BTG e outras corretoras pagando para ter sua marca no centro do pregão dos traders ativos.</div>
+      </div>
+    </div>
+    <div class="mono-summary reveal">
+      <div class="ms-item"><div class="ms-val">300</div><div class="ms-lbl">Assinantes TraderCalc</div></div>
+      <div class="ms-sep"></div>
+      <div class="ms-item"><div class="ms-val" style="color:var(--g)">R$3.000</div><div class="ms-lbl">Receita recorrente/mês</div></div>
+      <div class="ms-sep"></div>
+      <div class="ms-item"><div class="ms-val" style="color:var(--b)">R$30</div><div class="ms-lbl">Custo infra na fase 2</div></div>
+      <div class="ms-sep"></div>
+      <div class="ms-item"><div class="ms-val" style="color:var(--y)">+R$5.000</div><div class="ms-lbl">Por patrocinador</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PATROCINADORES -->
+<section id="patrocinadores">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow">SALAS PATROCINADAS</div>
+      <h2 class="sec-title">O modelo B2B mais inteligente do mercado financeiro</h2>
+      <p class="sec-sub">Sua corretora no centro do pregão de traders ativos. Não é banner — é presença.</p>
+    </div>
+    <div class="pat-card reveal">
+      <div class="pat-top">
+        <div class="pat-icon" style="background:#ff6b00">XP</div>
+        <div>
+          <div class="pat-title">Sala XP Investimentos — exemplo</div>
+          <div class="pat-sub">Como ficaria uma sala patrocinada no TradeRoom</div>
+        </div>
+      </div>
+      <div class="pat-benefits">
+        <div class="pb-item"><div class="pb-check">✓</div><div class="pb-text"><b>Sala exclusiva no topo do lobby</b> — todos os traders veem ao abrir a plataforma</div></div>
+        <div class="pb-item"><div class="pb-check">✓</div><div class="pb-text"><b>YouTube Live embutido</b> — analista transmite dentro do TradeRoom</div></div>
+        <div class="pb-item"><div class="pb-check">✓</div><div class="pb-text"><b>Sem limite de usuários</b> — sala aberta para toda a base</div></div>
+        <div class="pb-item"><div class="pb-check">✓</div><div class="pb-text"><b>Chat ao vivo</b> — traders comentam e interagem com o analista</div></div>
+        <div class="pb-item"><div class="pb-check">✓</div><div class="pb-text"><b>CTA rastreável</b> — botão direto para abertura de conta</div></div>
+        <div class="pb-item"><div class="pb-check">✓</div><div class="pb-text"><b>Relatório mensal</b> — audiência, tempo médio, cliques no CTA</div></div>
+        <div class="pb-item"><div class="pb-check">✓</div><div class="pb-text"><b>Notificação push</b> — toda a base é avisada quando a live começar</div></div>
+        <div class="pb-item"><div class="pb-check">✓</div><div class="pb-text"><b>Público 100% qualificado</b> — traders ativos B3, não público genérico</div></div>
+      </div>
+      <div class="pat-price">
+        <div class="pp-label">Valor estimado por sala patrocinada</div>
+        <div class="pp-val">R$3.000 – R$15.000 / mês</div>
+      </div>
+    </div>
+    <div class="sec-header reveal" style="margin-top:40px;margin-bottom:16px">
+      <p class="sec-sub">Potenciais patrocinadores — já com interesse natural neste público</p>
+    </div>
+    <div class="pat-corps reveal">
+      <div class="corp"><div class="corp-name">XP Investimentos</div><div class="corp-type">Corretora</div></div>
+      <div class="corp"><div class="corp-name">Clear</div><div class="corp-type">Corretora B3</div></div>
+      <div class="corp"><div class="corp-name">BTG Pactual</div><div class="corp-type">Banco / Corretora</div></div>
+      <div class="corp"><div class="corp-name">Rico</div><div class="corp-type">Corretora</div></div>
+      <div class="corp"><div class="corp-name">Empiricus</div><div class="corp-type">Casa de Análise</div></div>
+      <div class="corp"><div class="corp-name">Nord Research</div><div class="corp-type">Casa de Análise</div></div>
+      <div class="corp"><div class="corp-name">InfoMoney</div><div class="corp-type">Mídia Financeira</div></div>
+      <div class="corp"><div class="corp-name">Agora.io / IC Mkts</div><div class="corp-type">Forex Internacional</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRADERCALC -->
+<section id="tradercalc" style="padding:100px 0;background:var(--bg1)">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow">TRADERCALC — PRODUTO INTEGRADO</div>
+      <h2 class="sec-title">A calculadora de IR que todo trader precisa</h2>
+    </div>
+    <div class="tc-hero reveal">
+      <div class="tc-text">
+        <div class="tc-title">Seu IR no day trade resolvido em <span>minutos</span></div>
+        <div class="tc-desc">Arraste a nota de corretagem em PDF. O TraderCalc calcula resultado, DARF e gera o relatório campo a campo para a declaração anual. Integrado ao TradeRoom com login único.</div>
+        <div class="tc-price-pill">
+          <span class="tpp-from">apenas</span>
+          <span class="tpp-val">R$10</span>
+          <span class="tpp-per">/mês · somente B3</span>
+        </div>
+        <div style="margin-top:14px;font-family:var(--mono);font-size:10px;color:var(--t3);line-height:1.8">
+          ✓ Suporta WIN, WDO e Bitcoin Futuro (BIT)<br>
+          ✓ Compensação de prejuízos entre meses<br>
+          ✓ Alerta 10 dias antes do DARF vencer<br>
+          ✓ Análise retroativa de anos anteriores<br>
+          ✓ Campo a campo para o programa IRPF
+        </div>
+      </div>
+      <div class="tc-visual">
+        <div class="tcv-header">
+          <div class="tcv-icon">🧮</div>
+          <div class="tcv-name">TraderCalc · Integrado ao TradeRoom</div>
+        </div>
+        <div class="tcv-body">
+          <div style="background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);border-radius:6px;padding:10px 12px;margin-bottom:12px;font-family:var(--mono);font-size:11px;color:#ff9999">⚠ DARF janeiro/2025 vence em 3 dias · R$187,40 · código 6015</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px">
+            <div style="background:var(--bg3);border-radius:6px;padding:10px;text-align:center"><div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--g)">+R$1.840</div><div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:2px">RESULTADO</div></div>
+            <div style="background:var(--bg3);border-radius:6px;padding:10px;text-align:center"><div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--r)">R$187,40</div><div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:2px">IR DEVIDO</div></div>
+            <div style="background:var(--bg3);border-radius:6px;padding:10px;text-align:center"><div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--t2)">R$0</div><div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:2px">PREJUÍZO</div></div>
+          </div>
+          <div style="border:2px dashed var(--border2);border-radius:8px;padding:20px;text-align:center;cursor:pointer">
+            <div style="font-size:20px;margin-bottom:6px">📄</div>
+            <div style="font-family:var(--mono);font-size:12px;color:var(--t1)">Arraste sua nota de corretagem</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:3px">PDF da XP, Clear, Rico, BTG e outras</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tc-features reveal">
+      <div class="tcf"><div class="tcf-icon">📊</div><div class="tcf-title">Cálculo automático</div><div class="tcf-desc">Lê o PDF, separa os ativos e calcula resultado líquido por pregão.</div></div>
+      <div class="tcf"><div class="tcf-icon">📄</div><div class="tcf-title">DARF pronto</div><div class="tcf-desc">IR de 20% com compensação de prejuízos. Código 6015 gerado.</div></div>
+      <div class="tcf"><div class="tcf-icon">📋</div><div class="tcf-title">Declaração anual</div><div class="tcf-desc">Campo a campo para o IRPF da Receita. Só copiar e preencher.</div></div>
+      <div class="tcf"><div class="tcf-icon">🔔</div><div class="tcf-title">Alerta de vencimento</div><div class="tcf-desc">Aviso 10 dias antes do DARF vencer. Nunca pague multa por atraso.</div></div>
+      <div class="tcf"><div class="tcf-icon">📁</div><div class="tcf-title">Histórico completo</div><div class="tcf-desc">Todos os meses e anos salvos. Análise retroativa desde 2020.</div></div>
+      <div class="tcf"><div class="tcf-icon">🔗</div><div class="tcf-title">Login único</div><div class="tcf-desc">Mesmo cadastro do TradeRoom. O trader não percebe que são dois produtos.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK TÉCNICA -->
+<section id="stack" style="padding:100px 0">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow">STACK TÉCNICA</div>
+      <h2 class="sec-title">Tecnologia moderna e custo baixo</h2>
+      <p class="sec-sub">100% open-source, hospedagem barata no início, escala quando precisar.</p>
+    </div>
+    <div class="stack-grid reveal">
+      <div class="stack-card"><div class="sc-name">Next.js 14</div><div class="sc-role">Interface web e mobile</div><span class="sc-tag tag-g">GRATUITO</span></div>
+      <div class="stack-card"><div class="sc-name">Node.js + Fastify</div><div class="sc-role">Servidor e API REST</div><span class="sc-tag tag-g">GRATUITO</span></div>
+      <div class="stack-card"><div class="sc-name">Socket.io</div><div class="sc-role">Salas em tempo real</div><span class="sc-tag tag-g">GRATUITO</span></div>
+      <div class="stack-card"><div class="sc-name">PostgreSQL</div><div class="sc-role">Banco de dados principal</div><span class="sc-tag tag-g">GRATUITO</span></div>
+      <div class="stack-card"><div class="sc-name">Supabase</div><div class="sc-role">Auth + banco na nuvem</div><span class="sc-tag tag-g">GRATUITO</span></div>
+      <div class="stack-card"><div class="sc-name">Redis</div><div class="sc-role">Salas ativas em memória</div><span class="sc-tag tag-g">GRATUITO</span></div>
+      <div class="stack-card"><div class="sc-name">TradingView</div><div class="sc-role">Gráfico WIN/WDO/Forex</div><span class="sc-tag tag-g">GRATUITO</span></div>
+      <div class="stack-card"><div class="sc-name">Agora.io</div><div class="sc-role">Áudio nas salas</div><span class="sc-tag tag-y">10k min grátis</span></div>
+      <div class="stack-card"><div class="sc-name">Vercel</div><div class="sc-role">Deploy do frontend</div><span class="sc-tag tag-g">GRATUITO</span></div>
+      <div class="stack-card"><div class="sc-name">Railway</div><div class="sc-role">Deploy do backend</div><span class="sc-tag tag-y">~R$25/mês</span></div>
+      <div class="stack-card"><div class="sc-name">Mercado Pago</div><div class="sc-role">Assinatura TraderCalc</div><span class="sc-tag tag-b">PIX</span></div>
+      <div class="stack-card"><div class="sc-name">Capacitor</div><div class="sc-role">App iOS e Android</div><span class="sc-tag tag-p">FASE 2</span></div>
+    </div>
+    <div class="cost-bar reveal">
+      <div class="cb-item"><div class="cb-phase">0–200 USUÁRIOS</div><div class="cb-val free">R$0/mês</div><div class="cb-desc">Tudo no tier gratuito</div></div>
+      <div style="width:1px;height:40px;background:var(--border2)"></div>
+      <div class="cb-item"><div class="cb-phase">200–500 USUÁRIOS</div><div class="cb-val low">~R$30/mês</div><div class="cb-desc">Só o Railway começa a cobrar</div></div>
+      <div style="width:1px;height:40px;background:var(--border2)"></div>
+      <div class="cb-item"><div class="cb-phase">500–2000 USUÁRIOS</div><div class="cb-val mid">~R$485/mês</div><div class="cb-desc">Todos os serviços em planos pagos</div></div>
+      <div style="width:1px;height:40px;background:var(--border2)"></div>
+      <div class="cb-item"><div class="cb-phase">BREAK-EVEN</div><div class="cb-val free">20 assinantes</div><div class="cb-desc">R$10 × 20 = R$200 já cobre fase 1</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" style="padding:100px 0;background:var(--bg1)">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow">ROADMAP</div>
+      <h2 class="sec-title">Do MVP ao produto completo</h2>
+      <p class="sec-sub">8 semanas para estar no ar. 24 semanas para app mobile publicado.</p>
+    </div>
+    <div class="timeline reveal">
+      <div class="tl-item">
+        <div class="tl-dot g"></div>
+        <div class="tl-content">
+          <div class="tl-phase" style="color:var(--g)">SEMANAS 1–2 · FUNDAÇÃO</div>
+          <div class="tl-title">Banco, autenticação e estrutura de salas</div>
+          <div class="tl-items">Cadastro com ID único · Login · Banco de dados · Perfil do trader · Estrutura básica de salas</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot g"></div>
+        <div class="tl-content">
+          <div class="tl-phase" style="color:var(--g)">SEMANAS 3–4 · SALA EM TEMPO REAL</div>
+          <div class="tl-title">WebSocket, gráfico e permissões</div>
+          <div class="tl-items">Socket.io · Gráfico TradingView · Sincronização criador/membro · Permissões host vs membro · Anotações no gráfico</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot g"></div>
+        <div class="tl-content">
+          <div class="tl-phase" style="color:var(--g)">SEMANAS 5–6 · COMUNICAÇÃO</div>
+          <div class="tl-title">Chat, áudio e ferramentas de análise</div>
+          <div class="tl-items">Chat em tempo real · Áudio via Agora.io · Suporte, resistência e Fibonacci · Timeframes · Indicadores</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot g"></div>
+        <div class="tl-content">
+          <div class="tl-phase" style="color:var(--g)">SEMANAS 7–8 · MVP AO VIVO ✅</div>
+          <div class="tl-title">Social, vínculos e deploy</div>
+          <div class="tl-items">Sistema de turma fixa · Histórico de sessões · Perfil completo · Lobby com filtros · Deploy no Railway + Vercel</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot b"></div>
+        <div class="tl-content">
+          <div class="tl-phase" style="color:var(--b)">SEMANAS 9–12 · PRODUTO COMPLETO</div>
+          <div class="tl-title">Notificações, WhatsApp e TraderCalc</div>
+          <div class="tl-items">Push notifications · WhatsApp API · TraderCalc integrado · Assinatura Mercado Pago · Salas patrocinadas</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot b"></div>
+        <div class="tl-content">
+          <div class="tl-phase" style="color:var(--b)">SEMANAS 13–16 · MONETIZAÇÃO</div>
+          <div class="tl-title">Receita e painel do patrocinador</div>
+          <div class="tl-items">Plano gratuito vs pago · Gateway de pagamento · Painel admin · Relatório de audiência para patrocinadores</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot y"></div>
+        <div class="tl-content">
+          <div class="tl-phase" style="color:var(--y)">SEMANAS 17–24 · APP MOBILE</div>
+          <div class="tl-title">iOS e Android na App Store</div>
+          <div class="tl-items">Capacitor (mesmo código web) · Adaptação mobile · Notificações push nativas · App Store + Google Play</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="cta">
+  <div class="cta-inner">
+    <div class="sec-eyebrow" style="text-align:center;margin-bottom:16px">O PROJETO</div>
+    <h2 class="cta-title">Um produto real,<br>construído do <span>zero</span></h2>
+    <p class="cta-sub">Backend, frontend, banco de dados e documentação completa já estão prontos. Próximo passo: instalação e lançamento do MVP em 8 semanas.</p>
+    <div class="cta-btns">
+      <a class="btn-p" href="#oque">↑ VOLTAR AO INÍCIO</a>
+      <a class="btn-g" href="#monetizacao">VER MONETIZAÇÃO</a>
+    </div>
+    <div style="margin-top:40px;padding:20px;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;display:inline-block;text-align:left;max-width:500px">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;margin-bottom:12px">STATUS ATUAL DO PROJETO</div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--g);font-size:12px">✓</span><span style="font-size:13px;color:var(--t2)">Protótipos completos de todas as telas</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--g);font-size:12px">✓</span><span style="font-size:13px;color:var(--t2)">Arquitetura técnica definida</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--g);font-size:12px">✓</span><span style="font-size:13px;color:var(--t2)">Backend completo gerado (Node.js)</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--g);font-size:12px">✓</span><span style="font-size:13px;color:var(--t2)">Schema do banco de dados pronto</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--g);font-size:12px">✓</span><span style="font-size:13px;color:var(--t2)">TraderCalc desenvolvido e integrado</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--g);font-size:12px">✓</span><span style="font-size:13px;color:var(--t2)">Modelo de negócio e monetização definidos</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--y);font-size:12px">→</span><span style="font-size:13px;color:var(--t1)"><b>Próximo: instalação e configuração do ambiente</b></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">TRADE<span>ROOM</span></div>
+  <div class="footer-note" style="margin-top:4px">Documento confidencial · Apresentação para sócios · 2025</div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) e.target.classList.add('visible')
+  })
+}, { threshold: 0.08 })
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+</script>
+</body>
+</html>
