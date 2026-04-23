@@ -475,7 +475,7 @@ canvas{display:block;width:100%;height:100%}
   <div class="splash-title">TRADE<span>ROOM</span></div>
   <div class="splash-sub">análise coletiva entre traders reais · sem analistas</div>
   <div class="splash-btns">
-    <button class="btn-p" onclick="go('s-lobby');renderRooms()">ENTRAR →</button>
+    <button class="btn-p" onclick="go('s-lobby'); setTimeout(renderRooms, 50)">ENTRAR →</button>
   </div>
   <div class="splash-ticker">
     <div class="ticker-inner" id="ticker"></div>
@@ -982,7 +982,10 @@ let spMsgCount = 0
 // ==================== NAVIGATION ====================
 function go(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'))
-  document.getElementById(id).classList.add('on')
+  const el = document.getElementById(id)
+  if (!el) { console.error('Screen not found:', id); return }
+  el.classList.add('on')
+  if (id === 's-lobby') renderRooms()
   if (id === 's-room') initRoom()
   if (id === 's-sponsor') initSponsor()
   if (id === 's-pitch') animPitchCount()
@@ -1031,7 +1034,6 @@ async function entrarLobby() {
         currentUser.trader_id = data.trader_id || data.usuario?.trader_id || email.split('@')[0]
         currentUser.nome = data.nome || data.usuario?.nome || email
         currentUser.email = email
-        currentUser.loggedIn = true
         updateUserUI()
         go('s-lobby')
         renderRooms()
@@ -1044,7 +1046,6 @@ async function entrarLobby() {
       currentUser.trader_id = email.split('@')[0] + '_demo'
       currentUser.nome = email
       currentUser.email = email
-      currentUser.loggedIn = true
       updateUserUI()
       go('s-lobby')
       renderRooms()
@@ -1064,7 +1065,6 @@ async function entrarLobby() {
     currentUser.nome = nome
     currentUser.email = email || ''
   }
-  currentUser.loggedIn = true
   updateUserUI()
   go('s-lobby')
   renderRooms()
