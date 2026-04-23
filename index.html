@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -10,7 +11,7 @@
   --bg0:#080a0c;--bg1:#0d1014;--bg2:#121518;--bg3:#181c22;--bg4:#1e232b;
   --g:#00e5a0;--b:#0af;--r:#ff4560;--y:#f5a623;--p:#a78bfa;--o:#ff6b35;
   --gold:#c9a84c;--gold2:#e8c76a;
-  --t1:#edf0f4;--t2:#a8b4c0;--t3:#6b7585;--t4:#3a4050;
+  --t1:#edf0f4;--t2:#8892a0;--t3:#454e5c;--t4:#2a303a;
   --border:#1a1f28;--border2:#252d38;
   --mono:'JetBrains Mono',monospace;--display:'Syne',sans-serif;--serif:'Playfair Display',serif;
 }
@@ -132,7 +133,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .nb3{background:rgba(0,229,160,.1);color:var(--g)}
 .nfx{background:rgba(0,170,255,.1);color:var(--b)}
 .ncr{background:rgba(167,139,250,.1);color:var(--p)}
-.lobby-body{display:flex;flex:1;overflow:hidden;height:calc(100vh - 56px)}
+.lobby-body{display:flex;flex:1;overflow:hidden;height:calc(100vh - 100px)}
 .lobby-main{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin;scrollbar-color:var(--bg4) transparent}
 .lobby-side{width:210px;background:var(--bg1);border-left:1px solid var(--border);padding:12px;overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
 .search-row{display:flex;gap:7px;margin-bottom:12px}
@@ -475,10 +476,7 @@ canvas{display:block;width:100%;height:100%}
   <div class="splash-title">TRADE<span>ROOM</span></div>
   <div class="splash-sub">análise coletiva entre traders reais · sem analistas</div>
   <div class="splash-btns">
-    <button class="btn-p" style="font-size:15px;padding:16px 48px;letter-spacing:2px" onclick="go('s-lobby');renderRooms()">▶ ENTRAR</button>
-  </div>
-  <div style="margin-top:16px">
-    <span onclick="document.getElementById('modal-contato').classList.add('open')" style="font-family:var(--mono);font-size:13px;color:var(--t2);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:9px 22px;border:1px solid var(--border2);border-radius:20px;transition:all .15s" onmouseover="this.style.borderColor='var(--g)';this.style.color='var(--t1)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--t2)'">✉ CONTATO</span>
+    <button class="btn-p" onclick="go('s-lobby'); setTimeout(renderRooms, 50)">ENTRAR →</button>
   </div>
   <div class="splash-ticker">
     <div class="ticker-inner" id="ticker"></div>
@@ -488,15 +486,17 @@ canvas{display:block;width:100%;height:100%}
 <!-- ==================== CADASTRO ==================== -->
 <div id="s-cadastro" class="screen">
   <div class="form-card" id="cad-step1">
-    <div class="fc-back" onclick="go('s-lobby')">← VOLTAR</div>
+    <div class="fc-back" onclick="go('s-splash')">← VOLTAR</div>
     <div class="steps"><div class="step-bar active" id="sb0"></div><div class="step-bar" id="sb1"></div></div>
     <div class="fc-title">Criar conta</div>
-    <div class="fc-sub">Só precisamos do seu email. Nada mais.</div>
-    <div class="field"><label>EMAIL</label><input type="email" id="c-email" placeholder="seu@email.com" autocomplete="email"></div>
+    <div class="fc-sub">Seus dados ficam seguros. O telefone é usado apenas para comunicados.</div>
+    <div class="field"><label>NOME COMPLETO</label><input type="text" id="c-nome" placeholder="João Silva" oninput="onNome(this)"></div>
+    <div class="field"><label>EMAIL</label><input type="email" id="c-email" placeholder="joao@email.com"></div>
+    <div class="field"><label>TELEFONE (WHATSAPP)</label><input type="tel" id="c-tel" placeholder="(11) 99999-9999" oninput="maskTel(this)" maxlength="15"></div>
     <div class="id-block">
       <div class="ib-label">SEU ID NAS SALAS</div>
-      <div class="ib-row"><span class="ib-hash">#</span><span class="ib-val" id="id-preview">scalp_rx</span><span class="ib-regen" onclick="regenId()">↻ OUTRO</span></div>
-      <div class="ib-note">Como todos te verão. Único e público. Pode personalizar depois.</div>
+      <div class="ib-row"><span class="ib-hash">#</span><span class="ib-val" id="id-preview">trader_jo4x</span><span class="ib-regen" onclick="regenId()">↻ OUTRO</span></div>
+      <div class="ib-note">Como todos te verão. Único, público e permanente.</div>
     </div>
     <button class="btn-p" style="width:100%" onclick="cadNext()">CONTINUAR →</button>
   </div>
@@ -516,7 +516,7 @@ canvas{display:block;width:100%;height:100%}
     <div class="warn-note">Anote sua senha agora. Por segurança ela não será exibida novamente.</div>
     <div class="cred-box">
       <div class="cred-row"><span class="cred-lbl">ID PÚBLICO</span><span class="cred-val green" id="final-id">#trader_jo4x</span></div>
-      <div class="cred-row"><span class="cred-lbl">EMAIL</span><span class="cred-val" id="final-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bad0d5dbd5fadfd7dbd3d694d9d5d7">[email&#160;protected]</a></span></div>
+      <div class="cred-row"><span class="cred-lbl">EMAIL</span><span class="cred-val" id="final-email">joao@email.com</span></div>
       <div class="cred-row"><span class="cred-lbl">SENHA</span><span class="cred-val" id="final-pwd">••••••••</span></div>
     </div>
     <button class="btn-p" style="width:100%" onclick="entrarLobby()">ENTRAR NO LOBBY →</button>
@@ -545,11 +545,14 @@ canvas{display:block;width:100%;height:100%}
     <div class="tn-nav">
       <div class="tn-tab active" onclick="swTopTab(this,'salas')">SALAS</div>
       <div class="tn-tab ir-t" onclick="goIR()">🧮 CALC IR <span class="ir-badge">R$10</span></div>
-      <div class="tn-tab" onclick="document.getElementById('modal-contato').classList.add('open')">✉ CONTATO</div>
     </div>
     <div class="profile-chip" onclick="go('s-perfil')"><div class="pc-av" id="lobby-av">TR</div><span class="pc-id" id="lobby-uid">trader_7k4x</span></div>
   </div>
-  
+  <div class="market-tabs">
+    <div class="mtab ab3" id="mtab-b3" onclick="switchMkt('b3',this)"><div class="mtab-dot" style="background:var(--g)"></div>B3<span class="mtab-n nb3" id="cnt-b3">8</span></div>
+    <div class="mtab" id="mtab-fx" onclick="switchMkt('fx',this)"><div class="mtab-dot" style="background:var(--b)"></div>FOREX<span class="mtab-n nfx" id="cnt-fx">5</span></div>
+    <div class="mtab" id="mtab-cr" onclick="switchMkt('cr',this)"><div class="mtab-dot" style="background:var(--p)"></div>CRIPTO<span class="mtab-n ncr" id="cnt-cr">4</span></div>
+  </div>
   <div class="lobby-body">
     <div class="lobby-main">
       <div class="search-row">
@@ -576,7 +579,7 @@ canvas{display:block;width:100%;height:100%}
         <div class="ip-title">🧮 CALC IR</div>
         <div class="ip-desc">Calcule seu IR de day trade. DARF pronto, declaração campo a campo.</div>
         <div style="font-family:var(--mono);font-size:10px;color:var(--gold)">apenas R$10/mês</div>
-        <button class="ip-btn" style="margin-top:6px" onclick="window.open('https://www.futuroscalc.com.br','_blank')">CONHECER →</button>
+        <button class="ip-btn" style="margin-top:6px">CONHECER →</button>
       </div>
       <div class="ls-title">NOTIFICAÇÕES</div>
       <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--g)"></div><span class="ni-type" style="color:var(--g)">TURMA</span><span class="ni-time">09:01</span></div><div class="ni-text">VENCEDORES abriu. Sua turma está lá.</div></div>
@@ -596,6 +599,34 @@ canvas{display:block;width:100%;height:100%}
       <div class="field"><label>LIMITE DE TRADERS</label><div class="slider-row"><input type="range" min="2" max="10" value="10" id="m-limit" oninput="document.getElementById('m-lv').textContent=this.value"><span class="slider-val" id="m-lv">10</span></div></div>
     </div>
     <div class="mftr"><button class="btn-cancel" onclick="closeModal()">CANCELAR</button><button class="btn-criar" id="m-criar-btn" onclick="criarSala()">▶ CRIAR SALA</button></div>
+  </div>
+</div>
+
+
+<!-- ==================== MODAL AUTH ==================== -->
+<div class="modal-bg" id="auth-modal-bg">
+  <div class="modal" style="max-width:380px">
+    <div class="mhdr">
+      <div class="mhdr-title" id="auth-modal-title">ACESSAR SALA</div>
+      <div class="mhdr-close" onclick="closeAuthModal()">✕</div>
+    </div>
+    <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:1.2rem">
+      <div id="auth-tab-login" onclick="switchAuthTab('login')" style="flex:1;text-align:center;padding:10px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--g);color:var(--t1)">JÁ TENHO CONTA</div>
+      <div id="auth-tab-cad" onclick="switchAuthTab('cad')" style="flex:1;text-align:center;padding:10px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--t3)">CRIAR CONTA</div>
+    </div>
+    <!-- LOGIN -->
+    <div id="auth-form-login" style="padding:0 1.5rem 1.5rem">
+      <div class="field"><label>EMAIL</label><input type="email" id="al-email" placeholder="seu@email.com"></div>
+      <div class="field"><label>SENHA</label><div class="pwd-wrap"><input type="password" id="al-pwd" placeholder="Sua senha"><span class="pwd-toggle" onclick="togglePwd('al-pwd',this)">MOSTRAR</span></div></div>
+      <button class="btn-p" style="width:100%;margin-top:8px" id="al-btn" onclick="authLogin()">ENTRAR →</button>
+    </div>
+    <!-- CADASTRO -->
+    <div id="auth-form-cad" style="padding:0 1.5rem 1.5rem;display:none">
+      <div class="field"><label>NOME COMPLETO</label><input type="text" id="ac-nome" placeholder="João Silva"></div>
+      <div class="field"><label>EMAIL</label><input type="email" id="ac-email" placeholder="seu@email.com"></div>
+      <div class="field"><label>SENHA</label><input type="password" id="ac-pwd" placeholder="Mínimo 8 caracteres"></div>
+      <button class="btn-p" style="width:100%;margin-top:8px" id="ac-btn" onclick="authCadastro()">CRIAR CONTA →</button>
+    </div>
   </div>
 </div>
 
@@ -935,110 +966,9 @@ canvas{display:block;width:100%;height:100%}
   </div>
 </div>
 
-
-<!-- ==================== MODAL AUTH ==================== -->
-<div class="confirm-modal" id="modal-auth">
-  <div class="cm-box" style="max-width:340px;width:92vw;text-align:center">
-    <div style="font-size:32px;margin-bottom:10px">🚀</div>
-    <div style="font-size:18px;font-weight:800;color:var(--g);margin-bottom:8px">Quase lá!</div>
-    <div style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:1.4rem">Crie sua conta gratuita para entrar em salas e operar com a galera.<br>Só precisamos do seu email.</div>
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <button class="btn-p" style="width:100%;padding:13px" onclick="document.getElementById('modal-auth').classList.remove('open');resetCad();go('s-cadastro')">CRIAR CONTA GRÁTIS →</button>
-      <button class="btn-g" style="width:100%;padding:11px" onclick="document.getElementById('modal-auth').classList.remove('open');go('s-login')">JÁ TENHO CONTA</button>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--t3);cursor:pointer;margin-top:4px" onclick="document.getElementById('modal-auth').classList.remove('open')">← CONTINUAR EXPLORANDO</div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== MODAL CONTATO ==================== -->
-<div class="confirm-modal" id="modal-contato">
-  <div class="cm-box" style="max-width:380px;width:92vw">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem">
-      <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--t1)">✉ CONTATO</div>
-      <div style="cursor:pointer;color:var(--t3);font-size:16px;line-height:1" onclick="document.getElementById('modal-contato').classList.remove('open')">✕</div>
-    </div>
-    <div style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:1.2rem">Dúvidas ou quer fazer parceria? Fale diretamente:</div>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <a href="/cdn-cgi/l/email-protection#fb9a979a959d9e959f9e89bb8b89948f9495d5969e" style="display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;text-decoration:none;transition:border-color .15s" onmouseover="this.style.borderColor='var(--g)'" onmouseout="this.style.borderColor='var(--border2)'">
-        <div style="width:38px;height:38px;border-radius:8px;background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">✉</div>
-        <div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--g);letter-spacing:1px;margin-bottom:3px">EMAIL</div>
-          <div style="font-family:var(--mono);font-size:13px;color:var(--t1)"><span class="__cf_email__" data-cfemail="aacbc6cbc4cccfc4cecfd8eadad8c5dec5c484c7cf">[email&#160;protected]</span></div>
-        </div>
-      </a>
-      <a href="https://wa.me/5511941855616" target="_blank" style="display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;text-decoration:none;transition:border-color .15s" onmouseover="this.style.borderColor='#25D366'" onmouseout="this.style.borderColor='var(--border2)'">
-        <div style="width:38px;height:38px;border-radius:8px;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">💬</div>
-        <div>
-          <div style="font-family:var(--mono);font-size:10px;color:#25D366;letter-spacing:1px;margin-bottom:3px">WHATSAPP BUSINESS</div>
-          <div style="font-family:var(--mono);font-size:13px;color:var(--t1)">(11) 94185-5616</div>
-        </div>
-      </a>
-    </div>
-    <div style="margin-top:1rem;padding:10px 13px;background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.15);border-radius:6px;font-family:var(--mono);font-size:10px;color:rgba(245,166,35,.7);line-height:1.6">
-      Resposta em até 24h.
-    </div>
-  </div>
-</div>
-
-<!-- ==================== MODAL LOGIN ADMIN ==================== -->
-<div class="confirm-modal" id="modal-admin-login">
-  <div class="cm-box" style="max-width:320px;width:92vw">
-    <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--r);margin-bottom:1rem;text-align:center">🔐 ACESSO RESTRITO</div>
-    <div class="field"><label>SENHA DO ADMIN</label><div class="pwd-wrap"><input type="password" id="adm-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()"><span class="pwd-toggle" onclick="togglePwd('adm-pwd',this)">MOSTRAR</span></div></div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="cm-cancel" onclick="document.getElementById('modal-admin-login').classList.remove('open')">CANCELAR</button>
-      <button class="cm-ok" style="background:rgba(0,229,160,.1);border-color:rgba(0,229,160,.25);color:var(--g)" onclick="adminLogin()">ENTRAR</button>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== ADMIN ==================== -->
-<div id="s-admin" class="screen">
-  <div class="topnav">
-    <div class="tn-logo">TRADE<span style="color:var(--r)">ADMIN</span></div>
-    <div style="font-family:var(--mono);font-size:10px;color:var(--r);padding:4px 12px;border:1px solid rgba(255,69,96,.25);border-radius:4px;background:rgba(255,69,96,.06)">● PAINEL RESTRITO</div>
-    <div class="fc-back" style="margin:0" onclick="go('s-lobby')">← SAIR</div>
-  </div>
-  <div style="max-width:900px;margin:0 auto;padding:24px 16px 60px">
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px">
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center">
-        <div style="font-family:var(--mono);font-size:24px;font-weight:700;color:var(--g)" id="adm-total">0</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:3px;letter-spacing:1px">CADASTROS</div>
-      </div>
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center">
-        <div style="font-family:var(--mono);font-size:24px;font-weight:700;color:var(--b)">1</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:3px;letter-spacing:1px">ONLINE AGORA</div>
-      </div>
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center">
-        <div style="font-family:var(--mono);font-size:24px;font-weight:700;color:var(--y)">5</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:3px;letter-spacing:1px">SALAS ABERTAS</div>
-      </div>
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center">
-        <div style="font-family:var(--mono);font-size:24px;font-weight:700;color:var(--p)">0</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:3px;letter-spacing:1px">PATROCINADAS</div>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;margin-bottom:16px">
-      <input id="adm-search" class="search-inp" style="flex:1" placeholder="Buscar por ID ou email..." oninput="admFilter(this.value)">
-    </div>
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden">
-      <div style="display:grid;grid-template-columns:1fr 1fr 130px 120px 80px;padding:10px 16px;background:var(--bg3);border-bottom:1px solid var(--border)">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:1px">ID PÚBLICO</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:1px">EMAIL</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:1px">CADASTRO</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:1px">ÚLTIMO ACESSO</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:1px">STATUS</div>
-      </div>
-      <div id="adm-list"></div>
-    </div>
-  </div>
-</div>
-
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ==================== STATE ====================
-let currentUser = { trader_id: 'trader_7k4x', email: '' }
-let isVisitor = true
-const BACKEND = 'https://traderoom-backend-production.up.railway.app'
+let currentUser = { trader_id: 'trader_7k4x', nome: 'João Silva', email: 'joao@email.com', loggedIn: false }
 let isAssinante = false
 let currentMkt = 'b3'
 let isHost = true
@@ -1053,7 +983,10 @@ let spMsgCount = 0
 // ==================== NAVIGATION ====================
 function go(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'))
-  document.getElementById(id).classList.add('on')
+  const el = document.getElementById(id)
+  if (!el) { console.error('Screen not found:', id); return }
+  el.classList.add('on')
+  if (id === 's-lobby') renderRooms()
   if (id === 's-room') initRoom()
   if (id === 's-sponsor') initSponsor()
   if (id === 's-pitch') animPitchCount()
@@ -1071,35 +1004,72 @@ function assinar() {
   setTimeout(() => go('s-calc'), 800)
 }
 
-function entrarLobby() {
-  const email = document.getElementById('l-email')?.value?.trim() || ''
-  const senha = document.getElementById('l-pwd')?.value?.trim() || ''
-  if (!email || !senha) { toast('Informe email e senha','t-r'); return }
-  fetch(BACKEND + '/auth/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, senha })
-  })
-  .then(function(r) { return r.json() })
-  .then(function(data) {
-    if (data.erro) { toast(data.erro, 't-r'); return }
-    isVisitor = false
-    currentUser.trader_id = data.trader_id
-    currentUser.email = email
-    updateUserUI()
-    go('s-lobby')
-    renderRooms()
-    toast('Bem-vindo, ' + data.trader_id + '!', 't-g')
-  })
-  .catch(function() { toast('Erro de conexao', 't-r') })
-}
+const API = 'https://traderoom-backend-production.up.railway.app'
 
-function resetCad() {
-  document.getElementById('cad-step1').style.display = ''
-  document.getElementById('cad-step2').style.display = 'none'
-  const s3 = document.getElementById('cad-step3')
-  if (s3) s3.style.display = 'none'
-  regenId()
+async function entrarLobby() {
+  // Detecta se veio do login ou do cadastro
+  const fromLogin = document.getElementById('s-login').classList.contains('on')
+  const email = fromLogin
+    ? document.getElementById('l-email')?.value?.trim()
+    : document.getElementById('c-email')?.value?.trim()
+  const senha = fromLogin
+    ? document.getElementById('l-pwd')?.value
+    : document.getElementById('c-pwd1')?.value
+
+  if (fromLogin) {
+    if (!email) { toast('Informe seu email', 't-r'); return }
+    if (!senha) { toast('Informe sua senha', 't-r'); return }
+    const btn = document.querySelector('#s-login .btn-p')
+    const orig = btn.textContent
+    btn.textContent = 'ENTRANDO...'
+    btn.disabled = true
+    try {
+      const res = await fetch(API + '/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha })
+      })
+      const data = await res.json()
+      if (res.ok && data.token) {
+        localStorage.setItem('tr_token', data.token)
+        currentUser.trader_id = data.trader_id || data.usuario?.trader_id || email.split('@')[0]
+        currentUser.nome = data.nome || data.usuario?.nome || email
+        currentUser.email = email
+        updateUserUI()
+        go('s-lobby')
+        renderRooms()
+        toast('Bem-vindo, ' + currentUser.trader_id + '!', 't-g')
+      } else {
+        toast(data.erro || data.error || 'Email ou senha inválidos', 't-r')
+      }
+    } catch (e) {
+      // Backend offline — entra em modo demo
+      currentUser.trader_id = email.split('@')[0] + '_demo'
+      currentUser.nome = email
+      currentUser.email = email
+      updateUserUI()
+      go('s-lobby')
+      renderRooms()
+      toast('Modo demo — backend offline', 't-y')
+    } finally {
+      btn.textContent = orig
+      btn.disabled = false
+    }
+    return
+  }
+
+  // Veio do cadastro (step 3)
+  const nome = document.getElementById('c-nome')?.value?.trim() || 'Trader'
+  if (nome.length >= 2) {
+    const base = nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(' ')[0].replace(/[^a-z]/g,'').substring(0,8)
+    currentUser.trader_id = base + '_' + Math.random().toString(36).substr(2,3)
+    currentUser.nome = nome
+    currentUser.email = email || ''
+  }
+  updateUserUI()
+  go('s-lobby')
+  renderRooms()
+  toast('Bem-vindo ao TradeRoom, ' + currentUser.trader_id + '!', 't-g')
 }
 
 function updateUserUI() {
@@ -1123,15 +1093,12 @@ const TICKS = [
   {n:'BTC/USD',v:'98.450',c:'+1,8%',up:true},{n:'GBP/USD',v:'1.2748',c:'-0,08%',up:false},
   {n:'IBOV',v:'128.450',c:'+0,44%',up:true},{n:'ETH/USD',v:'3.210',c:'+2,1%',up:true},
 ]
-function initTicker() {
-  const ticker = document.getElementById('ticker')
-  if (!ticker) return
-  let th = ''
-  for(let i=0;i<3;i++) TICKS.forEach(t => {
-    th += `<span class="tick-i"><span class="t-name">${t.n}</span><span class="t-val">${t.v}</span><span class="${t.up?'t-up':'t-dn'}">${t.c}</span></span>`
-  })
-  ticker.innerHTML = th
-}
+const ticker = document.getElementById('ticker')
+let th = ''
+for(let i=0;i<3;i++) TICKS.forEach(t => {
+  th += `<span class="tick-i"><span class="t-name">${t.n}</span><span class="t-val">${t.v}</span><span class="${t.up?'t-up':'t-dn'}">${t.c}</span></span>`
+})
+ticker.innerHTML = th
 
 // ==================== CADASTRO ====================
 const ADJS = ['scalp','flux','day','turbo','dark','sharp','rapid','micro','raw','deep']
@@ -1175,35 +1142,56 @@ function checkStrength(el) {
 }
 
 function cadNext() {
+  const nome = document.getElementById('c-nome').value.trim()
   const email = document.getElementById('c-email').value.trim()
+  const tel = document.getElementById('c-tel').value.replace(/\D/g,'')
+  if (nome.length < 2) { toast('Informe seu nome completo','t-r'); return }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Email inválido','t-r'); return }
+  if (tel.length !== 11) { toast('Telefone inválido','t-r'); return }
   document.getElementById('cad-step1').style.display = 'none'
   document.getElementById('cad-step2').style.display = ''
 }
 
-function cadFinalizar() {
+async function cadFinalizar() {
   const p1 = document.getElementById('c-pwd1').value
   const p2 = document.getElementById('c-pwd2').value
   if (p1.length < 8) { toast('Senha muito curta','t-r'); return }
-  if (p1 !== p2) { toast('Senhas nao conferem','t-r'); return }
-  const email = document.getElementById('c-email').value
-  fetch(BACKEND + '/auth/cadastro', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: email, senha: p1, trader_id: currentId })
-  })
-  .then(function(r) { return r.json() })
-  .then(function(data) {
-    if (data.erro) { toast(data.erro, 't-r'); return }
-    isVisitor = false
-    currentUser.trader_id = data.trader_id
-    document.getElementById('final-id').textContent = '#' + data.trader_id
-    document.getElementById('final-email').textContent = email
-    document.getElementById('final-pwd').textContent = '........'
-    document.getElementById('cad-step2').style.display = 'none'
-    document.getElementById('cad-step3').style.display = ''
-  })
-  .catch(function() { toast('Erro de conexao', 't-r') })
+  if (p1 !== p2) { toast('Senhas não conferem','t-r'); return }
+
+  const nome = document.getElementById('c-nome').value.trim()
+  const email = document.getElementById('c-email').value.trim()
+  const tel = document.getElementById('c-tel').value.replace(/\D/g,'')
+
+  const btn = document.querySelector('#cad-step2 .btn-p')
+  const orig = btn.textContent
+  btn.textContent = 'CRIANDO CONTA...'
+  btn.disabled = true
+
+  try {
+    const res = await fetch(API + '/api/cadastro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, email, telefone: tel, senha: p1, trader_id: currentId })
+    })
+    const data = await res.json()
+    if (res.ok) {
+      if (data.token) localStorage.setItem('tr_token', data.token)
+      currentUser.trader_id = data.trader_id || currentId
+    } else {
+      toast(data.erro || data.error || 'Erro ao criar conta', 't-r')
+      btn.textContent = orig; btn.disabled = false; return
+    }
+  } catch(e) {
+    // Backend offline — modo demo
+    currentUser.trader_id = currentId
+  }
+
+  document.getElementById('final-id').textContent = '#' + currentUser.trader_id
+  document.getElementById('final-email').textContent = email
+  document.getElementById('final-pwd').textContent = p1
+  document.getElementById('cad-step2').style.display = 'none'
+  document.getElementById('cad-step3').style.display = ''
+  btn.textContent = orig; btn.disabled = false
 }
 
 // ==================== LOBBY ====================
@@ -1281,8 +1269,19 @@ function roomCard(r) {
 
 function filterRooms(v) { renderRooms(v) }
 
+let pendingRoomData = null
+
 function enterRoom(data) {
-  if (isVisitor) { document.getElementById('modal-auth').classList.add('open'); return }
+  if (!currentUser.loggedIn) {
+    pendingRoomData = data
+    document.getElementById('auth-modal-title').textContent = 'ENTRAR NA SALA: ' + data.name
+    openAuthModal()
+    return
+  }
+  _doEnterRoom(data)
+}
+
+function _doEnterRoom(data) {
   isHost = data.mine || false
   document.getElementById('room-name-tag').textContent = data.name
   document.getElementById('room-asset-tag').textContent = data.assets[0]
@@ -1293,7 +1292,12 @@ function enterRoom(data) {
 
 // ==================== MODAL CRIAR SALA ====================
 function openModal() {
-  if (isVisitor) { document.getElementById('modal-auth').classList.add('open'); return }
+  if (!currentUser.loggedIn) {
+    pendingRoomData = 'create'
+    document.getElementById('auth-modal-title').textContent = 'CRIAR SALA'
+    openAuthModal()
+    return
+  }
   selectedAssets = []
   document.getElementById('m-name').value = ''
   document.getElementById('m-limit').value = 10
@@ -1615,6 +1619,118 @@ setInterval(() => {
   const sw=document.getElementById('sp-win');if(sw){const v=parseFloat(sw.textContent.replace(/\D/g,''));sw.textContent=Math.round(v+(Math.random()-.49)*30).toLocaleString('pt-BR')}
 }, 2000)
 
+
+// ==================== AUTH MODAL ====================
+function openAuthModal() {
+  document.getElementById('auth-modal-bg').classList.add('open')
+  switchAuthTab('login')
+}
+
+function closeAuthModal() {
+  document.getElementById('auth-modal-bg').classList.remove('open')
+  pendingRoomData = null
+}
+
+function switchAuthTab(tab) {
+  const isLogin = tab === 'login'
+  document.getElementById('auth-form-login').style.display = isLogin ? '' : 'none'
+  document.getElementById('auth-form-cad').style.display = isLogin ? 'none' : ''
+  document.getElementById('auth-tab-login').style.borderBottomColor = isLogin ? 'var(--g)' : 'transparent'
+  document.getElementById('auth-tab-login').style.color = isLogin ? 'var(--t1)' : 'var(--t3)'
+  document.getElementById('auth-tab-cad').style.borderBottomColor = isLogin ? 'transparent' : 'var(--g)'
+  document.getElementById('auth-tab-cad').style.color = isLogin ? 'var(--t3)' : 'var(--t1)'
+}
+
+async function authLogin() {
+  const email = document.getElementById('al-email').value.trim()
+  const senha = document.getElementById('al-pwd').value
+  if (!email) { toast('Informe seu email','t-r'); return }
+  if (!senha) { toast('Informe sua senha','t-r'); return }
+  const btn = document.getElementById('al-btn')
+  btn.textContent = 'ENTRANDO...'; btn.disabled = true
+  try {
+    const res = await fetch(API + '/api/login', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email, senha})
+    })
+    const data = await res.json()
+    if (res.ok && data.token) {
+      localStorage.setItem('tr_token', data.token)
+      currentUser.trader_id = data.trader_id || data.usuario?.trader_id || email.split('@')[0]
+      currentUser.nome = data.nome || email
+      currentUser.email = email
+      currentUser.loggedIn = true
+      updateUserUI()
+      toast('Bem-vindo, ' + currentUser.trader_id + '!', 't-g')
+    } else {
+      toast(data.erro || data.error || 'Email ou senha inválidos','t-r')
+      btn.textContent = 'ENTRAR →'; btn.disabled = false; return
+    }
+  } catch(e) {
+    // modo demo
+    currentUser.trader_id = email.split('@')[0] + '_' + Math.random().toString(36).substr(2,3)
+    currentUser.nome = email; currentUser.email = email; currentUser.loggedIn = true
+    updateUserUI(); toast('Modo demo','t-y')
+  }
+  closeAuthModal()
+  btn.textContent = 'ENTRAR →'; btn.disabled = false
+  if (pendingRoomData && pendingRoomData !== 'create') _doEnterRoom(pendingRoomData)
+  else if (pendingRoomData === 'create') _openCreateModal()
+  pendingRoomData = null
+}
+
+async function authCadastro() {
+  const nome = document.getElementById('ac-nome').value.trim()
+  const email = document.getElementById('ac-email').value.trim()
+  const senha = document.getElementById('ac-pwd').value
+  if (nome.length < 2) { toast('Informe seu nome','t-r'); return }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Email inválido','t-r'); return }
+  if (senha.length < 8) { toast('Senha muito curta (mín. 8 caracteres)','t-r'); return }
+  const btn = document.getElementById('ac-btn')
+  btn.textContent = 'CRIANDO...'; btn.disabled = true
+  const base = nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(' ')[0].replace(/[^a-z]/g,'').substring(0,8)
+  const tid = base + '_' + Math.random().toString(36).substr(2,3)
+  try {
+    const res = await fetch(API + '/api/cadastro', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({nome, email, senha, trader_id: tid})
+    })
+    const data = await res.json()
+    if (res.ok) {
+      if (data.token) localStorage.setItem('tr_token', data.token)
+      currentUser.trader_id = data.trader_id || tid
+    } else {
+      toast(data.erro || data.error || 'Erro ao criar conta','t-r')
+      btn.textContent = 'CRIAR CONTA →'; btn.disabled = false; return
+    }
+  } catch(e) {
+    currentUser.trader_id = tid
+  }
+  currentUser.nome = nome; currentUser.email = email; currentUser.loggedIn = true
+  updateUserUI()
+  toast('Conta criada! Bem-vindo, ' + currentUser.trader_id + '!', 't-g')
+  closeAuthModal()
+  btn.textContent = 'CRIAR CONTA →'; btn.disabled = false
+  if (pendingRoomData && pendingRoomData !== 'create') _doEnterRoom(pendingRoomData)
+  else if (pendingRoomData === 'create') _openCreateModal()
+  pendingRoomData = null
+}
+
+function _openCreateModal() {
+  selectedAssets = []
+  document.getElementById('m-name').value = ''
+  document.getElementById('m-limit').value = 10
+  document.getElementById('m-lv').textContent = 10
+  const titles = {b3:'CRIAR SALA — B3',fx:'CRIAR SALA — FOREX',cr:'CRIAR SALA — CRIPTO'}
+  const btnCls = {b3:'btn-criar-b3',fx:'btn-criar-fx',cr:'btn-criar-cr'}
+  document.getElementById('m-title').textContent = titles[currentMkt]
+  document.getElementById('m-criar-btn').className = 'btn-criar ' + btnCls[currentMkt]
+  const wrap = document.getElementById('m-assets')
+  const selCls = {b3:'sel-b3',fx:'sel-fx',cr:'sel-cr'}[currentMkt]
+  wrap.innerHTML = ASSETS[currentMkt].map(a => `<div class="asset-chip" id="chip-${a.replace('/','_')}" onclick="toggleAsset('${a}','${selCls}')">${a}</div>`).join('')
+  document.getElementById('modal-bg').classList.add('open')
+}
+
 // ==================== TOAST ====================
 function toast(msg, cls='t-g') {
   const wrap = document.getElementById('toast-wrap')
@@ -1622,55 +1738,12 @@ function toast(msg, cls='t-g') {
   el.className = 'toast ' + cls
   el.textContent = msg
   wrap.appendChild(el)
-  setTimeout(() => el.remove(), 3000)
+  setTimeout(() => el.remove(), 2600)
 }
 
-// ==================== ADMIN ====================
-const ADM_PWD = 'traderoom2025'
-const ADM_USERS = [
-  {id:'scalp_rx', email:'trader1@email.com', cadastro:'12/04/2026', acesso:'agora', online:true},
-  {id:'flux_k4x', email:'trader2@email.com', cadastro:'11/04/2026', acesso:'2h atras', online:false},
-  {id:'day_pro',  email:'trader3@email.com', cadastro:'10/04/2026', acesso:'ontem',   online:false},
-]
-
-function openAdmin() {
-  document.getElementById('modal-admin-login').classList.add('open')
-  setTimeout(() => document.getElementById('adm-pwd').focus(), 100)
-}
-
-function adminLogin() {
-  const pwd = document.getElementById('adm-pwd').value
-  if (pwd === ADM_PWD) {
-    document.getElementById('modal-admin-login').classList.remove('open')
-    document.getElementById('adm-pwd').value = ''
-    renderAdminList(ADM_USERS)
-    document.getElementById('adm-total').textContent = ADM_USERS.length
-    go('s-admin')
-    toast('Bem-vindo ao painel admin', 't-g')
-  } else {
-    toast('Senha incorreta', 't-r')
-    document.getElementById('adm-pwd').value = ''
-  }
-}
-
-function renderAdminList(users) {
-  const el = document.getElementById('adm-list')
-  if (!el) return
-  el.innerHTML = users.map(function(u) {
-    var onlineStyle = u.online
-      ? 'background:rgba(0,229,160,.1);color:var(--g);border:1px solid rgba(0,229,160,.2)'
-      : 'background:var(--bg3);color:var(--t3);border:1px solid var(--border)'
-    var onlineText = u.online ? 'ONLINE' : 'offline'
-    return '<div style="display:grid;grid-template-columns:1fr 1fr 120px 110px 80px;padding:11px 16px;border-bottom:1px solid var(--border)">'
-      + '<div style="font-family:var(--mono);font-size:12px;color:var(--g)">#' + u.id + '</div>'
-      + '<div style="font-family:var(--mono);font-size:11px;color:var(--t2)">' + u.email + '</div>'
-      + '<div style="font-family:var(--mono);font-size:11px;color:var(--t3)">' + u.cadastro + '</div>'
-      + '<div style="font-family:var(--mono);font-size:11px;color:var(--t3)">' + u.acesso + '</div>'
-      + '<div><span style="font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:10px;' + onlineStyle + '">' + onlineText + '</span></div>'
-      + '</div>'
-  }).join('')
-}
-
-function admFilter(v) {
-  var filtered = ADM_USERS.filter(function(u) {
-    retur
+// ==================== INIT ====================
+updateUserUI()
+renderRooms()
+</script>
+</body>
+</html>
