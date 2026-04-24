@@ -1294,10 +1294,10 @@ function roomCard(r) {
   const at = r.assets.map(a => `<span class="at-tag ${AT_CLS[a]||'at-b3'}">${a}</span>`).join('')
   const badge = r.mine ? '<span class="rc-badge badge-mine">CRIADOR</span>' : r.pinned ? '<span class="rc-badge badge-turma">TURMA</span>' : ''
   const roomData = JSON.stringify({name:r.name,assets:r.assets,mine:r.mine,mkt})
-  return `<div class="room-card${r.pinned?' pinned':r.mine?' my-room':''}" onclick='enterRoom(${roomData.replace(/'/g,"&#39;")})'>
+  return `<div class="room-card${r.pinned?' pinned':r.mine?' my-room':''}">
     <div class="rc-top"><div class="rcd rcd-${mkt}"></div><div class="rc-name">${r.name}</div>${badge}</div>
     <div class="rc-at">${at}</div>
-    <div class="rc-bottom"><span class="rc-meta">${r.sess} sessões · ${r.users}/${r.max||10} traders</span>${r.users>=(r.max||10) ? '<button class="enter-btn btn-lotada" disabled>LOTADA</button>' : '<button class="enter-btn ' + EB[mkt] + '">ENTRAR →</button>'}</div>
+    <div class="rc-bottom"><span class="rc-meta">${r.sess} sessões · ${r.users}/${r.max||10} traders</span>${r.users>=(r.max||10) ? '<button class="enter-btn btn-lotada" disabled>LOTADA</button>' : '<button class="enter-btn ' + EB[mkt] + '" onclick=\'enterRoom(' + roomData.replace(/'/g,"&#39;") + ')\'>ENTRAR →</button>'}</div>
   </div>`
 }
 
