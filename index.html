@@ -11,7 +11,7 @@
   --bg0:#080a0c;--bg1:#0d1014;--bg2:#121518;--bg3:#181c22;--bg4:#1e232b;
   --g:#00e5a0;--b:#0af;--r:#ff4560;--y:#f5a623;--p:#a78bfa;--o:#ff6b35;
   --gold:#c9a84c;--gold2:#e8c76a;
-  --t1:#edf0f4;--t2:#8892a0;--t3:#454e5c;--t4:#2a303a;
+  --t1:#edf0f4;--t2:#b0bec5;--t3:#90a4ae;--t4:#6b7a8d;
   --border:#1a1f28;--border2:#252d38;
   --mono:'JetBrains Mono',monospace;--display:'Syne',sans-serif;--serif:'Playfair Display',serif;
 }
@@ -144,7 +144,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .nb3-btn:hover{background:rgba(0,229,160,.16)}
 .nfx-btn{background:rgba(0,170,255,.08);border-color:rgba(0,170,255,.25);color:var(--b)}
 .ncr-btn{background:rgba(167,139,250,.08);border-color:rgba(167,139,250,.25);color:var(--p)}
-.sec-label{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;margin:8px 0 6px}
+.sec-label{font-family:var(--mono);font-size:9px;color:var(--t2);letter-spacing:2px;margin:8px 0 6px}
 .room-card{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:12px 14px;margin-bottom:7px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
 .room-card:hover{background:var(--bg3);border-color:var(--border2);transform:translateY(-1px)}
 .room-card.pinned{border-left:2px solid var(--p)}
@@ -165,7 +165,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .at-fx{background:rgba(0,170,255,.1);color:var(--b);border:1px solid rgba(0,170,255,.2)}
 .at-cr{background:rgba(167,139,250,.1);color:var(--p);border:1px solid rgba(167,139,250,.2)}
 .rc-bottom{display:flex;align-items:center}
-.rc-meta{font-family:var(--mono);font-size:10px;color:var(--t3);flex:1}
+.rc-meta{font-family:var(--mono);font-size:10px;color:var(--t2);flex:1}
 .enter-btn{font-family:var(--mono);font-size:10px;padding:5px 12px;border-radius:5px;cursor:pointer;transition:all .15s;white-space:nowrap;border:1px solid;font-weight:700}
 .eb3{background:rgba(0,229,160,.07);border-color:rgba(0,229,160,.2);color:var(--g)}
 .eb3:hover{background:rgba(0,229,160,.16)}
@@ -1204,60 +1204,60 @@ const AT_CLS = {'WIN':'at-b3','WDO':'at-b3','WINV25':'at-b3','WDOV25':'at-b3','E
 const EB = {b3:'eb3',fx:'efx',cr:'ecr'}
 const ROOMS = {
   b3:[
-    {name:'VENCEDORES',assets:['WIN','WDO'],users:8,sess:47,pinned:false,mine:true},
-    {name:'Scalp WIN manhã',assets:['WIN'],users:7,sess:31,pinned:true,mine:false},
-    {name:'Turma do Dólar',assets:['WDO'],users:5,sess:22,pinned:true,mine:false},
-    {name:'B3 Power',assets:['WIN','WDO'],users:9,sess:15,pinned:false,mine:false},
-    {name:'Fluxo de ordem',assets:['WIN'],users:3,sess:8,pinned:false,mine:false},
-    {name:'Mini Índice Pro',assets:['WIN','WINV25'],users:6,sess:12,pinned:false,mine:false},
-    {name:'WDO traders',assets:['WDO'],users:4,sess:9,pinned:false,mine:false},
-    {name:'Day trade B3',assets:['WIN','WDO'],users:2,sess:5,pinned:false,mine:false},
-    {name:'Agressão no Tape',assets:['WIN'],users:7,sess:28,pinned:false,mine:false},
-    {name:'Setup 9.1 WIN',assets:['WIN'],users:5,sess:19,pinned:false,mine:false},
-    {name:'Bandas de Bollinger',assets:['WIN','WDO'],users:4,sess:14,pinned:false,mine:false},
-    {name:'Price Action B3',assets:['WIN'],users:6,sess:33,pinned:false,mine:false},
-    {name:'Sala do Stopão',assets:['WIN','WDO'],users:3,sess:7,pinned:false,mine:false},
-    {name:'WINV25 Vencimento',assets:['WINV25'],users:8,sess:41,pinned:false,mine:false},
-    {name:'Tape Reading ao Vivo',assets:['WIN'],users:9,sess:55,pinned:false,mine:false},
-    {name:'Morning Call B3',assets:['WIN','WDO'],users:10,sess:62,pinned:false,mine:false},
-    {name:'Contra-tendência WIN',assets:['WIN'],users:4,sess:11,pinned:false,mine:false},
-    {name:'Swing B3',assets:['WIN','WINV25'],users:3,sess:6,pinned:false,mine:false},
-    {name:'Abertura NY',assets:['WDO'],users:7,sess:24,pinned:false,mine:false},
-    {name:'Só Long',assets:['WIN'],users:5,sess:17,pinned:false,mine:false},
-    {name:'Só Short',assets:['WIN'],users:4,sess:13,pinned:false,mine:false},
-    {name:'Rompimento de máxima',assets:['WIN','WDO'],users:6,sess:20,pinned:false,mine:false},
-    {name:'Turma do Milhão',assets:['WIN','WDO'],users:10,sess:88,pinned:false,mine:false},
-    {name:'IFR2 na B3',assets:['WIN'],users:2,sess:4,pinned:false,mine:false},
-    {name:'Fechamento Explosivo',assets:['WIN','WDO'],users:8,sess:36,pinned:false,mine:false},
+    {name:'VENCEDORES',assets:['WIN'],users:10,max:10,sess:47,pinned:false,mine:true},
+    {name:'Scalp WIN manhã',assets:['WIN'],users:10,max:10,sess:31,pinned:true,mine:false},
+    {name:'Turma do Dólar',assets:['WDO'],users:10,max:10,sess:22,pinned:true,mine:false},
+    {name:'B3 Power',assets:['WIN'],users:10,max:10,sess:15,pinned:false,mine:false},
+    {name:'Fluxo de ordem',assets:['WIN'],users:10,max:10,sess:8,pinned:false,mine:false},
+    {name:'Mini Índice Pro',assets:['WIN'],users:10,max:10,sess:12,pinned:false,mine:false},
+    {name:'WDO traders',assets:['WDO'],users:10,max:10,sess:9,pinned:false,mine:false},
+    {name:'Day trade B3',assets:['WDO'],users:10,max:10,sess:5,pinned:false,mine:false},
+    {name:'Agressão no Tape',assets:['WIN'],users:10,max:10,sess:28,pinned:false,mine:false},
+    {name:'Setup 9.1 WIN',assets:['WIN'],users:10,max:10,sess:19,pinned:false,mine:false},
+    {name:'Bandas de Bollinger',assets:['WDO'],users:10,max:10,sess:14,pinned:false,mine:false},
+    {name:'Price Action B3',assets:['WIN'],users:10,max:10,sess:33,pinned:false,mine:false},
+    {name:'Sala do Stopão',assets:['WDO'],users:10,max:10,sess:7,pinned:false,mine:false},
+    {name:'WINV25 Vencimento',assets:['WINV25'],users:10,max:10,sess:41,pinned:false,mine:false},
+    {name:'Tape Reading ao Vivo',assets:['WIN'],users:10,max:10,sess:55,pinned:false,mine:false},
+    {name:'Morning Call B3',assets:['WIN'],users:10,max:10,sess:62,pinned:false,mine:false},
+    {name:'Contra-tendência WIN',assets:['WIN'],users:10,max:10,sess:11,pinned:false,mine:false},
+    {name:'Swing B3',assets:['WINV25'],users:10,max:10,sess:6,pinned:false,mine:false},
+    {name:'Abertura NY',assets:['WDO'],users:10,max:10,sess:24,pinned:false,mine:false},
+    {name:'Só Long',assets:['WIN'],users:10,max:10,sess:17,pinned:false,mine:false},
+    {name:'Só Short',assets:['WIN'],users:10,max:10,sess:13,pinned:false,mine:false},
+    {name:'Rompimento de máxima',assets:['WDO'],users:10,max:10,sess:20,pinned:false,mine:false},
+    {name:'Turma do Milhão',assets:['WIN'],users:10,max:10,sess:88,pinned:false,mine:false},
+    {name:'IFR2 na B3',assets:['WIN'],users:10,max:10,sess:4,pinned:false,mine:false},
+    {name:'Fechamento Explosivo',assets:['WDO'],users:10,max:10,sess:36,pinned:false,mine:false},
   ],
   fx:[
-    {name:'OS FODÕES',assets:['EUR/USD','XAU/USD','GBP/USD'],users:6,sess:19,pinned:true,mine:false},
-    {name:'London Open',assets:['GBP/USD','EUR/USD'],users:8,sess:11,pinned:false,mine:false},
-    {name:'Ouro e Dólar',assets:['XAU/USD','USD/BRL'],users:4,sess:7,pinned:false,mine:false},
-    {name:'NY Session',assets:['EUR/USD','USD/JPY','WTI'],users:5,sess:14,pinned:false,mine:false},
-    {name:'Forex BR',assets:['USD/BRL'],users:3,sess:6,pinned:false,mine:false},
-    {name:'Scalp EUR/USD',assets:['EUR/USD'],users:7,sess:23,pinned:false,mine:false},
-    {name:'Gold Hunters',assets:['XAU/USD'],users:9,sess:38,pinned:false,mine:false},
-    {name:'Asian Session',assets:['USD/JPY','USD/CHF'],users:4,sess:9,pinned:false,mine:false},
-    {name:'Petróleo e Commodities',assets:['WTI','XAU/USD'],users:5,sess:16,pinned:false,mine:false},
-    {name:'Cable Traders',assets:['GBP/USD'],users:6,sess:21,pinned:false,mine:false},
-    {name:'DXY Watchers',assets:['EUR/USD','USD/JPY'],users:3,sess:8,pinned:false,mine:false},
-    {name:'Notícias e NFP',assets:['EUR/USD','XAU/USD'],users:8,sess:44,pinned:false,mine:false},
-    {name:'Swing Forex',assets:['GBP/USD','EUR/USD'],users:4,sess:12,pinned:false,mine:false},
-    {name:'Franco Suíço',assets:['USD/CHF'],users:2,sess:5,pinned:false,mine:false},
-    {name:'Risco On Risk Off',assets:['XAU/USD','USD/JPY'],users:7,sess:29,pinned:false,mine:false},
+    {name:'OS FODÕES',assets:['EUR/USD'],users:10,max:10,sess:19,pinned:true,mine:false},
+    {name:'London Open',assets:['GBP/USD'],users:10,max:10,sess:11,pinned:false,mine:false},
+    {name:'Ouro e Dólar',assets:['XAU/USD'],users:10,max:10,sess:7,pinned:false,mine:false},
+    {name:'NY Session',assets:['EUR/USD'],users:10,max:10,sess:14,pinned:false,mine:false},
+    {name:'Forex BR',assets:['USD/BRL'],users:10,max:10,sess:6,pinned:false,mine:false},
+    {name:'Scalp EUR/USD',assets:['EUR/USD'],users:10,max:10,sess:23,pinned:false,mine:false},
+    {name:'Gold Hunters',assets:['XAU/USD'],users:10,max:10,sess:38,pinned:false,mine:false},
+    {name:'Asian Session',assets:['USD/JPY'],users:10,max:10,sess:9,pinned:false,mine:false},
+    {name:'Petróleo ao Vivo',assets:['WTI'],users:10,max:10,sess:16,pinned:false,mine:false},
+    {name:'Cable Traders',assets:['GBP/USD'],users:10,max:10,sess:21,pinned:false,mine:false},
+    {name:'DXY Watchers',assets:['EUR/USD'],users:10,max:10,sess:8,pinned:false,mine:false},
+    {name:'Notícias e NFP',assets:['XAU/USD'],users:10,max:10,sess:44,pinned:false,mine:false},
+    {name:'Swing Forex',assets:['GBP/USD'],users:10,max:10,sess:12,pinned:false,mine:false},
+    {name:'Franco Suíço',assets:['USD/CHF'],users:10,max:10,sess:5,pinned:false,mine:false},
+    {name:'Risco On Risk Off',assets:['XAU/USD'],users:10,max:10,sess:29,pinned:false,mine:false},
   ],
   cr:[
-    {name:'BTC HUNTERS',assets:['BTC/USD','ETH/USD'],users:10,sess:28,pinned:true,mine:false},
-    {name:'Altcoins Gang',assets:['SOL/USD','BNB/USD','XRP/USD'],users:7,sess:15,pinned:false,mine:false},
-    {name:'Crypto Night',assets:['BTC/USD'],users:4,sess:9,pinned:false,mine:false},
-    {name:'ETH Traders',assets:['ETH/USD','SOL/USD'],users:5,sess:11,pinned:false,mine:false},
-    {name:'Halving Watch',assets:['BTC/USD'],users:9,sess:52,pinned:false,mine:false},
-    {name:'SOL Season',assets:['SOL/USD','BNB/USD'],users:6,sess:18,pinned:false,mine:false},
-    {name:'XRP Army',assets:['XRP/USD'],users:8,sess:34,pinned:false,mine:false},
-    {name:'DeFi Traders',assets:['ETH/USD','BNB/USD'],users:5,sess:13,pinned:false,mine:false},
-    {name:'Crypto Scalp',assets:['BTC/USD','ETH/USD'],users:7,sess:25,pinned:false,mine:false},
-    {name:'100x ou Zero',assets:['SOL/USD','XRP/USD','BNB/USD'],users:3,sess:7,pinned:false,mine:false},
+    {name:'BTC HUNTERS',assets:['BTC/USD'],users:10,max:10,sess:28,pinned:true,mine:false},
+    {name:'Altcoins Gang',assets:['SOL/USD'],users:10,max:10,sess:15,pinned:false,mine:false},
+    {name:'Crypto Night',assets:['BTC/USD'],users:10,max:10,sess:9,pinned:false,mine:false},
+    {name:'ETH Traders',assets:['ETH/USD'],users:10,max:10,sess:11,pinned:false,mine:false},
+    {name:'Halving Watch',assets:['BTC/USD'],users:10,max:10,sess:52,pinned:false,mine:false},
+    {name:'SOL Season',assets:['SOL/USD'],users:10,max:10,sess:18,pinned:false,mine:false},
+    {name:'XRP Army',assets:['XRP/USD'],users:10,max:10,sess:34,pinned:false,mine:false},
+    {name:'DeFi Traders',assets:['ETH/USD'],users:10,max:10,sess:13,pinned:false,mine:false},
+    {name:'Crypto Scalp',assets:['BTC/USD'],users:10,max:10,sess:25,pinned:false,mine:false},
+    {name:'100x ou Zero',assets:['SOL/USD'],users:10,max:10,sess:7,pinned:false,mine:false},
   ]
 }
 
@@ -1296,7 +1296,7 @@ function roomCard(r) {
   return `<div class="room-card${r.pinned?' pinned':r.mine?' my-room':''}" onclick='enterRoom(${roomData.replace(/'/g,"&#39;")})'>
     <div class="rc-top"><div class="rcd rcd-${mkt}"></div><div class="rc-name">${r.name}</div>${badge}</div>
     <div class="rc-at">${at}</div>
-    <div class="rc-bottom"><span class="rc-meta">${r.sess} sessões · ${r.users}/10 traders</span><button class="enter-btn ${EB[mkt]}">ENTRAR →</button></div>
+    <div class="rc-bottom"><span class="rc-meta">${r.sess} sessões · ${r.users}/${r.max||10} traders</span><button class="enter-btn ${EB[mkt]}">ENTRAR →</button></div>
   </div>`
 }
 
