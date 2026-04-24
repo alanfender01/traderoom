@@ -1024,7 +1024,7 @@ async function entrarLobby() {
     btn.textContent = 'ENTRANDO...'
     btn.disabled = true
     try {
-      const res = await fetch(API + '/api/login', {
+      const res = await fetch(API + '/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, senha })
@@ -1168,7 +1168,7 @@ async function cadFinalizar() {
   btn.disabled = true
 
   try {
-    const res = await fetch(API + '/api/cadastro', {
+    const res = await fetch(API + '/auth/cadastro', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, email, telefone: tel, senha: p1, trader_id: currentId })
@@ -1682,7 +1682,7 @@ async function authLogin() {
   const btn = document.getElementById('al-btn')
   btn.textContent = 'ENTRANDO...'; btn.disabled = true
   try {
-    const res = await fetch(API + '/api/login', {
+    const res = await fetch(API + '/auth/login', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({email, senha})
     })
@@ -1724,7 +1724,7 @@ async function authCadastro() {
   const base = nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(' ')[0].replace(/[^a-z]/g,'').substring(0,8)
   const tid = base + '_' + Math.random().toString(36).substr(2,3)
   try {
-    const res = await fetch(API + '/api/cadastro', {
+    const res = await fetch(API + '/auth/cadastro', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({nome, email, senha, trader_id: tid})
     })
