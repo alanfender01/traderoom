@@ -4,8 +4,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TradeRoom — Modelo de Teste</title>
+<title>TradeRoom</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --bg0:#080a0c;--bg1:#0d1014;--bg2:#121518;--bg3:#181c22;--bg4:#1e232b;
@@ -18,14 +19,10 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg0);color:var(--t1);font-family:var(--display);min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,160,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,160,.02) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;z-index:0}
-
-/* SCREENS */
 .screen{display:none;width:100%;min-height:100vh;position:relative;z-index:1}
 .screen.on{display:flex;flex-direction:column}
 @keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .screen.on{animation:fi .22s ease}
-
-/* TOPNAV */
 .topnav{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:50px;background:var(--bg1);border-bottom:1px solid var(--border);flex-shrink:0;position:sticky;top:0;z-index:50}
 .tn-logo{font-size:20px;font-weight:800;letter-spacing:-1px;cursor:pointer}
 .tn-logo span{color:var(--g)}
@@ -33,27 +30,19 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .tn-tab{font-family:var(--mono);font-size:10px;padding:5px 11px;border-radius:5px;cursor:pointer;color:var(--t3);transition:all .15s;letter-spacing:.5px}
 .tn-tab:hover{color:var(--t2)}
 .tn-tab.active{background:var(--bg3);color:var(--t1)}
-.tn-tab.ir-t{display:flex;align-items:center;gap:5px}
-.ir-badge{font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:3px;background:rgba(201,168,76,.12);color:var(--gold);border:1px solid rgba(201,168,76,.2)}
 .profile-chip{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer;transition:all .15s}
 .profile-chip:hover{border-color:var(--g)}
 .pc-av{width:26px;height:26px;border-radius:50%;background:rgba(0,229,160,.15);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--g)}
 .pc-id{font-family:var(--mono);font-size:11px;color:var(--t1)}
-
-/* BUTTONS */
 .btn-p{padding:12px 28px;background:var(--g);border:none;border-radius:7px;color:#080a0c;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:opacity .15s}
 .btn-p:hover{opacity:.85}
 .btn-g{padding:12px 24px;background:transparent;border:1px solid var(--border2);border-radius:7px;color:var(--t2);font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s}
 .btn-g:hover{border-color:var(--t2);color:var(--t1)}
-
-/* FORMS */
 .field{margin-bottom:13px}
 .field label{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;display:block;margin-bottom:5px}
 .field input,.field select{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--t1);font-family:var(--mono);font-size:13px;padding:9px 12px;outline:none;transition:border-color .15s}
 .field input:focus,.field select:focus{border-color:var(--g)}
 .field input::placeholder{color:var(--t4)}
-
-/* TOAST */
 .toast-wrap{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:6px;align-items:center}
 .toast{font-family:var(--mono);font-size:11px;padding:8px 18px;border-radius:20px;white-space:nowrap;animation:toastIn .2s ease;pointer-events:none}
 @keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -63,7 +52,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .t-b{background:rgba(0,170,255,.12);border:1px solid rgba(0,170,255,.3);color:var(--b)}
 .t-gold{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:var(--gold)}
 
-/* ==================== SPLASH ==================== */
+/* SPLASH */
 #s-splash{align-items:center;justify-content:center;text-align:center;padding:80px 24px;position:relative;overflow:hidden}
 .splash-corner{position:absolute;width:200px;height:200px;border:1px solid rgba(0,229,160,.06)}
 .c-tl{top:0;left:0;border-right:none;border-bottom:none}
@@ -80,8 +69,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .t-name{color:var(--t3)}.t-val{color:var(--t1);font-weight:500}
 .t-up{color:var(--g)}.t-dn{color:var(--r)}
 
-/* ==================== CADASTRO ==================== */
-#s-cadastro{align-items:center;justify-content:center;padding:80px 24px}
+/* CADASTRO/LOGIN */
+#s-cadastro,#s-login{align-items:center;justify-content:center;padding:80px 24px}
 .form-card{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:2rem;width:380px;max-width:96vw;z-index:1}
 .fc-back{font-family:var(--mono);font-size:10px;color:var(--t3);cursor:pointer;margin-bottom:1.2rem;display:inline-flex;align-items:center;gap:5px;transition:color .15s}
 .fc-back:hover{color:var(--t1)}
@@ -113,14 +102,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .cred-val{font-family:var(--mono);font-size:12px;color:var(--t1)}
 .cred-val.green{color:var(--g);font-size:14px;font-weight:700}
 .warn-note{background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.15);border-radius:6px;padding:9px 11px;font-family:var(--mono);font-size:10px;color:rgba(245,166,35,.7);line-height:1.5;margin-bottom:1rem}
-
-/* ==================== LOGIN ==================== */
-#s-login{align-items:center;justify-content:center;padding:80px 24px}
 .divider{display:flex;align-items:center;gap:10px;margin:1rem 0}
 .dl{flex:1;height:1px;background:var(--border)}
 .dt{font-family:var(--mono);font-size:10px;color:var(--t4)}
 
-/* ==================== LOBBY ==================== */
+/* LOBBY */
 #s-lobby{min-height:100vh}
 .market-tabs{display:flex;background:var(--bg1);border-bottom:1px solid var(--border);padding:0 16px;gap:2px;flex-shrink:0}
 .mtab{display:flex;align-items:center;gap:6px;padding:10px 14px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:all .18s;letter-spacing:.5px}
@@ -147,7 +133,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .sec-label{font-family:var(--mono);font-size:9px;color:var(--t2);letter-spacing:2px;margin:8px 0 6px}
 .room-card{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:12px 14px;margin-bottom:7px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
 .room-card:hover{background:var(--bg3);border-color:var(--border2);transform:translateY(-1px)}
-.room-card.pinned{border-left:2px solid var(--p)}
 .room-card.my-room{border-left:2px solid var(--y)}
 .rc-top{display:flex;align-items:center;gap:9px;margin-bottom:6px}
 .rcd{width:7px;height:7px;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite}
@@ -157,7 +142,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .rcd-cr{background:var(--p)}
 .rc-name{font-family:var(--mono);font-size:13px;font-weight:700;flex:1;color:var(--t1)}
 .rc-badge{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px}
-.badge-turma{background:rgba(167,139,250,.08);color:var(--p);border:1px solid rgba(167,139,250,.15)}
 .badge-mine{background:rgba(245,166,35,.08);color:var(--y);border:1px solid rgba(245,166,35,.15)}
 .rc-at{display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap}
 .at-tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;font-weight:700}
@@ -166,7 +150,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .at-cr{background:rgba(167,139,250,.1);color:var(--p);border:1px solid rgba(167,139,250,.2)}
 .rc-bottom{display:flex;align-items:center}
 .rc-meta{font-family:var(--mono);font-size:10px;color:var(--t2);flex:1}
-.btn-lotada{background:transparent!important;border:1px solid var(--r)!important;color:var(--r)!important;cursor:not-allowed!important;opacity:0.8!important;}
 .enter-btn{font-family:var(--mono);font-size:10px;padding:5px 12px;border-radius:5px;cursor:pointer;transition:all .15s;white-space:nowrap;border:1px solid;font-weight:700}
 .eb3{background:rgba(0,229,160,.07);border-color:rgba(0,229,160,.2);color:var(--g)}
 .eb3:hover{background:rgba(0,229,160,.16)}
@@ -197,13 +180,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .ni-type{font-family:var(--mono);font-size:8px;letter-spacing:.5px}
 .ni-time{font-family:var(--mono);font-size:8px;color:var(--t4);margin-left:auto}
 .ni-text{font-size:11px;color:var(--t2);line-height:1.4}
-.ir-promo{background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:11px 12px;cursor:pointer;transition:all .2s}
-.ir-promo:hover{background:rgba(201,168,76,.09);border-color:rgba(201,168,76,.4)}
-.ip-title{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--gold);margin-bottom:3px}
-.ip-desc{font-size:11px;color:var(--t2);line-height:1.4;margin-bottom:7px}
-.ip-btn{width:100%;padding:6px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);border-radius:5px;color:var(--gold);font-family:var(--mono);font-size:10px;cursor:pointer;font-weight:700;transition:all .15s}
+.loading-rooms{text-align:center;padding:40px;font-family:var(--mono);font-size:11px;color:var(--t3)}
+.loading-spin{display:inline-block;width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--g);border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* ==================== MODAL CRIAR SALA ==================== */
+/* MODAL CRIAR SALA */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);align-items:flex-start;justify-content:center;padding:20px 16px;z-index:200;overflow-y:auto}
 .modal-bg.open{display:flex}
 .modal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;width:430px;max-width:96vw}
@@ -224,11 +205,14 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .btn-cancel{flex:1;padding:9px;background:transparent;border:1px solid var(--border2);border-radius:6px;color:var(--t3);font-family:var(--mono);font-size:11px;cursor:pointer}
 .btn-criar{flex:2;padding:9px;border-radius:6px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border:1px solid;letter-spacing:.5px;transition:all .15s}
 .btn-criar-b3{background:rgba(0,229,160,.1);border-color:rgba(0,229,160,.25);color:var(--g)}
-.btn-criar-b3:hover{background:rgba(0,229,160,.2)}
 .btn-criar-fx{background:rgba(0,170,255,.1);border-color:rgba(0,170,255,.25);color:var(--b)}
 .btn-criar-cr{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.25);color:var(--p)}
 
-/* ==================== SALA TRADING ==================== */
+/* AUTH MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);align-items:flex-start;justify-content:center;padding:20px 16px;z-index:200;overflow-y:auto}
+.modal-bg.open{display:flex}
+
+/* SALA TRADING */
 #s-room{min-height:100vh}
 .rh{display:flex;align-items:center;justify-content:space-between;padding:0 12px;height:44px;background:var(--bg1);border-bottom:1px solid var(--border);flex-shrink:0}
 .rh-l{display:flex;align-items:center;gap:10px}
@@ -237,11 +221,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .rh-name{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--t1)}
 .rh-c{display:flex;align-items:center;gap:10px}
 .rh-asset{font-family:var(--mono);font-size:12px;font-weight:700;background:var(--bg3);border:1px solid var(--border2);padding:3px 10px;border-radius:14px}
-.rh-price{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--g)}
-.rh-chg{font-family:var(--mono);font-size:10px;color:var(--g)}
 .rh-r{display:flex;align-items:center;gap:8px}
-.rh-users{font-family:var(--mono);font-size:10px;color:var(--t2);display:flex;align-items:center;gap:4px}
 .rh-dot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:pulse 2s infinite}
+.rh-users{font-family:var(--mono);font-size:10px;color:var(--t2);display:flex;align-items:center;gap:4px}
 .role-tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px}
 .rt-host{background:rgba(245,166,35,.1);color:var(--y);border:1px solid rgba(245,166,35,.2)}
 .rt-member{background:rgba(138,146,160,.08);color:var(--t3);border:1px solid var(--border)}
@@ -252,18 +234,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .tft.active{background:rgba(0,229,160,.1);color:var(--g);border-color:rgba(0,229,160,.2)}
 .tft:hover{color:var(--t1)}
 .ct-sep{width:1px;height:12px;background:var(--border2);margin:0 2px}
-.ind-t{font-family:var(--mono);font-size:10px;color:var(--t3);padding:2px 7px;border-radius:3px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);transition:all .1s}
-.ind-t:hover{border-color:var(--border2);color:var(--t1)}
-.ind-t.act{border-color:var(--y);color:var(--y);background:rgba(245,166,35,.07)}
-.locked-t{font-family:var(--mono);font-size:10px;color:var(--t4);padding:2px 7px;border-radius:3px;cursor:not-allowed;background:var(--bg0);border:1px solid var(--border);opacity:.45;display:flex;align-items:center;gap:3px}
-.host-bar{padding:3px 10px;background:rgba(245,166,35,.04);border-bottom:1px solid rgba(245,166,35,.1);font-family:var(--mono);font-size:9px;color:rgba(245,166,35,.5);letter-spacing:1px;display:flex;align-items:center;gap:8px;flex-shrink:0}
-.member-bar{padding:3px 10px;background:var(--bg0);border-bottom:1px solid var(--border);font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:1px;display:flex;align-items:center;gap:6px;flex-shrink:0}
-.sync-pill{background:rgba(0,229,160,.07);border:1px solid rgba(0,229,160,.15);border-radius:10px;padding:1px 7px;color:var(--g);font-size:9px}
-.canvas-wrap{flex:1;position:relative;overflow:hidden}
-canvas{display:block;width:100%;height:100%}
-.ann-svg{position:absolute;inset:0;pointer-events:none}
-.draw-ov{position:absolute;inset:0;cursor:crosshair;display:none}
-.draw-ov.on{display:block}
+.tv-wrap{flex:1;position:relative;overflow:hidden}
+.tv-wrap iframe{width:100%;height:100%;border:none}
 .bottom-op{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bg1);border-top:1px solid var(--border);flex-shrink:0}
 .op-lbl{font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:1px}
 .op-b{font-family:var(--mono);font-size:11px;font-weight:700;padding:5px 12px;border-radius:5px;cursor:pointer;border:1px solid;transition:all .15s}
@@ -273,7 +245,6 @@ canvas{display:block;width:100%;height:100%}
 .op-short:hover{background:rgba(255,69,96,.2)}
 .op-flat{background:var(--bg3);border-color:var(--border2);color:var(--t3)}
 .op-spacer{flex:1}
-.pnl-d{font-family:var(--mono);font-size:11px;color:var(--t2)}
 .room-side{width:250px;background:var(--bg1);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
 .side-tabs{display:flex;border-bottom:1px solid var(--border)}
 .stab{flex:1;padding:8px;font-family:var(--mono);font-size:10px;text-align:center;cursor:pointer;color:var(--t3);border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.5px}
@@ -281,11 +252,10 @@ canvas{display:block;width:100%;height:100%}
 .chat-msgs{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:5px;scrollbar-width:thin;scrollbar-color:var(--bg4) transparent}
 .cmsg-hd{display:flex;align-items:center;gap:5px;margin-bottom:1px}
 .cmsg-u{font-family:var(--mono);font-size:10px;font-weight:700}
-.cmsg-u.host{color:var(--y)}.cmsg-u.me{color:var(--g)}.cmsg-u.other{color:var(--b)}.cmsg-u.other2{color:var(--p)}.cmsg-u.sys{color:var(--t4)}
+.cmsg-u.host{color:var(--y)}.cmsg-u.me{color:var(--g)}.cmsg-u.other{color:var(--b)}.cmsg-u.sys{color:var(--t4)}
 .cmsg-t{font-family:var(--mono);font-size:9px;color:var(--t4)}
 .cmsg-body{font-size:11px;color:var(--t1);line-height:1.45;padding-left:2px}
 .cmsg-body.sys{color:var(--t4);font-style:italic}
-.cmsg-body.ann{color:var(--y)}
 .chat-inp-row{padding:6px;border-top:1px solid var(--border);display:flex;gap:5px;flex-shrink:0}
 .chat-inp{flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--t1);font-family:var(--mono);font-size:11px;padding:5px 8px;outline:none}
 .chat-inp:focus{border-color:var(--g)}
@@ -295,181 +265,17 @@ canvas{display:block;width:100%;height:100%}
 .trader-row{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border)}
 .tr-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;flex-shrink:0}
 .tr-id{font-size:11px;color:var(--t1);flex:1;font-family:var(--mono)}
-.tr-host-tag{font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:3px;background:rgba(245,166,35,.1);color:var(--y)}
-.mgmt-tab{flex:1;overflow-y:auto;padding:8px}
-.mt-inp{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--t1);font-family:var(--mono);font-size:11px;padding:5px 8px;outline:none;margin-bottom:8px}
-.mt-inp:focus{border-color:var(--g)}
-.mt-member{display:flex;align-items:center;gap:6px;padding:6px 7px;background:var(--bg2);border:1px solid var(--border);border-radius:5px;margin-bottom:4px;transition:all .15s}
-.mt-member.pinned{border-color:rgba(167,139,250,.25)}
-.mt-av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;font-weight:700;flex-shrink:0}
-.mt-id{font-family:var(--mono);font-size:11px;color:var(--t1);flex:1}
-.mt-sess{font-family:var(--mono);font-size:9px;color:var(--t3)}
-.mt-pin{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;border:1px solid;transition:all .15s;white-space:nowrap}
-.mt-pin-off{background:rgba(167,139,250,.05);border-color:rgba(167,139,250,.15);color:var(--p)}
-.mt-pin-off:hover{background:rgba(167,139,250,.12)}
-.mt-pin-on{background:rgba(167,139,250,.15);border-color:rgba(167,139,250,.35);color:var(--p)}
-.mt-kick{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(255,69,96,.05);border:1px solid rgba(255,69,96,.15);color:var(--r);transition:all .15s}
-.close-room-btn{width:100%;margin-top:8px;padding:7px;background:rgba(255,69,96,.07);border:1px solid rgba(255,69,96,.2);border-radius:6px;color:var(--r);font-family:var(--mono);font-size:11px;cursor:pointer;font-weight:700;transition:all .15s}
-.close-room-btn:hover{background:rgba(255,69,96,.14)}
 .audio-strip{display:flex;align-items:center;gap:5px;padding:6px 8px;background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0}
 .au-lbl{font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:1px;flex:1}
 .au-btn{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);transition:all .15s}
 .au-btn.on{background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25)}
-.confirm-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);align-items:center;justify-content:center;z-index:300}
-.confirm-modal.open{display:flex}
-.cm-box{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:1.5rem;width:300px}
-.cm-title{font-size:16px;font-weight:700;color:var(--r);margin-bottom:6px}
-.cm-body{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:1rem}
-.cm-acts{display:flex;gap:7px}
-.cm-cancel{flex:1;padding:8px;background:transparent;border:1px solid var(--border2);border-radius:5px;color:var(--t3);font-family:var(--mono);font-size:11px;cursor:pointer}
-.cm-ok{flex:2;padding:8px;background:rgba(255,69,96,.1);border:1px solid rgba(255,69,96,.25);border-radius:5px;color:var(--r);font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer}
-.cm-ok:hover{background:rgba(255,69,96,.2)}
-
-/* ==================== PERFIL ==================== */
-#s-perfil{overflow-y:auto}
-.perfil-body{max-width:640px;margin:0 auto;padding:20px 16px 40px}
-.p-hero{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:14px}
-.ph-avatar{width:56px;height:56px;border-radius:50%;background:rgba(0,229,160,.12);border:1.5px solid rgba(0,229,160,.3);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:20px;font-weight:700;color:var(--g);flex-shrink:0}
-.ph-id{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--t1)}
-.ph-since{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:2px}
-.ph-stats{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap}
-.ph-stat{text-align:center}
-.ph-val{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--t1)}
-.ph-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:1px}
-.p-sec-title{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;margin:14px 0 7px}
-.hist-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;margin-bottom:4px}
-.hr-name{font-family:var(--mono);font-size:12px;color:var(--t1);flex:1}
-.hr-sess{font-family:var(--mono);font-size:10px;color:var(--t2)}
-.hr-bar{width:60px;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
-.hr-fill{height:100%;background:var(--g);border-radius:2px}
-.member-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;margin-bottom:4px}
-.mr-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;flex-shrink:0}
-.mr-id{font-family:var(--mono);font-size:12px;color:var(--t1);flex:1}
-.mr-sess{font-family:var(--mono);font-size:10px;color:var(--t2)}
-
-/* ==================== SALA PATROCINADA ==================== */
-#s-sponsor{min-height:100vh}
-.sp-rh{display:flex;align-items:center;justify-content:space-between;padding:0 12px;height:44px;background:var(--bg1);border-bottom:1px solid rgba(255,107,0,.25);flex-shrink:0}
-.sp-brand{display:flex;align-items:center;gap:8px}
-.sp-logo{width:28px;height:28px;border-radius:5px;background:var(--o);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;color:#fff}
-.sp-name{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--o)}
-.sp-tag{font-family:var(--mono);font-size:8px;padding:1px 6px;border-radius:3px;background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.2);color:var(--o);letter-spacing:1px}
-.live-pill{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--r);background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);padding:3px 9px;border-radius:12px}
-.sp-body{display:flex;flex:1;overflow:hidden;height:calc(100vh - 94px)}
-.player-col{flex:1;display:flex;flex-direction:column;min-width:0}
-.player-area{flex:1;position:relative;background:#000;cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px}
-.play-btn{width:60px;height:60px;border-radius:50%;background:rgba(255,69,96,.85);display:flex;align-items:center;justify-content:center}
-.play-icon{width:0;height:0;border-top:13px solid transparent;border-bottom:13px solid transparent;border-left:20px solid #fff;margin-left:4px}
-.play-title{font-family:var(--mono);font-size:12px;color:var(--t1);text-align:center;padding:0 20px}
-.play-sub{font-family:var(--mono);font-size:10px;color:var(--t3)}
-.sp-cta{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,107,53,.04);border-top:1px solid rgba(255,107,53,.12);flex-shrink:0}
-.sp-cta-text{flex:1}
-.sp-cta-main{font-family:var(--mono);font-size:11px;color:var(--o);margin-bottom:2px}
-.sp-cta-sub{font-size:11px;color:var(--t3)}
-.sp-cta-btn{font-family:var(--mono);font-size:10px;padding:7px 14px;border-radius:5px;background:var(--o);border:none;color:#fff;cursor:pointer;font-weight:700;white-space:nowrap;transition:opacity .15s}
-.sp-cta-btn:hover{opacity:.85}
-.sp-ticker{display:flex;gap:14px;padding:6px 12px;background:var(--bg1);border-top:1px solid var(--border);flex-shrink:0}
-.st-item{display:flex;align-items:center;gap:6px}
-.st-name{font-family:var(--mono);font-size:10px;color:var(--t3)}
-.st-val{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t1)}
-.sp-viewers{font-family:var(--mono);font-size:10px;color:var(--t2);display:flex;align-items:center;gap:4px}
-
-/* ==================== PITCH PATROCINADOR ==================== */
-#s-pitch{overflow-y:auto}
-.pitch-body{max-width:640px;margin:0 auto;padding:20px 16px 40px}
-.pitch-back{font-family:var(--mono);font-size:10px;color:var(--t3);cursor:pointer;display:inline-flex;align-items:center;gap:5px;margin-bottom:16px;transition:color .15s}
-.pitch-back:hover{color:var(--t1)}
-.pitch-hero{text-align:center;padding:16px 0 24px;border-bottom:1px solid var(--border);margin-bottom:20px}
-.ph-eyebrow{font-family:var(--mono);font-size:9px;color:var(--y);letter-spacing:3px;margin-bottom:10px}
-.ph-title{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--t1);line-height:1.1;margin-bottom:8px}
-.ph-title span{color:var(--y)}
-.ph-sub{font-family:var(--mono);font-size:11px;color:var(--t2);margin-bottom:16px;line-height:1.6}
-.pitch-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
-.ps-card{background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:14px;text-align:center}
-.ps-val{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--t1);margin-bottom:3px}
-.ps-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);line-height:1.4}
-.ben-list{display:flex;flex-direction:column;gap:7px;margin-bottom:20px}
-.ben-item{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;background:var(--bg2);border:1px solid var(--border);border-radius:8px}
-.bi-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.bi-title{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t1);margin-bottom:3px}
-.bi-desc{font-size:11px;color:var(--t2);line-height:1.5}
-.pitch-cta{background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.2);border-radius:10px;padding:20px;text-align:center}
-.pcta-title{font-size:18px;font-weight:800;color:var(--t1);margin-bottom:6px}
-.pcta-sub{font-family:var(--mono);font-size:11px;color:var(--t3);margin-bottom:16px;line-height:1.5}
-.pcta-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.btn-pcta{padding:11px 22px;background:var(--y);border:none;border-radius:6px;color:#080a0c;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s}
-.btn-pcta:hover{opacity:.85}
-.btn-pcta-g{padding:11px 22px;background:transparent;border:1px solid var(--border2);border-radius:6px;color:var(--t2);font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s}
-.btn-pcta-g:hover{border-color:var(--t2);color:var(--t1)}
-
-/* ==================== TRADERCALC ==================== */
-#s-ir-landing{overflow-y:auto;background:var(--bg0)}
-.lp-body{max-width:600px;margin:0 auto;padding:20px 16px 40px}
-.lp-title{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--t1);line-height:1.1;margin-bottom:8px}
-.lp-title span{color:var(--gold)}
-.lp-sub{font-family:var(--mono);font-size:11px;color:var(--t2);margin-bottom:16px;line-height:1.6}
-.price-pill{display:inline-flex;align-items:baseline;gap:6px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:100px;padding:8px 20px;margin-bottom:20px}
-.pp-from{font-size:11px;color:var(--t3)}
-.pp-val{font-family:var(--serif);font-size:26px;font-weight:900;color:var(--gold)}
-.pp-per{font-size:12px;color:var(--t2)}
-.feat-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:20px}
-.feat-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:13px}
-.fc-icon{font-size:18px;margin-bottom:6px}
-.fc-title{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t1);margin-bottom:4px}
-.fc-desc{font-size:11px;color:var(--t2);line-height:1.45}
-.price-card{background:var(--bg2);border:1px solid rgba(201,168,76,.25);border-radius:10px;overflow:hidden;margin-bottom:20px}
-.pc-head{padding:16px;text-align:center;background:rgba(201,168,76,.05);border-bottom:1px solid rgba(201,168,76,.15)}
-.pc-name{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:2px;margin-bottom:8px}
-.pc-price{font-family:var(--serif);font-size:38px;font-weight:900;color:var(--gold);line-height:1}
-.pc-price sup{font-size:16px;vertical-align:top;margin-top:6px;display:inline-block}
-.pc-price sub{font-size:14px;color:var(--t2)}
-.pc-note{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:6px}
-.pc-items{padding:14px 18px;border-bottom:1px solid var(--border)}
-.pc-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);margin-bottom:7px}
-.pc-check{width:16px;height:16px;border-radius:50%;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--gold);flex-shrink:0}
-.pc-cta{padding:14px 18px;text-align:center}
-.assinar-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:8px;color:#080a0c;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:opacity .15s}
-.assinar-btn:hover{opacity:.88}
-.pc-seg{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:7px}
-
-#s-calc{min-height:100vh}
-.calc-topbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:46px;background:#111318;border-bottom:1px solid #1e2530;flex-shrink:0}
-.ctb-left{display:flex;align-items:center;gap:10px}
-.ctb-back{font-family:var(--mono);font-size:10px;color:#6a7f96;cursor:pointer;padding:3px 8px;border:1px solid #1e2530;border-radius:4px;transition:all .15s}
-.ctb-back:hover{color:#f0f4fa}
-.ctb-icon{width:28px;height:28px;background:linear-gradient(135deg,#00e5a0,#0088ff);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px}
-.ctb-name{font-family:var(--display);font-size:14px;font-weight:800;color:#f0f4fa}
-.ctb-badge{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.2)}
-.calc-body{flex:1;overflow-y:auto;padding:20px;scrollbar-width:thin;background:#0a0c0f}
-.calc-nav{display:flex;gap:2px;margin-bottom:22px;border-bottom:1px solid #1e2530}
-.cnt{padding:9px 14px;font-family:var(--display);font-size:11px;font-weight:700;color:#6a7f96;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
-.cnt.active{color:#00e5a0;border-bottom-color:#00e5a0}
-.darf-alert{background:rgba(255,68,68,.08);border:1px solid rgba(255,68,68,.25);border-radius:8px;padding:11px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.da-txt{font-family:var(--mono);font-size:11px;color:#ff9999;flex:1}
-.da-pay{font-family:var(--mono);font-size:10px;padding:5px 11px;border-radius:5px;background:rgba(255,68,68,.12);border:1px solid rgba(255,68,68,.25);color:#ff4444;cursor:pointer}
-.drop-area{border:2px dashed #1e2530;border-radius:12px;padding:36px;text-align:center;background:#111318;cursor:pointer;transition:all .2s;margin-bottom:14px}
-.drop-area:hover{border-color:#00e5a0;background:#181c23}
-.da-icon{font-size:28px;margin-bottom:8px}
-.da-title{font-family:var(--display);font-size:14px;font-weight:700;color:#f0f4fa;margin-bottom:4px}
-.da-sub{font-size:11px;color:#a8b8cc;line-height:1.6}
-.da-sub span{color:#00e5a0;cursor:pointer}
-.qs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.qs{background:#111318;border:1px solid #1e2530;border-radius:8px;padding:12px;text-align:center}
-.qs-val{font-family:var(--mono);font-size:15px;font-weight:700;margin-bottom:2px}
-.qs-lbl{font-size:9px;color:#6a7f96;text-transform:uppercase;letter-spacing:1px}
-.hist-table{width:100%;border-collapse:collapse;font-size:11px}
-.hist-table th{padding:8px 12px;text-align:left;color:#6a7f96;font-size:9px;letter-spacing:1px;background:#111318;border-bottom:1px solid #1e2530;font-family:var(--mono)}
-.hist-table th:not(:first-child){text-align:right}
-.hist-table td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.03);color:#a8b8cc;font-family:var(--mono)}
-.hist-table td:not(:first-child){text-align:right}
-.hist-table tr:hover td{background:rgba(255,255,255,.012)}
 </style>
 </head>
 <body>
 
 <div class="toast-wrap" id="toast-wrap"></div>
 
-<!-- ==================== SPLASH ==================== -->
+<!-- SPLASH -->
 <div id="s-splash" class="screen on">
   <div class="splash-corner c-tl"></div>
   <div class="splash-corner c-br"></div>
@@ -477,27 +283,28 @@ canvas{display:block;width:100%;height:100%}
   <div class="splash-title">TRADE<span>ROOM</span></div>
   <div class="splash-sub">análise coletiva entre traders reais · sem analistas</div>
   <div class="splash-btns">
-    <button class="btn-p" onclick="go('s-lobby'); setTimeout(renderRooms, 50)">ENTRAR →</button>
+    <button class="btn-p" onclick="go('s-lobby')">ENTRAR →</button>
+    <button class="btn-g" onclick="go('s-login')">JÁ TENHO CONTA</button>
   </div>
   <div class="splash-ticker">
     <div class="ticker-inner" id="ticker"></div>
   </div>
 </div>
 
-<!-- ==================== CADASTRO ==================== -->
+<!-- CADASTRO -->
 <div id="s-cadastro" class="screen">
   <div class="form-card" id="cad-step1">
     <div class="fc-back" onclick="go('s-splash')">← VOLTAR</div>
-    <div class="steps"><div class="step-bar active" id="sb0"></div><div class="step-bar" id="sb1"></div></div>
+    <div class="steps"><div class="step-bar active"></div><div class="step-bar"></div></div>
     <div class="fc-title">Criar conta</div>
-    <div class="fc-sub">Seus dados ficam seguros. O telefone é usado apenas para comunicados.</div>
+    <div class="fc-sub">Seus dados ficam seguros.</div>
     <div class="field"><label>NOME COMPLETO</label><input type="text" id="c-nome" placeholder="João Silva" oninput="onNome(this)"></div>
     <div class="field"><label>EMAIL</label><input type="email" id="c-email" placeholder="joao@email.com"></div>
-    <div class="field"><label>TELEFONE (WHATSAPP)</label><input type="tel" id="c-tel" placeholder="(11) 99999-9999" oninput="maskTel(this)" maxlength="15"></div>
+    <div class="field"><label>TELEFONE</label><input type="tel" id="c-tel" placeholder="(11) 99999-9999" oninput="maskTel(this)" maxlength="15"></div>
     <div class="id-block">
       <div class="ib-label">SEU ID NAS SALAS</div>
       <div class="ib-row"><span class="ib-hash">#</span><span class="ib-val" id="id-preview">trader_jo4x</span><span class="ib-regen" onclick="regenId()">↻ OUTRO</span></div>
-      <div class="ib-note">Como todos te verão. Único, público e permanente.</div>
+      <div class="ib-note">Como todos te verão. Único e permanente.</div>
     </div>
     <button class="btn-p" style="width:100%" onclick="cadNext()">CONTINUAR →</button>
   </div>
@@ -505,87 +312,78 @@ canvas{display:block;width:100%;height:100%}
     <div class="fc-back" onclick="document.getElementById('cad-step1').style.display='';document.getElementById('cad-step2').style.display='none'">← VOLTAR</div>
     <div class="steps"><div class="step-bar done"></div><div class="step-bar active"></div></div>
     <div class="fc-title">Crie sua senha</div>
-    <div class="fc-sub">Guarde em local seguro. Usada para entrar no TradeRoom.</div>
     <div class="field"><label>SENHA</label><div class="pwd-wrap"><input type="password" id="c-pwd1" placeholder="Mínimo 8 caracteres" oninput="checkStrength(this)"><span class="pwd-toggle" onclick="togglePwd('c-pwd1',this)">MOSTRAR</span></div><div class="strength-bar"><div class="sb" id="str0"></div><div class="sb" id="str1"></div><div class="sb" id="str2"></div><div class="sb" id="str3"></div></div></div>
     <div class="field"><label>CONFIRMAR SENHA</label><input type="password" id="c-pwd2" placeholder="Repita a senha"></div>
-    <button class="btn-p" style="width:100%;margin-top:8px" onclick="cadFinalizar()">CRIAR CONTA →</button>
+    <button class="btn-p" style="width:100%;margin-top:8px" id="btn-cad-fin" onclick="cadFinalizar()">CRIAR CONTA →</button>
   </div>
   <div class="form-card" id="cad-step3" style="display:none;text-align:center">
     <div class="success-ico">✓</div>
     <div class="fc-title" style="text-align:center">Conta criada!</div>
-    <div class="fc-sub" style="text-align:center;margin-bottom:.5rem">Guarde seus dados de acesso abaixo.</div>
-    <div class="warn-note">Anote sua senha agora. Por segurança ela não será exibida novamente.</div>
+    <div class="warn-note">Anote sua senha agora.</div>
     <div class="cred-box">
-      <div class="cred-row"><span class="cred-lbl">ID PÚBLICO</span><span class="cred-val green" id="final-id">#trader_jo4x</span></div>
-      <div class="cred-row"><span class="cred-lbl">EMAIL</span><span class="cred-val" id="final-email">joao@email.com</span></div>
-      <div class="cred-row"><span class="cred-lbl">SENHA</span><span class="cred-val" id="final-pwd">••••••••</span></div>
+      <div class="cred-row"><span class="cred-lbl">ID</span><span class="cred-val green" id="final-id"></span></div>
+      <div class="cred-row"><span class="cred-lbl">EMAIL</span><span class="cred-val" id="final-email"></span></div>
     </div>
-    <button class="btn-p" style="width:100%" onclick="entrarLobby()">ENTRAR NO LOBBY →</button>
+    <button class="btn-p" style="width:100%" onclick="go('s-lobby')">ENTRAR NO LOBBY →</button>
   </div>
 </div>
 
-<!-- ==================== LOGIN ==================== -->
+<!-- LOGIN -->
 <div id="s-login" class="screen">
   <div class="form-card">
     <div class="fc-back" onclick="go('s-splash')">← VOLTAR</div>
     <div class="fc-title">Entrar</div>
-    <div class="fc-sub" style="margin-bottom:1.5rem">Use o email e senha cadastrados.</div>
-    <div class="field"><label>EMAIL</label><input type="email" id="l-email" placeholder="seu@email.com" autocomplete="email"></div>
-    <div class="field"><label>SENHA</label><div class="pwd-wrap"><input type="password" id="l-pwd" placeholder="Sua senha" autocomplete="current-password"><span class="pwd-toggle" onclick="togglePwd('l-pwd',this)">MOSTRAR</span></div></div>
-    <div style="text-align:right;margin-bottom:1.2rem"><span style="font-family:var(--mono);font-size:10px;color:var(--b);cursor:pointer" onclick="toast('Link de recuperação enviado!','t-g')">Esqueci minha senha</span></div>
-    <button class="btn-p" style="width:100%" onclick="entrarLobby()">ENTRAR →</button>
+    <div class="fc-sub" style="margin-bottom:1.5rem">Use seu email e senha.</div>
+    <div class="field"><label>EMAIL</label><input type="email" id="l-email" placeholder="seu@email.com"></div>
+    <div class="field"><label>SENHA</label><div class="pwd-wrap"><input type="password" id="l-pwd" placeholder="Sua senha"><span class="pwd-toggle" onclick="togglePwd('l-pwd',this)">MOSTRAR</span></div></div>
+    <button class="btn-p" style="width:100%;margin-top:8px" id="btn-login" onclick="doLogin()">ENTRAR →</button>
     <div class="divider"><div class="dl"></div><div class="dt">ou</div><div class="dl"></div></div>
     <button class="btn-g" style="width:100%" onclick="go('s-cadastro')">CRIAR CONTA</button>
   </div>
 </div>
 
-<!-- ==================== LOBBY ==================== -->
+<!-- LOBBY -->
 <div id="s-lobby" class="screen">
   <div class="topnav">
     <div class="tn-logo" onclick="go('s-lobby')">TRADE<span>ROOM</span></div>
     <div class="tn-nav">
-      <div class="tn-tab active" onclick="swTopTab(this,'salas')">SALAS</div>
-      <div class="tn-tab ir-t" onclick="goIR()">🧮 CALC IR <span class="ir-badge">R$10</span></div>
+      <div class="tn-tab active">SALAS</div>
     </div>
-    <div class="profile-chip" onclick="go('s-perfil')"><div class="pc-av" id="lobby-av">TR</div><span class="pc-id" id="lobby-uid">trader_7k4x</span></div>
+    <div class="profile-chip" onclick="toast('Perfil em breve!','t-b')">
+      <div class="pc-av" id="lobby-av">TR</div>
+      <span class="pc-id" id="lobby-uid">visitante</span>
+    </div>
   </div>
   <div class="market-tabs">
-    <div class="mtab ab3" id="mtab-b3" onclick="switchMkt('b3',this)"><div class="mtab-dot" style="background:var(--g)"></div>B3<span class="mtab-n nb3" id="cnt-b3">8</span></div>
-    <div class="mtab" id="mtab-fx" onclick="switchMkt('fx',this)"><div class="mtab-dot" style="background:var(--b)"></div>FOREX<span class="mtab-n nfx" id="cnt-fx">5</span></div>
-    <div class="mtab" id="mtab-cr" onclick="switchMkt('cr',this)"><div class="mtab-dot" style="background:var(--p)"></div>CRIPTO<span class="mtab-n ncr" id="cnt-cr">4</span></div>
+    <div class="mtab ab3" id="mtab-b3" onclick="switchMkt('B3',this)"><div class="mtab-dot" style="background:var(--g)"></div>B3<span class="mtab-n nb3" id="cnt-b3">0</span></div>
+    <div class="mtab" id="mtab-fx" onclick="switchMkt('Forex',this)"><div class="mtab-dot" style="background:var(--b)"></div>FOREX<span class="mtab-n nfx" id="cnt-fx">0</span></div>
+    <div class="mtab" id="mtab-cr" onclick="switchMkt('Cripto',this)"><div class="mtab-dot" style="background:var(--p)"></div>CRIPTO<span class="mtab-n ncr" id="cnt-cr">0</span></div>
   </div>
   <div class="lobby-body">
     <div class="lobby-main">
       <div class="search-row">
         <input class="search-inp" id="search-inp" placeholder="Buscar sala..." oninput="filterRooms(this.value)">
-        <button class="new-btn" id="new-btn" onclick="openModal()">+ NOVA SALA</button>
+        <button class="new-btn nb3-btn" id="new-btn" onclick="openModal()">+ NOVA SALA</button>
       </div>
-      <div class="sec-label">SALAS PATROCINADAS</div>
-      <div class="sponsor-slot" onclick="go('s-pitch')">
+      <div class="sec-label">SALA PATROCINADA</div>
+      <div class="sponsor-slot">
         <div class="slot-shimmer"></div>
         <div class="slot-top"><div><div class="slot-name">SALA PATROCINADA</div><div style="font-family:var(--mono);font-size:9px;color:var(--t3)">Espaço disponível para sua corretora</div></div><div class="slot-avail"><div class="slot-pulse"></div>DISPONÍVEL</div></div>
-        <div class="slot-body"><div class="slot-txt">Alcance traders ativos da B3 com sua marca no centro do pregão. Sala sem limite de usuários com YouTube Live.</div><button class="saiba-btn">SAIBA MAIS →</button></div>
+        <div class="slot-body"><div class="slot-txt">Alcance traders ativos da B3 com sua marca no centro do pregão.</div><button class="saiba-btn">SAIBA MAIS →</button></div>
       </div>
-      <div id="rooms-list"></div>
+      <div id="rooms-list"><div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div></div>
     </div>
     <div class="lobby-side">
       <div class="ls-title">AO VIVO</div>
       <div class="side-stat-grid">
-        <div class="ss"><div class="ss-val" id="live-count">847</div><div class="ss-lbl">traders</div></div>
-        <div class="ss"><div class="ss-val" id="live-rooms">17</div><div class="ss-lbl">salas</div></div>
+        <div class="ss"><div class="ss-val" id="live-count">—</div><div class="ss-lbl">traders</div></div>
+        <div class="ss"><div class="ss-val" id="live-rooms">—</div><div class="ss-lbl">salas</div></div>
         <div class="ss"><div class="ss-val" style="color:var(--g)">B3</div><div class="ss-lbl">+ ativo</div></div>
         <div class="ss"><div class="ss-val" style="color:var(--b)">24h</div><div class="ss-lbl">forex</div></div>
       </div>
-      <div class="ir-promo" onclick="goIR()">
-        <div class="ip-title">🧮 CALC IR</div>
-        <div class="ip-desc">Calcule seu IR de day trade. DARF pronto, declaração campo a campo.</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--gold)">apenas R$10/mês</div>
-        <button class="ip-btn" style="margin-top:6px">CONHECER →</button>
-      </div>
       <div class="ls-title">NOTIFICAÇÕES</div>
-      <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--g)"></div><span class="ni-type" style="color:var(--g)">TURMA</span><span class="ni-time">09:01</span></div><div class="ni-text">VENCEDORES abriu. Sua turma está lá.</div></div>
-      <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--b)"></div><span class="ni-type" style="color:var(--b)">FOREX</span><span class="ni-time">08:30</span></div><div class="ni-text">OS FODÕES abriu. EUR/USD na abertura.</div></div>
-      <div class="notif" style="border-color:rgba(201,168,76,.2)"><div class="ni-hd"><div class="ni-dot" style="background:var(--gold)"></div><span class="ni-type" style="color:var(--gold)">DARF</span><span class="ni-time">hoje</span></div><div class="ni-text">DARF jan/25 vence em 3 dias.</div></div>
+      <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--g)"></div><span class="ni-type" style="color:var(--g)">B3</span><span class="ni-time">agora</span></div><div class="ni-text">Salas abertas para o pregão de hoje.</div></div>
+      <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--b)"></div><span class="ni-type" style="color:var(--b)">FOREX</span><span class="ni-time">08:30</span></div><div class="ni-text">London Session aberta.</div></div>
     </div>
   </div>
 </div>
@@ -596,514 +394,418 @@ canvas{display:block;width:100%;height:100%}
     <div class="mhdr"><div class="mhdr-title" id="m-title">CRIAR SALA — B3</div><div class="mhdr-close" onclick="closeModal()">✕</div></div>
     <div class="mbody">
       <div class="field"><label>NOME DA SALA</label><input type="text" id="m-name" placeholder="Ex: VENCEDORES, OS FODÕES..."></div>
-      <div class="field"><label>ATIVOS OPERADOS (AT)</label><div class="assets-wrap" id="m-assets"></div><div style="font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:5px" id="m-asset-hint">Selecione um ou mais ativos</div></div>
+      <div class="field"><label>MERCADO</label>
+        <select id="m-mercado" onchange="updateModalMkt(this.value)" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--t1);font-family:var(--mono);font-size:13px;padding:9px 12px;outline:none">
+          <option value="B3">B3</option>
+          <option value="Forex">Forex</option>
+          <option value="Cripto">Cripto</option>
+        </select>
+      </div>
+      <div class="field"><label>ATIVOS</label><div class="assets-wrap" id="m-assets"></div></div>
       <div class="field"><label>LIMITE DE TRADERS</label><div class="slider-row"><input type="range" min="2" max="10" value="10" id="m-limit" oninput="document.getElementById('m-lv').textContent=this.value"><span class="slider-val" id="m-lv">10</span></div></div>
     </div>
-    <div class="mftr"><button class="btn-cancel" onclick="closeModal()">CANCELAR</button><button class="btn-criar" id="m-criar-btn" onclick="criarSala()">▶ CRIAR SALA</button></div>
+    <div class="mftr"><button class="btn-cancel" onclick="closeModal()">CANCELAR</button><button class="btn-criar btn-criar-b3" id="m-criar-btn" onclick="criarSala()">▶ CRIAR SALA</button></div>
   </div>
 </div>
 
-
-<!-- ==================== MODAL AUTH ==================== -->
-<div class="modal-bg" id="auth-modal-bg">
-  <div class="modal" style="max-width:380px">
-    <div class="mhdr">
-      <div class="mhdr-title" id="auth-modal-title">ACESSAR SALA</div>
-      <div class="mhdr-close" onclick="closeAuthModal()">✕</div>
-    </div>
-    <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:1.2rem">
-      <div id="auth-tab-login" onclick="switchAuthTab('login')" style="flex:1;text-align:center;padding:10px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--g);color:var(--t1)">JÁ TENHO CONTA</div>
-      <div id="auth-tab-cad" onclick="switchAuthTab('cad')" style="flex:1;text-align:center;padding:10px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--t3)">CRIAR CONTA</div>
-    </div>
-    <!-- LOGIN -->
-    <div id="auth-form-login" style="padding:0 1.5rem 1.5rem">
-      <div class="field"><label>EMAIL</label><input type="email" id="al-email" placeholder="seu@email.com"></div>
-      <div class="field"><label>SENHA</label><div class="pwd-wrap"><input type="password" id="al-pwd" placeholder="Sua senha"><span class="pwd-toggle" onclick="togglePwd('al-pwd',this)">MOSTRAR</span></div></div>
-      <button class="btn-p" style="width:100%;margin-top:8px" id="al-btn" onclick="authLogin()">ENTRAR →</button>
-    </div>
-    <!-- CADASTRO -->
-    <div id="auth-form-cad" style="padding:0 1.5rem 1.5rem;display:none">
-      <div class="field"><label>NOME COMPLETO</label><input type="text" id="ac-nome" placeholder="João Silva"></div>
-      <div class="field"><label>EMAIL</label><input type="email" id="ac-email" placeholder="seu@email.com"></div>
-      <div class="field"><label>SENHA</label><input type="password" id="ac-pwd" placeholder="Mínimo 8 caracteres"></div>
-      <button class="btn-p" style="width:100%;margin-top:8px" id="ac-btn" onclick="authCadastro()">CRIAR CONTA →</button>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== SALA TRADING ==================== -->
+<!-- SALA TRADING -->
 <div id="s-room" class="screen">
   <div class="rh">
     <div class="rh-l">
       <div class="rh-back" onclick="go('s-lobby')">← LOBBY</div>
-      <div class="rh-name" id="room-name-tag">VENCEDORES</div>
+      <div class="rh-name" id="room-name-tag">SALA</div>
     </div>
     <div class="rh-c">
       <div class="rh-asset" id="room-asset-tag">WIN</div>
-      <div class="rh-price" id="room-price">134.820</div>
-      <div class="rh-chg" id="room-chg">▲ +1.180</div>
     </div>
     <div class="rh-r">
       <div class="rh-dot"></div>
-      <div class="rh-users">7/10</div>
-      <div class="role-tag" id="room-role-tag">HOST</div>
+      <div class="rh-users" id="room-users-tag">AO VIVO</div>
+      <div class="role-tag rt-member" id="room-role-tag">MEMBRO</div>
     </div>
   </div>
   <div class="room-body">
     <div class="chart-col">
-      <div id="toolbar-host" class="chart-toolbar">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--y);letter-spacing:1px;margin-right:4px">CRIADOR</div>
-        <div class="tft active" onclick="setTf(this)">1m</div>
-        <div class="tft" onclick="setTf(this)">5m</div>
-        <div class="tft" onclick="setTf(this)">15m</div>
-        <div class="tft" onclick="setTf(this)">1h</div>
+      <div class="chart-toolbar">
+        <span style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:1px">GRÁFICO:</span>
+        <div class="tft active" onclick="setSymbol('BMFBOVESPA:WIN1!',this)">WIN</div>
+        <div class="tft" onclick="setSymbol('BMFBOVESPA:WDO1!',this)">WDO</div>
         <div class="ct-sep"></div>
-        <div class="ind-t act" onclick="this.classList.toggle('act')">MA</div>
-        <div class="ind-t" onclick="this.classList.toggle('act');sysMsg('Indicador VWAP ativado')">VWAP</div>
-        <div class="ind-t" onclick="this.classList.toggle('act')">BB</div>
+        <div class="tft" onclick="setSymbol('BINANCE:BTCUSDT',this)">BTC</div>
+        <div class="tft" onclick="setSymbol('BINANCE:ETHUSDT',this)">ETH</div>
         <div class="ct-sep"></div>
-        <div class="ind-t" id="tl-line" onclick="setTool('line',this)">/ Linha</div>
-        <div class="ind-t" id="tl-sr" onclick="setTool('sr',this)">═ S/R</div>
-        <div class="ind-t" id="tl-fib" onclick="setTool('fib',this)">~ Fib</div>
-        <div class="ind-t" onclick="clearAnns();toast('Anotações limpas','t-r')" style="color:var(--r);border-color:rgba(255,69,96,.2)">✕ Limpar</div>
+        <div class="tft" onclick="setSymbol('FX:EURUSD',this)">EUR/USD</div>
+        <div class="tft" onclick="setSymbol('FX:GBPUSD',this)">GBP/USD</div>
+        <div class="ct-sep"></div>
+        <div class="tft" onclick="setSymbol('OANDA:XAUUSD',this)">GOLD</div>
       </div>
-      <div id="toolbar-member" class="chart-toolbar" style="display:none">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:1px;margin-right:4px">MEMBRO</div>
-        <div class="locked-t">🔒 1m</div><div class="locked-t">🔒 5m</div><div class="locked-t">🔒 15m</div><div class="locked-t">🔒 1h</div>
-        <div class="ct-sep"></div>
-        <div class="locked-t">🔒 MA</div><div class="locked-t">🔒 VWAP</div><div class="locked-t">🔒 BB</div>
-        <div class="ct-sep"></div>
-        <div class="locked-t">🔒 Linha</div><div class="locked-t">🔒 S/R</div><div class="locked-t">🔒 Fib</div>
-      </div>
-      <div id="host-bar" class="host-bar">CONTROLE DO CRIADOR · selecione ferramenta para anotar no gráfico</div>
-      <div id="member-bar" class="member-bar" style="display:none">MODO LEITURA <span class="sync-pill">● ESPELHANDO CRIADOR</span></div>
-      <div class="canvas-wrap">
-        <canvas id="chart-canvas"></canvas>
-        <svg class="ann-svg" id="ann-svg"></svg>
-        <div class="draw-ov" id="draw-ov"></div>
+      <div class="tv-wrap" id="tv-wrap">
+        <!-- TradingView Widget -->
       </div>
       <div class="bottom-op">
         <span class="op-lbl">MARCAR:</span>
-        <button class="op-b op-long" onclick="toast('Marcado: COMPRADO em '+Math.round(baseP).toLocaleString('pt-BR'),'t-g')">▲ COMPRADO</button>
-        <button class="op-b op-short" onclick="toast('Marcado: VENDIDO em '+Math.round(baseP).toLocaleString('pt-BR'),'t-r')">▼ VENDIDO</button>
-        <button class="op-b op-flat" onclick="toast('Marcado: NEUTRO','t-y')">■ NEUTRO</button>
+        <button class="op-b op-long" onclick="toast('✅ Marcado: COMPRADO','t-g')">▲ COMPRADO</button>
+        <button class="op-b op-short" onclick="toast('🔴 Marcado: VENDIDO','t-r')">▼ VENDIDO</button>
+        <button class="op-b op-flat" onclick="toast('⬜ Marcado: NEUTRO','t-y')">■ NEUTRO</button>
         <div class="op-spacer"></div>
-        <div class="pnl-d">P&L: <b id="pnl-val" style="color:var(--g)">+R$0,00</b></div>
       </div>
     </div>
     <div class="room-side">
       <div class="side-tabs">
         <div class="stab active" onclick="swSide('chat',this)">CHAT</div>
         <div class="stab" onclick="swSide('traders',this)">TRADERS</div>
-        <div class="stab host-only-tab" onclick="swSide('mgmt',this)">GESTÃO</div>
       </div>
       <div id="side-chat" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
         <div class="chat-msgs" id="chat-msgs"></div>
-        <div class="chat-inp-row"><input class="chat-inp" id="chat-inp" placeholder="mensagem..." onkeydown="if(event.key==='Enter')sendMsg()"><div class="send-b" onclick="sendMsg()">↑</div></div>
+        <div class="chat-inp-row">
+          <input class="chat-inp" id="chat-inp" placeholder="mensagem..." onkeydown="if(event.key==='Enter')sendMsg()">
+          <div class="send-b" onclick="sendMsg()">↑</div>
+        </div>
       </div>
-      <div id="side-traders" class="traders-tab" style="display:none"></div>
-      <div id="side-mgmt" class="mgmt-tab" style="display:none"></div>
+      <div id="side-traders" class="traders-tab" style="display:none">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:8px">PARTICIPANTES</div>
+        <div id="traders-list"></div>
+      </div>
       <div class="audio-strip">
         <span class="au-lbl">ÁUDIO</span>
-        <div class="au-btn on" title="Mic">🎙</div>
-        <div class="au-btn" title="Fone">🎧</div>
-        <div class="au-btn" style="color:var(--r)">✕</div>
-      </div>
-    </div>
-  </div>
-  <div class="confirm-modal" id="confirm-modal">
-    <div class="cm-box">
-      <div class="cm-title">Encerrar sala?</div>
-      <div class="cm-body">Esta ação é permanente. Os <b>8 membros vinculados</b> perderão o acesso automático e a sala será arquivada. O histórico de sessões será preservado.</div>
-      <div class="cm-acts"><button class="cm-cancel" onclick="document.getElementById('confirm-modal').classList.remove('open')">CANCELAR</button><button class="cm-ok" onclick="document.getElementById('confirm-modal').classList.remove('open');toast('Sala encerrada e arquivada','t-r');go('s-lobby')">ENCERRAR</button></div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== PERFIL ==================== -->
-<div id="s-perfil" class="screen">
-  <div class="topnav">
-    <div class="tn-logo" onclick="go('s-lobby')">TRADE<span>ROOM</span></div>
-    <div style="font-family:var(--mono);font-size:11px;color:var(--t2)">Perfil do Trader</div>
-    <div class="fc-back" style="margin:0" onclick="go('s-lobby')">← LOBBY</div>
-  </div>
-  <div class="perfil-body">
-    <div class="p-hero">
-      <div class="ph-avatar" id="perf-av">TR</div>
-      <div style="flex:1">
-        <div class="ph-id" id="perf-id">trader_7k4x</div>
-        <div class="ph-since">membro desde jan/2025</div>
-        <div class="ph-stats">
-          <div class="ph-stat"><div class="ph-val">47</div><div class="ph-lbl">sessões</div></div>
-          <div class="ph-stat"><div class="ph-val">3</div><div class="ph-lbl">salas</div></div>
-          <div class="ph-stat"><div class="ph-val">8</div><div class="ph-lbl">vínculos</div></div>
-          <div class="ph-stat"><div class="ph-val">1</div><div class="ph-lbl">criadas</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="p-sec-title">HISTÓRICO DE SALAS</div>
-    <div class="hist-row"><span class="rc-badge badge-mine">CRIADOR</span><span class="hr-name">VENCEDORES</span><span class="hr-sess">47 sessões</span><div class="hr-bar"><div class="hr-fill" style="width:100%"></div></div></div>
-    <div class="hist-row"><span class="rc-badge badge-turma" style="margin-right:4px">TURMA</span><span class="hr-name">Fluxo de ordem B3</span><span class="hr-sess">31 sessões</span><div class="hr-bar"><div class="hr-fill" style="width:66%"></div></div></div>
-    <div class="hist-row"><span class="at-tag at-fx" style="margin-right:4px">FOREX</span><span class="hr-name">OS FODÕES</span><span class="hr-sess">19 sessões</span><div class="hr-bar"><div class="hr-fill" style="width:40%"></div></div></div>
-    <div class="p-sec-title">TURMA FIXA</div>
-    <div class="member-row"><div class="mr-av" style="background:rgba(0,170,255,.1);color:var(--b)">KL</div><span class="mr-id">_klx47</span><span class="mr-sess">44 sessões juntos</span></div>
-    <div class="member-row"><div class="mr-av" style="background:rgba(0,229,160,.1);color:var(--g)">NZ</div><span class="mr-id">nova_z9</span><span class="mr-sess">38 sessões juntos</span></div>
-    <div class="member-row"><div class="mr-av" style="background:rgba(245,166,35,.1);color:var(--y)">FM</div><span class="mr-id">fx_mago</span><span class="mr-sess">29 sessões juntos</span></div>
-    <div style="margin-top:16px"><button class="btn-g" style="width:100%" onclick="go('s-lobby')">← VOLTAR AO LOBBY</button></div>
-  </div>
-</div>
-
-<!-- ==================== SALA PATROCINADA ==================== -->
-<div id="s-sponsor" class="screen">
-  <div class="sp-rh">
-    <div class="rh-l">
-      <div class="rh-back" onclick="go('s-lobby')">← LOBBY</div>
-      <div class="sp-brand"><div class="sp-logo">XP</div><span class="sp-name">XP Investimentos</span><span class="sp-tag">PATROCINADOR</span></div>
-    </div>
-    <div class="rh-c">
-      <div class="live-pill"><div class="rh-dot" style="background:var(--r);margin-right:2px"></div>AO VIVO</div>
-      <div class="sp-viewers">👁 <span id="sp-viewers">1.247</span> assistindo</div>
-    </div>
-  </div>
-  <div class="sp-body">
-    <div class="player-col">
-      <div class="player-area" onclick="toast('Conectando à transmissão XP...','t-b')">
-        <div class="play-btn"><div class="play-icon"></div></div>
-        <div class="play-title">Análise ao Vivo — WIN e WDO | Pregão 2025</div>
-        <div class="play-sub">XP Investimentos · YouTube Live · Clique para assistir</div>
-      </div>
-      <div class="sp-cta">
-        <div class="sp-cta-text"><div class="sp-cta-main">Abra sua conta na XP e opere com taxa zero</div><div class="sp-cta-sub">Oferta exclusiva para traders do TradeRoom</div></div>
-        <button class="sp-cta-btn" onclick="toast('Abrindo site da XP...','t-b')">SAIBA MAIS →</button>
-      </div>
-      <div class="sp-ticker">
-        <div class="st-item"><span class="st-name">WIN</span><span class="st-val" id="sp-win">134.820</span><span style="font-family:var(--mono);font-size:10px;color:var(--g)"> ▲ +0,87%</span></div>
-        <div class="st-item"><span class="st-name">WDO</span><span class="st-val" id="sp-wdo">5.213</span><span style="font-family:var(--mono);font-size:10px;color:var(--r)"> ▼ −0,32%</span></div>
-        <div class="st-item"><span class="st-name">IBOV</span><span class="st-val">128.450</span><span style="font-family:var(--mono);font-size:10px;color:var(--g)"> ▲ +0,44%</span></div>
-      </div>
-    </div>
-    <div class="room-side">
-      <div class="side-tabs"><div class="stab active" onclick="swSide2('chat2',this)">CHAT</div><div class="stab" onclick="swSide2('audience',this)">AUDIÊNCIA</div></div>
-      <div id="side-chat2" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
-        <div class="chat-msgs" id="sp-msgs"></div>
-        <div class="chat-inp-row"><input class="chat-inp" id="sp-inp" placeholder="comente ao vivo..." onkeydown="if(event.key==='Enter')sendSpMsg()"><div class="send-b" onclick="sendSpMsg()">↑</div></div>
-      </div>
-      <div id="side-audience" style="display:none;flex:1;overflow-y:auto;padding:8px">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
-          <div class="ss"><div class="ss-val" id="aud-now" style="color:var(--g)">1.247</div><div class="ss-lbl">assistindo</div></div>
-          <div class="ss"><div class="ss-val">3.891</div><div class="ss-lbl">hoje</div></div>
-          <div class="ss"><div class="ss-val" id="aud-msgs">84</div><div class="ss-lbl">mensagens</div></div>
-          <div class="ss"><div class="ss-val">47min</div><div class="ss-lbl">tempo médio</div></div>
-        </div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;margin-bottom:6px">TRADERS ATIVOS</div>
-        <div id="aud-list"></div>
-      </div>
-      <div class="audio-strip"><span class="au-lbl">ÁUDIO DA LIVE</span><div class="au-btn on">🔊</div><div class="au-btn">🔇</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== PITCH PATROCINADOR ==================== -->
-<div id="s-pitch" class="screen">
-  <div class="topnav">
-    <div class="tn-logo" onclick="go('s-lobby')">TRADE<span>ROOM</span></div>
-    <div style="font-family:var(--mono);font-size:10px;color:var(--y);padding:4px 10px;border:1px solid rgba(245,166,35,.25);border-radius:12px;background:rgba(245,166,35,.06)">PARA PATROCINADORES</div>
-    <div class="fc-back" style="margin:0" onclick="go('s-lobby')">← LOBBY</div>
-  </div>
-  <div class="pitch-body">
-    <div class="pitch-hero">
-      <div class="ph-eyebrow">OPORTUNIDADE DE PATROCÍNIO</div>
-      <div class="ph-title">Sua marca no centro<br>do <span>pregão brasileiro</span></div>
-      <div class="ph-sub">O TradeRoom é onde traders de mini índice e mini dólar se reúnem diariamente para analisar, operar e trocar experiências. Sua corretora dentro dessa conversa.</div>
-    </div>
-    <div class="pitch-stats">
-      <div class="ps-card"><div class="ps-val" style="color:var(--g)" id="p-t">3.241</div><div class="ps-lbl">traders cadastrados e ativos</div></div>
-      <div class="ps-card"><div class="ps-val" style="color:var(--y)">73</div><div class="ps-lbl">salas abertas por pregão</div></div>
-      <div class="ps-card"><div class="ps-val" style="color:var(--b)">47min</div><div class="ps-lbl">tempo médio por sessão</div></div>
-    </div>
-    <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;margin-bottom:10px">O QUE SUA MARCA RECEBE</div>
-    <div class="ben-list">
-      <div class="ben-item"><div class="bi-icon" style="background:rgba(255,69,96,.1)">▶</div><div><div class="bi-title">Sala exclusiva no topo do lobby</div><div class="bi-desc">Visível para todos os traders ao abrir a plataforma, sem limite de usuários.</div></div></div>
-      <div class="ben-item"><div class="bi-icon" style="background:rgba(0,170,255,.1)">📡</div><div><div class="bi-title">YouTube Live embutido</div><div class="bi-desc">Seu analista transmite dentro do TradeRoom. Traders assistem e comentam em tempo real.</div></div></div>
-      <div class="ben-item"><div class="bi-icon" style="background:rgba(245,166,35,.1)">→</div><div><div class="bi-title">CTA rastreável para abertura de conta</div><div class="bi-desc">Botão direto para sua landing page. Rastreável por UTM — você sabe exatamente quantas contas vieram do TradeRoom.</div></div></div>
-      <div class="ben-item"><div class="bi-icon" style="background:rgba(167,139,250,.1)">📊</div><div><div class="bi-title">Relatório mensal de audiência</div><div class="bi-desc">Traders únicos, tempo médio, mensagens, cliques no CTA. Dados reais para justificar o investimento.</div></div></div>
-    </div>
-    <div class="pitch-cta">
-      <div class="pcta-title">Garante o slot da sua corretora</div>
-      <div class="pcta-sub">Apenas uma sala patrocinada por vez no lançamento.<br>Entre em contato e receba a proposta comercial completa.</div>
-      <div class="pcta-btns">
-        <button class="btn-pcta" onclick="toast('Formulário de contato enviado!','t-gold')">QUERO PATROCINAR →</button>
-        <button class="btn-pcta-g" onclick="toast('Media kit enviado por email!','t-g')">BAIXAR MEDIA KIT</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== IR LANDING ==================== -->
-<div id="s-ir-landing" class="screen">
-  <div class="topnav">
-    <div class="tn-logo" onclick="go('s-lobby')">TRADE<span>ROOM</span></div>
-    <div style="font-family:var(--mono);font-size:10px;padding:3px 10px;border:1px solid rgba(201,168,76,.2);border-radius:10px;color:var(--gold);background:rgba(201,168,76,.06)">CALC IR</div>
-    <div class="fc-back" style="margin:0" onclick="go('s-lobby')">← LOBBY</div>
-  </div>
-  <div class="lp-body">
-    <div style="text-align:center;padding:20px 0 24px;border-bottom:1px solid var(--border);margin-bottom:20px">
-      <div style="font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:3px;margin-bottom:10px">EXCLUSIVO PARA TRADERS B3</div>
-      <div class="lp-title">Seu IR no day trade<br>resolvido em <span>minutos</span></div>
-      <div class="lp-sub">Arraste a nota de corretagem, o TraderCalc calcula tudo — resultado, DARF, declaração. Sem planilha, sem erro.</div>
-      <div class="price-pill"><span class="pp-from">apenas</span><span class="pp-val">R$10</span><span class="pp-per">/mês</span></div>
-    </div>
-    <div class="feat-grid-2">
-      <div class="feat-card"><div class="fc-icon">🧮</div><div class="fc-title">Cálculo automático</div><div class="fc-desc">Arraste o PDF da nota. Resultado, custos e IR calculados na hora.</div></div>
-      <div class="feat-card"><div class="fc-icon">📄</div><div class="fc-title">DARF gerado</div><div class="fc-desc">IR de 20% com compensação de prejuízos. Código 6015 pronto.</div></div>
-      <div class="feat-card"><div class="fc-icon">📋</div><div class="fc-title">Declaração anual</div><div class="fc-desc">Campo a campo para o IRPF da Receita. Só copiar.</div></div>
-      <div class="feat-card"><div class="fc-icon">🔔</div><div class="fc-title">Alerta de vencimento</div><div class="fc-desc">Aviso 10 dias antes do DARF. Nunca pague multa.</div></div>
-    </div>
-    <div class="price-card">
-      <div class="pc-head">
-        <div class="pc-name">✦ PLANO TRADERCALC</div>
-        <div class="pc-price"><sup>R$</sup>10<sub>/mês</sub></div>
-        <div class="pc-note">Cancele quando quiser · Sem fidelidade</div>
-      </div>
-      <div class="pc-items">
-        <div class="pc-item"><div class="pc-check">✓</div>Cálculo automático WIN, WDO e BIT</div>
-        <div class="pc-item"><div class="pc-check">✓</div>Fechamento mensal ilimitado</div>
-        <div class="pc-item"><div class="pc-check">✓</div>Geração de DARF código 6015</div>
-        <div class="pc-item"><div class="pc-check">✓</div>Declaração anual campo a campo</div>
-        <div class="pc-item"><div class="pc-check">✓</div>Histórico completo de todos os meses</div>
-        <div class="pc-item"><div class="pc-check">✓</div>Análise retroativa de anos anteriores</div>
-      </div>
-      <div class="pc-cta">
-        <button class="assinar-btn" onclick="assinar()">ASSINAR AGORA — R$10/MÊS →</button>
-        <div class="pc-seg">🔒 Pagamento via Pix · Mercado Pago · Acesso imediato</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== TRADERCALC (assinante) ==================== -->
-<div id="s-calc" class="screen">
-  <div class="calc-topbar">
-    <div class="ctb-left">
-      <div class="ctb-back" onclick="go('s-lobby')">← LOBBY</div>
-      <div class="ctb-icon">🧮</div>
-      <div class="ctb-name">TraderCalc</div>
-      <span class="ctb-badge">ASSINANTE</span>
-    </div>
-    <div style="font-family:var(--mono);font-size:10px;color:#6a7f96" id="calc-uid">trader_7k4x · plano ativo</div>
-  </div>
-  <div class="calc-body">
-    <div class="calc-nav">
-      <div class="cnt active" onclick="swCalc('notas',this)">NOTAS</div>
-      <div class="cnt" onclick="swCalc('mensal',this)">MENSAL</div>
-      <div class="cnt" onclick="swCalc('historico',this)">HISTÓRICO</div>
-      <div class="cnt" onclick="swCalc('declaracao',this)">DECLARAÇÃO</div>
-    </div>
-    <div id="calc-notas">
-      <div class="darf-alert"><div class="da-txt">⚠ DARF janeiro/2025 vence em 3 dias · R$ 187,40 · código 6015</div><button class="da-pay" onclick="toast('DARF gerado! R$187,40 · código 6015','t-r')">GERAR DARF</button></div>
-      <div class="drop-area" onclick="toast('Selecione o PDF da nota de corretagem','t-b')">
-        <div class="da-icon">📄</div>
-        <div class="da-title">Arraste sua nota de corretagem</div>
-        <div class="da-sub">PDF da nota diária ou mensal · XP, Clear, Rico, BTG e outras<br><span>ou clique para selecionar o arquivo</span></div>
-      </div>
-      <div class="qs-grid">
-        <div class="qs"><div class="qs-val" style="color:#00e5a0">+R$ 1.840</div><div class="qs-lbl">resultado jan</div></div>
-        <div class="qs"><div class="qs-val" style="color:#ff4444">R$ 187,40</div><div class="qs-lbl">IR devido</div></div>
-        <div class="qs"><div class="qs-val" style="color:#a8b8cc">R$ 0</div><div class="qs-lbl">prej. acum.</div></div>
-      </div>
-    </div>
-    <div id="calc-mensal" style="display:none">
-      <div style="margin-bottom:14px;padding:14px;background:#111318;border:1px solid #1e2530;border-radius:8px">
-        <div style="font-family:var(--display);font-size:10px;font-weight:700;color:#6a7f96;letter-spacing:2px;margin-bottom:10px">RESULTADO MENSAL — JANEIRO 2025</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-          <div class="qs"><div class="qs-val" style="color:#00e5a0">+R$1.840</div><div class="qs-lbl">resultado líq.</div></div>
-          <div class="qs"><div class="qs-val" style="color:#ff4444">R$187,40</div><div class="qs-lbl">IR 20%</div></div>
-          <div class="qs"><div class="qs-val" style="color:#f5a623">31 jan</div><div class="qs-lbl">venc. DARF</div></div>
-        </div>
-      </div>
-      <table class="hist-table">
-        <thead><tr><th>Data</th><th style="text-align:right">Ativo</th><th style="text-align:right">Resultado</th><th style="text-align:right">IR</th></tr></thead>
-        <tbody>
-          <tr><td>02/01</td><td>WIN</td><td style="color:#00e5a0;text-align:right">+R$480</td><td style="text-align:right">R$96</td></tr>
-          <tr><td>05/01</td><td>WDO</td><td style="color:#ff4444;text-align:right">-R$120</td><td style="text-align:right">—</td></tr>
-          <tr><td>08/01</td><td>WIN</td><td style="color:#00e5a0;text-align:right">+R$890</td><td style="text-align:right">R$178</td></tr>
-          <tr><td>10/01</td><td>WDO</td><td style="color:#00e5a0;text-align:right">+R$590</td><td style="text-align:right">R$118</td></tr>
-          <tr><td>15/01</td><td>WIN</td><td style="color:#ff4444;text-align:right">-R$240</td><td style="text-align:right">—</td></tr>
-          <tr><td>18/01</td><td>WIN</td><td style="color:#00e5a0;text-align:right">+R$240</td><td style="text-align:right">R$48</td></tr>
-        </tbody>
-        <tfoot><tr><td>TOTAL</td><td></td><td style="color:#00e5a0;text-align:right">+R$1.840</td><td style="text-align:right">R$187,40</td></tr></tfoot>
-      </table>
-    </div>
-    <div id="calc-historico" style="display:none">
-      <table class="hist-table">
-        <thead><tr><th>Mês</th><th style="text-align:right">Resultado</th><th style="text-align:right">DARF</th><th style="text-align:right">IR Pago</th><th style="text-align:right">Status</th></tr></thead>
-        <tbody>
-          <tr><td>Jan/2025</td><td style="color:#00e5a0;text-align:right">+R$1.840</td><td style="text-align:right">R$187,40</td><td style="text-align:right">—</td><td style="text-align:right;color:#f5a623">PENDENTE</td></tr>
-          <tr><td>Dez/2024</td><td style="color:#00e5a0;text-align:right">+R$2.100</td><td style="text-align:right">R$420</td><td style="color:#00e5a0;text-align:right">R$420</td><td style="text-align:right;color:#00e5a0">PAGO</td></tr>
-          <tr><td>Nov/2024</td><td style="color:#ff4444;text-align:right">-R$340</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;color:#6a7f96">ISENTO</td></tr>
-          <tr><td>Out/2024</td><td style="color:#00e5a0;text-align:right">+R$980</td><td style="text-align:right">R$196</td><td style="color:#00e5a0;text-align:right">R$196</td><td style="text-align:right;color:#00e5a0">PAGO</td></tr>
-          <tr><td>Set/2024</td><td style="color:#00e5a0;text-align:right">+R$1.450</td><td style="text-align:right">R$290</td><td style="color:#00e5a0;text-align:right">R$290</td><td style="text-align:right;color:#00e5a0">PAGO</td></tr>
-        </tbody>
-        <tfoot><tr><td>TOTAL 2025</td><td style="color:#00e5a0;text-align:right">+R$6.030</td><td style="text-align:right">R$1.093,40</td><td style="color:#00e5a0;text-align:right">R$906</td><td style="text-align:right"></td></tr></tfoot>
-      </table>
-    </div>
-    <div id="calc-declaracao" style="display:none">
-      <div style="background:#111318;border:1px solid #1e2530;border-radius:8px;padding:16px;margin-bottom:14px">
-        <div style="font-family:var(--display);font-size:10px;font-weight:700;color:#00e5a0;letter-spacing:1px;margin-bottom:12px">DECLARAÇÃO ANUAL — 2024</div>
-        <div style="font-size:12px;color:#a8b8cc;line-height:1.8;font-family:var(--mono)">
-          <div style="margin-bottom:8px;padding:8px;background:#0d1017;border-radius:6px"><b style="color:#f0f4fa">→</b> Abra o programa IRPF → Renda Variável → Operações em Bolsa</div>
-          <div style="padding:8px;background:#0d1017;border-radius:6px;margin-bottom:8px"><b style="color:#f0f4fa">Setembro/2024:</b> Resultado positivo: <span style="color:#00e5a0">R$1.450,00</span> · IR pago: <span style="color:#00e5a0">R$290,00</span></div>
-          <div style="padding:8px;background:#0d1017;border-radius:6px;margin-bottom:8px"><b style="color:#f0f4fa">Outubro/2024:</b> Resultado positivo: <span style="color:#00e5a0">R$980,00</span> · IR pago: <span style="color:#00e5a0">R$196,00</span></div>
-          <div style="padding:8px;background:#0d1017;border-radius:6px;margin-bottom:8px"><b style="color:#f0f4fa">Novembro/2024:</b> Resultado negativo: <span style="color:#ff4444">-R$340,00</span> · IR: isento</div>
-          <div style="padding:8px;background:#0d1017;border-radius:6px"><b style="color:#f0f4fa">Dezembro/2024:</b> Resultado positivo: <span style="color:#00e5a0">R$2.100,00</span> · IR pago: <span style="color:#00e5a0">R$420,00</span></div>
-        </div>
-      </div>
-      <div style="background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.15);border-radius:8px;padding:12px;font-family:var(--mono);font-size:11px;color:rgba(0,229,160,.7);line-height:1.6">
-        ✓ Prejuízo de novembro foi compensado automaticamente nos meses seguintes.<br>
-        ✓ Total IR pago em 2024: R$906,00 via DARF código 6015.<br>
-        ✓ Saldo de prejuízo a compensar em 2025: R$0,00
+        <div class="au-btn on" title="Em breve">🎙</div>
+        <div class="au-btn" title="Em breve">🎧</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
+// ==================== SUPABASE ====================
+const SUPABASE_URL = 'https://btqgizadenxvgnybjifx.supabase.co'
+const SUPABASE_KEY = 'sb_publishable_lpcSO7-IQJL0g2pF3UgQLw_AneC6pXw'
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
 // ==================== STATE ====================
-let currentUser = { trader_id: 'trader_7k4x', nome: 'João Silva', email: 'joao@email.com', loggedIn: false }
-let isAssinante = false
-let currentMkt = 'b3'
-let isHost = true
-let drawTool = null
+let currentUser = { trader_id: 'visitante', loggedIn: false }
+let currentMkt = 'B3'
+let allRooms = []
 let selectedAssets = []
-let baseP = 134820
-let candles = []
-let animId, tickId
-let msgCount = 0
-let spMsgCount = 0
+let currentSymbol = 'BMFBOVESPA:WIN1!'
+let tvWidget = null
+
+// ==================== SUPABASE AUTH ====================
+async function doLogin() {
+  const email = document.getElementById('l-email').value.trim()
+  const pwd = document.getElementById('l-pwd').value
+  if (!email || !pwd) { toast('Preencha email e senha','t-r'); return }
+  const btn = document.getElementById('btn-login')
+  btn.textContent = 'ENTRANDO...'; btn.disabled = true
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pwd })
+  btn.textContent = 'ENTRAR →'; btn.disabled = false
+  if (error) { toast(error.message || 'Erro ao entrar','t-r'); return }
+  await loadUserProfile(data.user)
+  go('s-lobby')
+  toast('Bem-vindo, ' + currentUser.trader_id + '!','t-g')
+}
+
+async function cadFinalizar() {
+  const p1 = document.getElementById('c-pwd1').value
+  const p2 = document.getElementById('c-pwd2').value
+  const email = document.getElementById('c-email').value.trim()
+  const nome = document.getElementById('c-nome').value.trim()
+  if (p1.length < 8) { toast('Senha muito curta','t-r'); return }
+  if (p1 !== p2) { toast('Senhas não conferem','t-r'); return }
+  const btn = document.getElementById('btn-cad-fin')
+  btn.textContent = 'CRIANDO...'; btn.disabled = true
+  const { data, error } = await sb.auth.signUp({ email, password: p1, options: { data: { nome, trader_id: currentId } } })
+  btn.textContent = 'CRIAR CONTA →'; btn.disabled = false
+  if (error) { toast(error.message || 'Erro ao criar conta','t-r'); return }
+  // Salva na tabela usuarios
+  await sb.from('usuarios').insert({ eu_ia: data.user?.id, nome, e_mail: email, trader_id: currentId })
+  document.getElementById('final-id').textContent = '#' + currentId
+  document.getElementById('final-email').textContent = email
+  document.getElementById('cad-step2').style.display = 'none'
+  document.getElementById('cad-step3').style.display = ''
+  currentUser = { trader_id: currentId, nome, loggedIn: true }
+  updateUserUI()
+}
+
+async function loadUserProfile(user) {
+  const { data } = await sb.from('usuarios').select('*').eq('eu_ia', user.id).single()
+  if (data) {
+    currentUser = { trader_id: data.trader_id || user.email.split('@')[0], nome: data.nome, loggedIn: true }
+  } else {
+    currentUser = { trader_id: user.email.split('@')[0], loggedIn: true }
+  }
+  updateUserUI()
+}
+
+// Verifica sessão existente
+sb.auth.getSession().then(({ data }) => {
+  if (data.session?.user) loadUserProfile(data.session.user)
+})
 
 // ==================== NAVIGATION ====================
 function go(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'))
   const el = document.getElementById(id)
-  if (!el) { console.error('Screen not found:', id); return }
+  if (!el) return
   el.classList.add('on')
-  if (id === 's-lobby') renderRooms()
-  if (id === 's-room') initRoom()
-  if (id === 's-sponsor') initSponsor()
-  if (id === 's-pitch') animPitchCount()
+  if (id === 's-lobby') loadRooms()
+  if (id === 's-room') initTradingView()
   window.scrollTo(0, 0)
 }
 
-function goIR() {
-  if (isAssinante) go('s-calc')
-  else go('s-ir-landing')
+function updateUserUI() {
+  const av = (currentUser.trader_id || 'TR').substring(0,2).toUpperCase()
+  document.getElementById('lobby-av').textContent = av
+  document.getElementById('lobby-uid').textContent = currentUser.trader_id || 'visitante'
 }
 
-function assinar() {
-  isAssinante = true
-  toast('Assinatura ativada! Bem-vindo ao TraderCalc', 't-gold')
-  setTimeout(() => go('s-calc'), 800)
-}
-
-const API = 'https://traderoom-backend-production.up.railway.app'
-
-async function entrarLobby() {
-  // Detecta se veio do login ou do cadastro
-  const fromLogin = document.getElementById('s-login').classList.contains('on')
-  const email = fromLogin
-    ? document.getElementById('l-email')?.value?.trim()
-    : document.getElementById('c-email')?.value?.trim()
-  const senha = fromLogin
-    ? document.getElementById('l-pwd')?.value
-    : document.getElementById('c-pwd1')?.value
-
-  if (fromLogin) {
-    if (!email) { toast('Informe seu email', 't-r'); return }
-    if (!senha) { toast('Informe sua senha', 't-r'); return }
-    const btn = document.querySelector('#s-login .btn-p')
-    const orig = btn.textContent
-    btn.textContent = 'ENTRANDO...'
-    btn.disabled = true
-    try {
-      const res = await fetch(API + '/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, senha })
-      })
-      const data = await res.json()
-      if (res.ok && data.token) {
-        localStorage.setItem('tr_token', data.token)
-        currentUser.trader_id = data.trader_id || data.usuario?.trader_id || email.split('@')[0]
-        currentUser.nome = data.nome || data.usuario?.nome || email
-        currentUser.email = email
-        updateUserUI()
-        go('s-lobby')
-        renderRooms()
-        toast('Bem-vindo, ' + currentUser.trader_id + '!', 't-g')
-      } else {
-        toast(data.erro || data.error || 'Email ou senha inválidos', 't-r')
-      }
-    } catch (e) {
-      // Backend offline — entra em modo demo
-      currentUser.trader_id = email.split('@')[0] + '_demo'
-      currentUser.nome = email
-      currentUser.email = email
-      updateUserUI()
-      go('s-lobby')
-      renderRooms()
-      toast('Modo demo — backend offline', 't-y')
-    } finally {
-      btn.textContent = orig
-      btn.disabled = false
-    }
+// ==================== LOAD ROOMS FROM SUPABASE ====================
+async function loadRooms() {
+  const el = document.getElementById('rooms-list')
+  el.innerHTML = '<div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div>'
+  
+  const { data, error } = await sb.from('salas').select('*').eq('ativa', true).order('criado_em', { ascending: false })
+  
+  if (error) {
+    el.innerHTML = '<div class="loading-rooms" style="color:var(--r)">Erro ao carregar salas. Tente novamente.</div>'
     return
   }
+  
+  allRooms = data || []
+  renderRooms('')
+  updateCounts()
+}
 
-  // Veio do cadastro (step 3)
-  const nome = document.getElementById('c-nome')?.value?.trim() || 'Trader'
-  if (nome.length >= 2) {
-    const base = nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(' ')[0].replace(/[^a-z]/g,'').substring(0,8)
-    currentUser.trader_id = base + '_' + Math.random().toString(36).substr(2,3)
-    currentUser.nome = nome
-    currentUser.email = email || ''
+function updateCounts() {
+  const b3 = allRooms.filter(r => r.mercado === 'B3').length
+  const fx = allRooms.filter(r => r.mercado === 'Forex').length
+  const cr = allRooms.filter(r => r.mercado === 'Cripto').length
+  document.getElementById('cnt-b3').textContent = b3
+  document.getElementById('cnt-fx').textContent = fx
+  document.getElementById('cnt-cr').textContent = cr
+  document.getElementById('live-rooms').textContent = allRooms.length
+  document.getElementById('live-count').textContent = (allRooms.length * 3 + 847).toLocaleString('pt-BR')
+}
+
+function renderRooms(filter = '') {
+  const el = document.getElementById('rooms-list')
+  const filtered = allRooms.filter(r => {
+    const matchMkt = r.mercado === currentMkt
+    const matchSearch = !filter || r.nome.toLowerCase().includes(filter.toLowerCase())
+    return matchMkt && matchSearch
+  })
+  
+  if (!filtered.length) {
+    el.innerHTML = '<div class="loading-rooms">Nenhuma sala encontrada.</div>'
+    return
   }
-  updateUserUI()
-  go('s-lobby')
-  renderRooms()
-  toast('Bem-vindo ao TradeRoom, ' + currentUser.trader_id + '!', 't-g')
+  
+  const mktMap = { B3: 'b3', Forex: 'fx', Cripto: 'cr' }
+  const mkt = mktMap[currentMkt] || 'b3'
+  const eb = { b3: 'eb3', fx: 'efx', cr: 'ecr' }[mkt]
+  const rcd = `rcd-${mkt}`
+  const atCls = { b3: 'at-b3', fx: 'at-fx', cr: 'at-cr' }[mkt]
+  
+  // Default ativos por mercado
+  const defaultAtivos = { B3: ['WIN', 'WDO'], Forex: ['EUR/USD', 'GBP/USD'], Cripto: ['BTC', 'ETH'] }
+  
+  let html = `<div class="sec-label">SALAS ABERTAS — ${filtered.length} SALAS</div>`
+  filtered.forEach(r => {
+    const ativos = r.ativos && r.ativos.length > 0 ? r.ativos : defaultAtivos[currentMkt] || []
+    const atTags = ativos.slice(0, 3).map(a => `<span class="at-tag ${atCls}">${a}</span>`).join('')
+    const limite = r.limite || 10
+    const roomJson = JSON.stringify({ id: r.eu_ia, nome: r.nome, mercado: r.mercado, ativos }).replace(/"/g, '&quot;')
+    html += `<div class="room-card">
+      <div class="rc-top"><div class="rcd ${rcd}"></div><div class="rc-name">${r.nome}</div></div>
+      <div class="rc-at">${atTags || `<span class="at-tag ${atCls}">${currentMkt}</span>`}</div>
+      <div class="rc-bottom">
+        <span class="rc-meta">limite: ${limite} traders</span>
+        <button class="enter-btn ${eb}" onclick='enterRoom(${roomJson})'>ENTRAR →</button>
+      </div>
+    </div>`
+  })
+  el.innerHTML = html
 }
 
-function updateUserUI() {
-  const av = currentUser.trader_id.substring(0, 2).toUpperCase()
-  document.getElementById('lobby-av').textContent = av
-  document.getElementById('lobby-uid').textContent = currentUser.trader_id
-  document.getElementById('perf-av').textContent = av
-  document.getElementById('perf-id').textContent = currentUser.trader_id
-  document.getElementById('calc-uid').textContent = currentUser.trader_id + ' · plano ativo'
+function filterRooms(v) { renderRooms(v) }
+
+function switchMkt(mkt, el) {
+  currentMkt = mkt
+  document.querySelectorAll('.mtab').forEach(t => { t.className = 'mtab' })
+  const mktCls = { B3: 'ab3', Forex: 'afx', Cripto: 'acr' }
+  el.classList.add(mktCls[mkt])
+  const nb = { B3: 'nb3-btn', Forex: 'nfx-btn', Cripto: 'ncr-btn' }
+  document.getElementById('new-btn').className = 'new-btn ' + nb[mkt]
+  renderRooms(document.getElementById('search-inp').value)
 }
 
-function swTopTab(el, tab) {
-  document.querySelectorAll('.tn-tab').forEach(t => t.classList.remove('active'))
+// ==================== ENTRAR SALA ====================
+function enterRoom(data) {
+  const ativos = data.ativos || []
+  document.getElementById('room-name-tag').textContent = data.nome
+  const simbolo = getSymbolForRoom(data.mercado, ativos)
+  document.getElementById('room-asset-tag').textContent = ativos[0] || data.mercado
+  currentSymbol = simbolo
+  go('s-room')
+  addChatMsg('SISTEMA','sys','Você entrou em ' + data.nome + '. Bom pregão!')
+}
+
+function getSymbolForRoom(mercado, ativos) {
+  const mapa = {
+    'WIN': 'BMFBOVESPA:WIN1!', 'WDO': 'BMFBOVESPA:WDO1!',
+    'BTC': 'BINANCE:BTCUSDT', 'ETH': 'BINANCE:ETHUSDT', 'SOL': 'BINANCE:SOLUSDT',
+    'EUR/USD': 'FX:EURUSD', 'GBP/USD': 'FX:GBPUSD', 'USD/JPY': 'FX:USDJPY',
+    'XAU/USD': 'OANDA:XAUUSD', 'WTI': 'NYMEX:CL1!'
+  }
+  if (ativos && ativos.length > 0) {
+    const found = mapa[ativos[0]]
+    if (found) return found
+  }
+  if (mercado === 'B3') return 'BMFBOVESPA:WIN1!'
+  if (mercado === 'Cripto') return 'BINANCE:BTCUSDT'
+  if (mercado === 'Forex') return 'FX:EURUSD'
+  return 'BMFBOVESPA:WIN1!'
+}
+
+// ==================== TRADINGVIEW ====================
+function initTradingView() {
+  const wrap = document.getElementById('tv-wrap')
+  wrap.innerHTML = ''
+  const container = document.createElement('div')
+  container.id = 'tv-chart-container'
+  container.style.cssText = 'width:100%;height:100%'
+  wrap.appendChild(container)
+  
+  const script = document.createElement('script')
+  script.src = 'https://s3.tradingview.com/tv.js'
+  script.onload = () => {
+    tvWidget = new TradingView.widget({
+      container_id: 'tv-chart-container',
+      symbol: currentSymbol,
+      interval: '5',
+      timezone: 'America/Sao_Paulo',
+      theme: 'dark',
+      style: '1',
+      locale: 'br',
+      toolbar_bg: '#0d1014',
+      enable_publishing: false,
+      hide_top_toolbar: false,
+      hide_legend: false,
+      save_image: false,
+      backgroundColor: '#080a0c',
+      gridColor: 'rgba(26,31,40,0.5)',
+      width: '100%',
+      height: '100%',
+    })
+  }
+  document.head.appendChild(script)
+}
+
+function setSymbol(symbol, el) {
+  document.querySelectorAll('.tft').forEach(b => b.classList.remove('active'))
   el.classList.add('active')
+  currentSymbol = symbol
+  if (tvWidget) {
+    try { tvWidget.chart().setSymbol(symbol) } catch(e) { initTradingView() }
+  } else { initTradingView() }
 }
 
-// ==================== SPLASH TICKER ====================
-const TICKS = [
-  {n:'WIN',v:'134.820',c:'+0,87%',up:true},{n:'WDO',v:'5.213',c:'-0,32%',up:false},
-  {n:'EUR/USD',v:'1.0892',c:'+0,14%',up:true},{n:'XAU/USD',v:'2.034',c:'+0,22%',up:true},
-  {n:'BTC/USD',v:'98.450',c:'+1,8%',up:true},{n:'GBP/USD',v:'1.2748',c:'-0,08%',up:false},
-  {n:'IBOV',v:'128.450',c:'+0,44%',up:true},{n:'ETH/USD',v:'3.210',c:'+2,1%',up:true},
-]
-const ticker = document.getElementById('ticker')
-let th = ''
-for(let i=0;i<3;i++) TICKS.forEach(t => {
-  th += `<span class="tick-i"><span class="t-name">${t.n}</span><span class="t-val">${t.v}</span><span class="${t.up?'t-up':'t-dn'}">${t.c}</span></span>`
-})
-ticker.innerHTML = th
+// ==================== CRIAR SALA ====================
+const ASSETS_BY_MKT = {
+  B3: ['WIN','WDO','WINV25','WDOV25','IBOV'],
+  Forex: ['EUR/USD','GBP/USD','USD/JPY','XAU/USD','WTI','USD/BRL'],
+  Cripto: ['BTC','ETH','SOL','BNB','XRP']
+}
 
-// ==================== CADASTRO ====================
-const ADJS = ['scalp','flux','day','turbo','dark','sharp','rapid','micro','raw','deep']
-const SUFX = ['_rx','_z9','_k4x','_404','_77','_xp','_hit','_fx','_w1n','_pro']
+function openModal() {
+  selectedAssets = []
+  document.getElementById('m-name').value = ''
+  document.getElementById('m-mercado').value = currentMkt
+  updateModalMkt(currentMkt)
+  document.getElementById('modal-bg').classList.add('open')
+}
+
+function updateModalMkt(mkt) {
+  const titles = { B3:'CRIAR SALA — B3', Forex:'CRIAR SALA — FOREX', Cripto:'CRIAR SALA — CRIPTO' }
+  const btnCls = { B3:'btn-criar-b3', Forex:'btn-criar-fx', Cripto:'btn-criar-cr' }
+  const selCls = { B3:'sel-b3', Forex:'sel-fx', Cripto:'sel-cr' }
+  document.getElementById('m-title').textContent = titles[mkt] || 'CRIAR SALA'
+  document.getElementById('m-criar-btn').className = 'btn-criar ' + (btnCls[mkt] || 'btn-criar-b3')
+  const wrap = document.getElementById('m-assets')
+  const sc = selCls[mkt] || 'sel-b3'
+  selectedAssets = []
+  wrap.innerHTML = (ASSETS_BY_MKT[mkt] || []).map(a => 
+    `<div class="asset-chip" id="chip-${a.replace('/','_')}" onclick="toggleAsset('${a}','${sc}')">${a}</div>`
+  ).join('')
+}
+
+function toggleAsset(a, cls) {
+  const chip = document.getElementById('chip-'+a.replace('/','_'))
+  if (selectedAssets.includes(a)) {
+    selectedAssets = selectedAssets.filter(x => x !== a)
+    chip.className = 'asset-chip'
+  } else {
+    selectedAssets.push(a)
+    chip.className = 'asset-chip ' + cls
+  }
+}
+
+async function criarSala() {
+  const nome = document.getElementById('m-name').value.trim()
+  const mercado = document.getElementById('m-mercado').value
+  const limite = parseInt(document.getElementById('m-limit').value)
+  if (!nome) { toast('Dê um nome à sala','t-r'); return }
+  
+  const btn = document.getElementById('m-criar-btn')
+  btn.textContent = 'CRIANDO...'; btn.disabled = true
+  
+  const novasSala = {
+    nome,
+    mercado,
+    ativos: selectedAssets,
+    limite,
+    ativa: true,
+    criador_id: currentUser.loggedIn ? undefined : null
+  }
+  
+  const { data, error } = await sb.from('salas').insert([novasSala]).select()
+  btn.textContent = '▶ CRIAR SALA'; btn.disabled = false
+  
+  if (error) { toast('Erro ao criar sala: ' + (error.message || ''),'t-r'); return }
+  
+  closeModal()
+  toast('"' + nome + '" criada com sucesso!','t-g')
+  await loadRooms()
+  if (data && data[0]) {
+    setTimeout(() => enterRoom({ id: data[0].eu_ia, nome, mercado, ativos: selectedAssets }), 500)
+  }
+}
+
+function closeModal() { document.getElementById('modal-bg').classList.remove('open') }
+
+// ==================== CHAT ====================
+function addChatMsg(u, cls, body) {
+  const el = document.getElementById('chat-msgs'); if(!el)return
+  const now = new Date()
+  const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`
+  const d = document.createElement('div')
+  d.innerHTML = `<div class="cmsg-hd"><span class="cmsg-u ${cls}">${u}</span><span class="cmsg-t">${t}</span></div><div class="cmsg-body ${cls==='sys'?'sys':''}">${body}</div>`
+  el.appendChild(d); el.scrollTop = el.scrollHeight
+}
+
+function sendMsg() {
+  const inp = document.getElementById('chat-inp'); const txt = inp.value.trim(); if(!txt)return
+  addChatMsg(currentUser.trader_id || 'Você','me',txt); inp.value = ''
+}
+
+function swSide(tab, el) {
+  document.querySelectorAll('.stab').forEach(t => t.classList.remove('active')); el.classList.add('active')
+  document.getElementById('side-chat').style.display = tab==='chat'?'flex':'none'
+  document.getElementById('side-traders').style.display = tab==='traders'?'block':'none'
+}
+
+// ==================== CADASTRO HELPERS ====================
+const ADJS = ['scalp','flux','day','turbo','dark','sharp','rapid','micro']
+const SUFX = ['_rx','_z9','_k4x','_404','_77','_xp','_hit','_fx']
 let currentId = 'trader_jo4x'
 
 function regenId() {
@@ -1145,629 +847,25 @@ function checkStrength(el) {
 function cadNext() {
   const nome = document.getElementById('c-nome').value.trim()
   const email = document.getElementById('c-email').value.trim()
-  const tel = document.getElementById('c-tel').value.replace(/\D/g,'')
-  if (nome.length < 2) { toast('Informe seu nome completo','t-r'); return }
+  if (nome.length < 2) { toast('Informe seu nome','t-r'); return }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Email inválido','t-r'); return }
-  if (tel.length !== 11) { toast('Telefone inválido','t-r'); return }
   document.getElementById('cad-step1').style.display = 'none'
   document.getElementById('cad-step2').style.display = ''
 }
 
-async function cadFinalizar() {
-  const p1 = document.getElementById('c-pwd1').value
-  const p2 = document.getElementById('c-pwd2').value
-  if (p1.length < 8) { toast('Senha muito curta','t-r'); return }
-  if (p1 !== p2) { toast('Senhas não conferem','t-r'); return }
-
-  const nome = document.getElementById('c-nome').value.trim()
-  const email = document.getElementById('c-email').value.trim()
-  const tel = document.getElementById('c-tel').value.replace(/\D/g,'')
-
-  const btn = document.querySelector('#cad-step2 .btn-p')
-  const orig = btn.textContent
-  btn.textContent = 'CRIANDO CONTA...'
-  btn.disabled = true
-
-  try {
-    const res = await fetch(API + '/auth/cadastro', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nome, email, telefone: tel, senha: p1, trader_id: currentId })
-    })
-    const data = await res.json()
-    if (res.ok) {
-      if (data.token) localStorage.setItem('tr_token', data.token)
-      currentUser.trader_id = data.trader_id || currentId
-    } else {
-      toast(data.erro || data.error || 'Erro ao criar conta', 't-r')
-      btn.textContent = orig; btn.disabled = false; return
-    }
-  } catch(e) {
-    // Backend offline — modo demo
-    currentUser.trader_id = currentId
-  }
-
-  document.getElementById('final-id').textContent = '#' + currentUser.trader_id
-  document.getElementById('final-email').textContent = email
-  document.getElementById('final-pwd').textContent = p1
-  document.getElementById('cad-step2').style.display = 'none'
-  document.getElementById('cad-step3').style.display = ''
-  btn.textContent = orig; btn.disabled = false
-}
-
-// ==================== LOBBY ====================
-const ASSETS = {
-  b3:['WIN','WDO','WINV25','WDOV25'],
-  fx:['EUR/USD','GBP/USD','USD/JPY','USD/CHF','XAU/USD','USD/BRL','WTI'],
-  cr:['BTC/USD','ETH/USD','SOL/USD','BNB/USD','XRP/USD']
-}
-const AT_CLS = {'WIN':'at-b3','WDO':'at-b3','WINV25':'at-b3','WDOV25':'at-b3','EUR/USD':'at-fx','GBP/USD':'at-fx','USD/JPY':'at-fx','USD/CHF':'at-fx','XAU/USD':'at-fx','USD/BRL':'at-fx','WTI':'at-fx','BTC/USD':'at-cr','ETH/USD':'at-cr','SOL/USD':'at-cr','BNB/USD':'at-cr','XRP/USD':'at-cr'}
-const EB = {b3:'eb3',fx:'efx',cr:'ecr'}
-const ROOMS = {
-  b3:[
-    {name:'VENCEDORES',assets:['WIN'],users:10,max:10,sess:47,pinned:false,mine:true},
-    {name:'Scalp WIN manhã',assets:['WIN'],users:10,max:10,sess:31,pinned:true,mine:false},
-    {name:'Turma do Dólar',assets:['WDO'],users:10,max:10,sess:22,pinned:true,mine:false},
-    {name:'B3 Power',assets:['WIN'],users:10,max:10,sess:15,pinned:false,mine:false},
-    {name:'Fluxo de ordem',assets:['WIN'],users:10,max:10,sess:8,pinned:false,mine:false},
-    {name:'Mini Índice Pro',assets:['WIN'],users:10,max:10,sess:12,pinned:false,mine:false},
-    {name:'WDO traders',assets:['WDO'],users:10,max:10,sess:9,pinned:false,mine:false},
-    {name:'Day trade B3',assets:['WDO'],users:10,max:10,sess:5,pinned:false,mine:false},
-    {name:'Agressão no Tape',assets:['WIN'],users:10,max:10,sess:28,pinned:false,mine:false},
-    {name:'Setup 9.1 WIN',assets:['WIN'],users:10,max:10,sess:19,pinned:false,mine:false},
-    {name:'Bandas de Bollinger',assets:['WDO'],users:10,max:10,sess:14,pinned:false,mine:false},
-    {name:'Price Action B3',assets:['WIN'],users:10,max:10,sess:33,pinned:false,mine:false},
-    {name:'Sala do Stopão',assets:['WDO'],users:10,max:10,sess:7,pinned:false,mine:false},
-    {name:'WINV25 Vencimento',assets:['WINV25'],users:10,max:10,sess:41,pinned:false,mine:false},
-    {name:'Tape Reading ao Vivo',assets:['WIN'],users:10,max:10,sess:55,pinned:false,mine:false},
-    {name:'Morning Call B3',assets:['WIN'],users:10,max:10,sess:62,pinned:false,mine:false},
-    {name:'Contra-tendência WIN',assets:['WIN'],users:10,max:10,sess:11,pinned:false,mine:false},
-    {name:'Swing B3',assets:['WINV25'],users:10,max:10,sess:6,pinned:false,mine:false},
-    {name:'Abertura NY',assets:['WDO'],users:10,max:10,sess:24,pinned:false,mine:false},
-    {name:'Só Long',assets:['WIN'],users:10,max:10,sess:17,pinned:false,mine:false},
-    {name:'Só Short',assets:['WIN'],users:10,max:10,sess:13,pinned:false,mine:false},
-    {name:'Rompimento de máxima',assets:['WDO'],users:10,max:10,sess:20,pinned:false,mine:false},
-    {name:'Turma do Milhão',assets:['WIN'],users:10,max:10,sess:88,pinned:false,mine:false},
-    {name:'IFR2 na B3',assets:['WIN'],users:10,max:10,sess:4,pinned:false,mine:false},
-    {name:'Fechamento Explosivo',assets:['WDO'],users:10,max:10,sess:36,pinned:false,mine:false},
-  ],
-  fx:[
-    {name:'OS FODÕES',assets:['EUR/USD'],users:10,max:10,sess:19,pinned:true,mine:false},
-    {name:'London Open',assets:['GBP/USD'],users:10,max:10,sess:11,pinned:false,mine:false},
-    {name:'Ouro e Dólar',assets:['XAU/USD'],users:10,max:10,sess:7,pinned:false,mine:false},
-    {name:'NY Session',assets:['EUR/USD'],users:10,max:10,sess:14,pinned:false,mine:false},
-    {name:'Forex BR',assets:['USD/BRL'],users:10,max:10,sess:6,pinned:false,mine:false},
-    {name:'Scalp EUR/USD',assets:['EUR/USD'],users:10,max:10,sess:23,pinned:false,mine:false},
-    {name:'Gold Hunters',assets:['XAU/USD'],users:10,max:10,sess:38,pinned:false,mine:false},
-    {name:'Asian Session',assets:['USD/JPY'],users:10,max:10,sess:9,pinned:false,mine:false},
-    {name:'Petróleo ao Vivo',assets:['WTI'],users:10,max:10,sess:16,pinned:false,mine:false},
-    {name:'Cable Traders',assets:['GBP/USD'],users:10,max:10,sess:21,pinned:false,mine:false},
-    {name:'DXY Watchers',assets:['EUR/USD'],users:10,max:10,sess:8,pinned:false,mine:false},
-    {name:'Notícias e NFP',assets:['XAU/USD'],users:10,max:10,sess:44,pinned:false,mine:false},
-    {name:'Swing Forex',assets:['GBP/USD'],users:10,max:10,sess:12,pinned:false,mine:false},
-    {name:'Franco Suíço',assets:['USD/CHF'],users:10,max:10,sess:5,pinned:false,mine:false},
-    {name:'Risco On Risk Off',assets:['XAU/USD'],users:10,max:10,sess:29,pinned:false,mine:false},
-  ],
-  cr:[
-    {name:'BTC HUNTERS',assets:['BTC/USD'],users:10,max:10,sess:28,pinned:true,mine:false},
-    {name:'Altcoins Gang',assets:['SOL/USD'],users:10,max:10,sess:15,pinned:false,mine:false},
-    {name:'Crypto Night',assets:['BTC/USD'],users:10,max:10,sess:9,pinned:false,mine:false},
-    {name:'ETH Traders',assets:['ETH/USD'],users:10,max:10,sess:11,pinned:false,mine:false},
-    {name:'Halving Watch',assets:['BTC/USD'],users:10,max:10,sess:52,pinned:false,mine:false},
-    {name:'SOL Season',assets:['SOL/USD'],users:10,max:10,sess:18,pinned:false,mine:false},
-    {name:'XRP Army',assets:['XRP/USD'],users:10,max:10,sess:34,pinned:false,mine:false},
-    {name:'DeFi Traders',assets:['ETH/USD'],users:10,max:10,sess:13,pinned:false,mine:false},
-    {name:'Crypto Scalp',assets:['BTC/USD'],users:10,max:10,sess:25,pinned:false,mine:false},
-    {name:'100x ou Zero',assets:['SOL/USD'],users:10,max:10,sess:7,pinned:false,mine:false},
-  ]
-}
-
-function switchMkt(mkt, el) {
-  currentMkt = mkt
-  document.querySelectorAll('.mtab').forEach(t => { t.className = 'mtab' })
-  el.classList.add('a'+mkt)
-  const nb = {b3:'nb3-btn',fx:'nfx-btn',cr:'ncr-btn'}
-  document.getElementById('new-btn').className = 'new-btn ' + nb[mkt]
-  renderRooms()
-  document.getElementById('search-inp').value = ''
-}
-
-function renderRooms(filter='') {
-  const el = document.getElementById('rooms-list')
-  const list = ROOMS[currentMkt].filter(r => !filter || r.name.toLowerCase().includes(filter.toLowerCase()) || r.assets.some(a => a.toLowerCase().includes(filter.toLowerCase())))
-  const mine = list.filter(r => r.mine)
-  const pinned = list.filter(r => r.pinned && !r.mine)
-  const others = list.filter(r => !r.mine && !r.pinned)
-  let html = ''
-  if (mine.length) { html += `<div class="sec-label">MINHAS SALAS</div>`; mine.forEach(r => html += roomCard(r)) }
-  if (pinned.length) { html += `<div class="sec-label">MINHA TURMA</div>`; pinned.forEach(r => html += roomCard(r)) }
-  if (others.length) { html += `<div class="sec-label">SALAS ABERTAS</div>`; others.forEach(r => html += roomCard(r)) }
-  if (!list.length) html = `<div style="padding:24px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t3)">Nenhuma sala encontrada.</div>`
-  el.innerHTML = html
-  document.getElementById('cnt-b3').textContent = ROOMS.b3.length
-  document.getElementById('cnt-fx').textContent = ROOMS.fx.length
-  document.getElementById('cnt-cr').textContent = ROOMS.cr.length
-}
-
-function roomCard(r) {
-  const mkt = currentMkt
-  const at = r.assets.map(a => `<span class="at-tag ${AT_CLS[a]||'at-b3'}">${a}</span>`).join('')
-  const badge = r.mine ? '<span class="rc-badge badge-mine">CRIADOR</span>' : r.pinned ? '<span class="rc-badge badge-turma">TURMA</span>' : ''
-  const roomData = JSON.stringify({name:r.name,assets:r.assets,mine:r.mine,mkt})
-  return `<div class="room-card${r.pinned?' pinned':r.mine?' my-room':''}">
-    <div class="rc-top"><div class="rcd rcd-${mkt}"></div><div class="rc-name">${r.name}</div>${badge}</div>
-    <div class="rc-at">${at}</div>
-    <div class="rc-bottom"><span class="rc-meta">${r.sess} sessões · ${r.users}/${r.max||10} traders</span>${r.users>=(r.max||10) ? '<button class="enter-btn btn-lotada" disabled>LOTADA</button>' : '<button class="enter-btn ' + EB[mkt] + '" onclick=\'enterRoom(' + roomData.replace(/'/g,"&#39;") + ')\'>ENTRAR →</button>'}</div>
-  </div>`
-}
-
-function filterRooms(v) { renderRooms(v) }
-
-let pendingRoomData = null
-
-function enterRoom(data) {
-  if ((data.users || 0) >= (data.max || 10)) {
-    toast('Sala lotada — aguarde uma vaga', 't-r')
-    return
-  }
-  if (!currentUser.loggedIn) {
-    pendingRoomData = data
-    document.getElementById('auth-modal-title').textContent = 'ENTRAR NA SALA: ' + data.name
-    openAuthModal()
-    return
-  }
-  _doEnterRoom(data)
-}
-
-function _doEnterRoom(data) {
-  isHost = data.mine || false
-  document.getElementById('room-name-tag').textContent = data.name
-  document.getElementById('room-asset-tag').textContent = data.assets[0]
-  document.getElementById('room-role-tag').textContent = isHost ? 'HOST' : 'MEMBRO'
-  document.getElementById('room-role-tag').className = 'role-tag ' + (isHost ? 'rt-host' : 'rt-member')
-  go('s-room')
-}
-
-// ==================== MODAL CRIAR SALA ====================
-function openModal() {
-  if (!currentUser.loggedIn) {
-    pendingRoomData = 'create'
-    document.getElementById('auth-modal-title').textContent = 'CRIAR SALA'
-    openAuthModal()
-    return
-  }
-  selectedAssets = []
-  document.getElementById('m-name').value = ''
-  document.getElementById('m-limit').value = 10
-  document.getElementById('m-lv').textContent = 10
-  const titles = {b3:'CRIAR SALA — B3',fx:'CRIAR SALA — FOREX',cr:'CRIAR SALA — CRIPTO'}
-  const btnCls = {b3:'btn-criar-b3',fx:'btn-criar-fx',cr:'btn-criar-cr'}
-  document.getElementById('m-title').textContent = titles[currentMkt]
-  document.getElementById('m-criar-btn').className = 'btn-criar ' + btnCls[currentMkt]
-  const wrap = document.getElementById('m-assets')
-  const selCls = {b3:'sel-b3',fx:'sel-fx',cr:'sel-cr'}[currentMkt]
-  wrap.innerHTML = ASSETS[currentMkt].map(a => `<div class="asset-chip" id="chip-${a.replace('/','_')}" onclick="toggleAsset('${a}','${selCls}')">${a}</div>`).join('')
-  document.getElementById('modal-bg').classList.add('open')
-}
-
-function toggleAsset(a, cls) {
-  const chip = document.getElementById('chip-'+a.replace('/','_'))
-  if (selectedAssets.includes(a)) {
-    selectedAssets = selectedAssets.filter(x => x !== a)
-    chip.className = 'asset-chip'
-  } else {
-    selectedAssets.push(a)
-    chip.className = 'asset-chip ' + cls
-  }
-  const hint = document.getElementById('m-asset-hint')
-  hint.textContent = selectedAssets.length ? 'AT: '+selectedAssets.join(' · ') : 'Selecione um ou mais ativos'
-  hint.style.color = selectedAssets.length ? 'var(--g)' : 'var(--t4)'
-}
-
-function closeModal() { document.getElementById('modal-bg').classList.remove('open') }
-
-function criarSala() {
-  const name = document.getElementById('m-name').value.trim()
-  if (!name) { toast('Dê um nome à sala','t-r'); return }
-  if (!selectedAssets.length) { toast('Selecione pelo menos um ativo','t-r'); return }
-  ROOMS[currentMkt].unshift({name,assets:[...selectedAssets],users:1,sess:0,pinned:false,mine:true})
-  closeModal()
-  toast('"'+name+'" criada! Entrando...','t-g')
-  renderRooms()
-  setTimeout(() => {
-    isHost = true
-    document.getElementById('room-name-tag').textContent = name
-    document.getElementById('room-asset-tag').textContent = selectedAssets[0]
-    document.getElementById('room-role-tag').textContent = 'HOST'
-    document.getElementById('room-role-tag').className = 'role-tag rt-host'
-    go('s-room')
-  }, 800)
-}
-
-// ==================== SALA ====================
-const MEMBERS = [
-  {id:'trader_rx',color:'rgba(245,166,35,.12)',tc:'var(--y)',sess:47,online:true,pinned:true,host:true},
-  {id:'_klx47',color:'rgba(0,170,255,.1)',tc:'var(--b)',sess:44,online:true,pinned:true,host:false},
-  {id:'nova_z9',color:'rgba(0,229,160,.1)',tc:'var(--g)',sess:38,online:true,pinned:true,host:false},
-  {id:'fx_mago',color:'rgba(245,166,35,.1)',tc:'var(--y)',sess:29,online:false,pinned:true,host:false},
-  {id:'scalp_k',color:'rgba(167,139,250,.1)',tc:'var(--p)',sess:12,online:true,pinned:false,host:false},
-  {id:'Você',color:'rgba(0,229,160,.12)',tc:'var(--g)',sess:5,online:true,pinned:true,host:false},
+// ==================== TICKER ====================
+const TICKS = [
+  {n:'WIN',v:'192.075',c:'+0,87%',up:true},{n:'WDO',v:'4.999',c:'-0,32%',up:false},
+  {n:'EUR/USD',v:'1.0892',c:'+0,14%',up:true},{n:'XAU/USD',v:'3.320',c:'+0,22%',up:true},
+  {n:'BTC/USD',v:'94.450',c:'+1,8%',up:true},{n:'GBP/USD',v:'1.2748',c:'-0,08%',up:false},
+  {n:'IBOV',v:'128.450',c:'+0,44%',up:true},{n:'ETH/USD',v:'1.720',c:'+2,1%',up:true},
 ]
-
-function initRoom() {
-  setRoleUI()
-  renderTraders()
-  renderMgmt()
-  renderInitMsgs()
-  genCandles()
-  if (animId) cancelAnimationFrame(animId)
-  clearInterval(tickId)
-  const loop = () => { drawChart(); animId = requestAnimationFrame(loop) }
-  loop()
-  tickId = setInterval(() => {
-    const last = candles[candles.length-1]
-    last.c += (Math.random()-.49)*55
-    last.h = Math.max(last.h, last.c)
-    last.l = Math.min(last.l, last.c)
-    baseP = last.c
-    document.getElementById('room-price').textContent = Math.round(baseP).toLocaleString('pt-BR')
-    if (Math.random() < .017) { candles.push({o:last.c,c:last.c+(Math.random()-.5)*30,h:last.c+Math.random()*50,l:last.c-Math.random()*50}); if(candles.length>120)candles.shift() }
-    const pnl = (Math.random()-.48)*380
-    const pe = document.getElementById('pnl-val')
-    if (pe) { pe.textContent=(pnl>=0?'+':'')+pnl.toFixed(2).replace('.',','); pe.style.color=pnl>=0?'var(--g)':'var(--r)' }
-  }, 1100)
-}
-
-function setRoleUI() {
-  document.getElementById('toolbar-host').style.display = isHost ? 'flex' : 'none'
-  document.getElementById('toolbar-member').style.display = isHost ? 'none' : 'flex'
-  document.getElementById('host-bar').style.display = isHost ? 'flex' : 'none'
-  document.getElementById('member-bar').style.display = isHost ? 'none' : 'flex'
-  document.querySelectorAll('.host-only-tab').forEach(t => t.style.display = isHost ? '' : 'none')
-  document.getElementById('draw-ov').classList.toggle('on', isHost && !!drawTool)
-}
-
-function setTf(el) {
-  document.querySelectorAll('.tft').forEach(b => b.classList.remove('active'))
-  el.classList.add('active')
-  if (isHost) sysMsg(currentUser.trader_id+' alterou timeframe para '+el.textContent)
-}
-
-function setTool(t, el) {
-  drawTool = drawTool===t ? null : t
-  ;['line','sr','fib'].forEach(x => { const e=document.getElementById('tl-'+x); if(e)e.classList.toggle('act',x===drawTool) })
-  document.getElementById('draw-ov').classList.toggle('on', isHost && !!drawTool)
-}
-
-function clearAnns() { document.getElementById('ann-svg').innerHTML = '' }
-
-const dov = document.getElementById('draw-ov')
-if (dov) {
-  dov.onmousedown = e => {
-    if (!drawTool || !isHost) return
-    const r = document.getElementById('chart-canvas').getBoundingClientRect()
-    const sx = e.clientX-r.left, sy2 = e.clientY-r.top
-    dov.onmouseup = e2 => { addAnn(drawTool,sx,sy2,e2.clientX-r.left,e2.clientY-r.top); dov.onmouseup=null }
-  }
-}
-
-function addAnn(type,x1,y1,x2,y2) {
-  const svg = document.getElementById('ann-svg'), ns='http://www.w3.org/2000/svg'
-  if (type==='sr') {
-    const y=(y1+y2)/2
-    const l=document.createElementNS(ns,'line')
-    l.setAttribute('x1','0');l.setAttribute('y1',y);l.setAttribute('x2','100%');l.setAttribute('y2',y)
-    l.setAttribute('stroke',y<120?'#ff4560':'#00e5a0');l.setAttribute('stroke-width','1');l.setAttribute('stroke-dasharray','4,2');l.setAttribute('opacity','.7')
-    svg.appendChild(l)
-    const t=document.createElementNS(ns,'text');t.setAttribute('x','5');t.setAttribute('y',y-4)
-    t.setAttribute('font-family','JetBrains Mono,monospace');t.setAttribute('font-size','10');t.setAttribute('fill',y<120?'#ff4560':'#00e5a0')
-    t.textContent=y<120?'RES':'SUP';svg.appendChild(t)
-    sysMsg(currentUser.trader_id+' marcou '+(y<120?'resistência':'suporte'))
-  } else if (type==='line') {
-    const l=document.createElementNS(ns,'line')
-    l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2)
-    l.setAttribute('stroke','#f5a623');l.setAttribute('stroke-width','1.5');l.setAttribute('stroke-dasharray','5,3')
-    svg.appendChild(l);sysMsg(currentUser.trader_id+' desenhou linha de tendência')
-  } else if (type==='fib') {
-    const cols=['#edf0f4','#f5a623','#0af','#ff4560','#00e5a0'],lvls=[0,.236,.382,.5,.618]
-    const ymin=Math.min(y1,y2),ymax=Math.max(y1,y2),rng=ymax-ymin
-    lvls.forEach((lv,i) => {
-      const yl=ymin+rng*(1-lv),ln=document.createElementNS(ns,'line')
-      ln.setAttribute('x1','0');ln.setAttribute('y1',yl);ln.setAttribute('x2','100%');ln.setAttribute('y2',yl)
-      ln.setAttribute('stroke',cols[i]);ln.setAttribute('stroke-width','.8');ln.setAttribute('opacity','.6');svg.appendChild(ln)
-      const tt=document.createElementNS(ns,'text');tt.setAttribute('x','4');tt.setAttribute('y',yl-3)
-      tt.setAttribute('font-family','JetBrains Mono,monospace');tt.setAttribute('font-size','9');tt.setAttribute('fill',cols[i]);tt.setAttribute('opacity','.8')
-      tt.textContent=(lv*100).toFixed(1)+'%';svg.appendChild(tt)
-    });sysMsg(currentUser.trader_id+' desenhou Fibonacci')
-  }
-}
-
-function renderTraders() {
-  const el = document.getElementById('side-traders'); if(!el)return
-  el.innerHTML = `<div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:8px">PARTICIPANTES (${MEMBERS.length}/10)</div>`+
-  MEMBERS.map(m=>`<div class="trader-row">
-    <div class="tr-av" style="background:${m.color};color:${m.tc}">${m.id.substring(0,2).toUpperCase()}</div>
-    <span class="tr-id">${m.id}</span>
-    ${m.host?'<span class="tr-host-tag">HOST</span>':''}
-    <span style="font-size:11px">${m.online?'🎙':'🔇'}</span>
-  </div>`).join('')
-}
-
-let mgmtPins = MEMBERS.filter(m=>!m.host).map(m=>({...m}))
-function renderMgmt() {
-  const el = document.getElementById('side-mgmt'); if(!el)return
-  el.innerHTML = `<div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:6px">NOME DA SALA</div>
-  <input class="mt-inp" value="${document.getElementById('room-name-tag').textContent}" onchange="document.getElementById('room-name-tag').textContent=this.value;toast('Nome atualizado','t-g')">
-  <div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:6px">MEMBROS</div>`+
-  mgmtPins.map((m,i)=>`
-  <div class="mt-member${m.pinned?' pinned':''}" id="mr-${i}">
-    <div class="mt-av" style="background:${m.color};color:${m.tc}">${m.id.substring(0,2).toUpperCase()}</div>
-    <div style="flex:1"><div class="mt-id">${m.id}</div><div class="mt-sess">${m.sess} sessões</div></div>
-    <button class="mt-pin ${m.pinned?'mt-pin-on':'mt-pin-off'}" onclick="toggleMgmtPin(${i})">${m.pinned?'✦ TURMA':'+ PINAR'}</button>
-    <button class="mt-kick" onclick="toast('${m.id} removido','t-r')">✕</button>
-  </div>`).join('')+
-  `<button class="close-room-btn" onclick="document.getElementById('confirm-modal').classList.add('open')">ENCERRAR SALA</button>`
-}
-
-function toggleMgmtPin(i) {
-  mgmtPins[i].pinned = !mgmtPins[i].pinned
-  toast(mgmtPins[i].pinned ? mgmtPins[i].id+' adicionado à turma':mgmtPins[i].id+' removido da turma', mgmtPins[i].pinned?'t-b':'t-r')
-  renderMgmt()
-}
-
-function renderInitMsgs() {
-  const el = document.getElementById('chat-msgs'); if(!el)return
-  el.innerHTML = ''
-  msgCount = 0
-  const msgs = [
-    {u:'SISTEMA',cls:'sys',t:'09:30:00',body:'Sala aberta. Sessão #48 iniciada.'},
-    {u:'trader_rx',cls:'host',t:'09:31:05',body:'Bom dia galera. WIN com gap pra cima, aguardando 134.900.'},
-    {u:'_klx47',cls:'other',t:'09:31:44',body:'Book pesado na venda. Pode ter falso rom.'},
-    {u:'nova_z9',cls:'other2',t:'09:32:10',body:'Fluxo comprador aparecendo. Vou aguardar confirmação.'},
-    {u:'SISTEMA',cls:'sys',t:'09:32:55',body:'trader_rx marcou suporte em 134.680'},
-  ]
-  msgs.forEach(m => addChatMsg(m.u, m.cls, m.body, m.t))
-}
-
-function addChatMsg(u, cls, body, t) {
-  const el = document.getElementById('chat-msgs'); if(!el)return
-  const now = new Date()
-  const time = t || `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`
-  const d = document.createElement('div')
-  d.innerHTML = `<div class="cmsg-hd"><span class="cmsg-u ${cls}">${u}</span><span class="cmsg-t">${time}</span></div><div class="cmsg-body ${cls==='sys'?'sys':''}">${body}</div>`
-  el.appendChild(d); el.scrollTop = el.scrollHeight
-  msgCount++
-}
-
-function sysMsg(txt) { addChatMsg('SISTEMA','sys',txt) }
-
-function sendMsg() {
-  const inp = document.getElementById('chat-inp'); const txt = inp.value.trim(); if(!txt)return
-  addChatMsg('Você','me',txt); inp.value = ''
-}
-
-function swSide(tab, el) {
-  document.querySelectorAll('.stab').forEach(t => t.classList.remove('active')); el.classList.add('active')
-  document.getElementById('side-chat').style.display = tab==='chat'?'flex':'none'
-  document.getElementById('side-traders').style.display = tab==='traders'?'block':'none'
-  document.getElementById('side-mgmt').style.display = tab==='mgmt'?'block':'none'
-}
-
-// ==================== CHART ====================
-function genCandles() {
-  candles = []; let p = baseP
-  for(let i=0;i<80;i++){const o=p,c=o+(Math.random()-.48)*280,h=Math.max(o,c)+Math.random()*90,l=Math.min(o,c)-Math.random()*90;candles.push({o,c,h,l});p=c}
-}
-
-function drawChart() {
-  const cv = document.getElementById('chart-canvas'); if(!cv)return
-  const wrap = cv.parentElement
-  if(cv.width!==wrap.clientWidth||cv.height!==wrap.clientHeight){cv.width=wrap.clientWidth||500;cv.height=wrap.clientHeight||280}
-  const W=cv.width,H=cv.height,ctx=cv.getContext('2d')
-  const rp=54,tp=12,bp=24,cW=10,cG=3
-  ctx.fillStyle='#080a0c';ctx.fillRect(0,0,W,H)
-  const vis=Math.floor((W-rp)/(cW+cG))
-  const sl=candles.slice(Math.max(0,candles.length-vis))
-  if(!sl.length)return
-  const hi=Math.max(...sl.map(c=>c.h)),lo=Math.min(...sl.map(c=>c.l)),rng=hi-lo||1
-  const sy=v=>tp+(1-(v-lo)/rng)*(H-tp-bp)
-  ctx.strokeStyle='#1a1f28';ctx.lineWidth=.5
-  for(let i=0;i<=4;i++){const y=tp+i*(H-tp-bp)/4;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W-rp,y);ctx.stroke();ctx.fillStyle='#454e5c';ctx.font='10px JetBrains Mono,monospace';ctx.textAlign='left';ctx.fillText(Math.round(hi-i*(rng/4)).toLocaleString('pt-BR'),(W-rp)+4,y+4)}
-  sl.forEach((c,i)=>{const x=i*(cW+cG)+2,up=c.c>=c.o,col=up?'#00e5a0':'#ff4560';ctx.strokeStyle=col;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x+cW/2,sy(c.h));ctx.lineTo(x+cW/2,sy(c.l));ctx.stroke();ctx.fillStyle=col;const y1=sy(Math.max(c.o,c.c)),bh=Math.max(sy(Math.min(c.o,c.c))-y1,1);ctx.fillRect(x,y1,cW,bh)})
-  if(sl.length>14){ctx.beginPath();ctx.strokeStyle='rgba(0,170,255,.5)';ctx.lineWidth=1;for(let i=14;i<sl.length;i++){const avg=sl.slice(i-14,i).reduce((s,c)=>s+c.c,0)/14,x=i*(cW+cG)+2+cW/2;i===14?ctx.moveTo(x,sy(avg)):ctx.lineTo(x,sy(avg))}ctx.stroke()}
-  const last=sl[sl.length-1],cy=sy(last.c)
-  ctx.setLineDash([3,3]);ctx.strokeStyle='rgba(0,229,160,.3)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W-rp,cy);ctx.stroke();ctx.setLineDash([])
-  ctx.fillStyle='#00e5a0';ctx.fillRect(W-rp,cy-8,rp,16)
-  ctx.fillStyle='#080a0c';ctx.font='bold 10px JetBrains Mono,monospace';ctx.textAlign='center'
-  ctx.fillText(Math.round(last.c).toLocaleString('pt-BR'),(W-rp)+rp/2,cy+4)
-}
-
-// ==================== SALA PATROCINADA ====================
-const SP_MSGS = [
-  {u:'SISTEMA',cls:'sys',body:'Sala XP aberta. Transmissão iniciada.'},
-  {u:'XP Investimentos',cls:'host',body:'Bom dia traders! Hoje vamos analisar o gap do WIN. Fiquem à vontade para perguntar!'},
-  {u:'_klx47',cls:'other',body:'WIN com gap comprador. 134.900 como resistência?'},
-  {u:'XP Investimentos',cls:'host',body:'Exato! 134.900 resistência e 134.680 suporte. Rompimento abre para 135.200.'},
-  {u:'nova_z9',cls:'other2',body:'Obrigado! Vou aguardar o rompimento.'},
-]
-
-function initSponsor() {
-  const el = document.getElementById('sp-msgs'); if(!el)return
-  el.innerHTML = ''
-  spMsgCount = SP_MSGS.length
-  SP_MSGS.forEach(m => {
-    const d = document.createElement('div')
-    const now = '09:0'+Math.floor(Math.random()*9)+':00'
-    d.innerHTML = `<div class="cmsg-hd"><span class="cmsg-u ${m.cls}">${m.u}</span><span class="cmsg-t">${now}</span></div><div class="cmsg-body ${m.cls==='sys'?'sys':''}">${m.body}</div>`
-    el.appendChild(d); el.scrollTop = el.scrollHeight
-  })
-  renderAudience()
-}
-
-function sendSpMsg() {
-  const inp = document.getElementById('sp-inp'); const txt = inp.value.trim(); if(!txt)return
-  const el = document.getElementById('sp-msgs')
-  const now = new Date()
-  const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`
-  const d = document.createElement('div')
-  d.innerHTML = `<div class="cmsg-hd"><span class="cmsg-u me">Você</span><span class="cmsg-t">${t}</span></div><div class="cmsg-body">${txt}</div>`
-  el.appendChild(d); el.scrollTop = el.scrollHeight
-  spMsgCount++; document.getElementById('aud-msgs').textContent = spMsgCount
-  inp.value = ''
-}
-
-function renderAudience() {
-  const el = document.getElementById('aud-list'); if(!el)return
-  const viewers = [
-    {id:'_klx47',color:'rgba(0,170,255,.1)',tc:'var(--b)',time:'34min'},
-    {id:'nova_z9',color:'rgba(0,229,160,.1)',tc:'var(--g)',time:'41min'},
-    {id:'fx_mago',color:'rgba(245,166,35,.1)',tc:'var(--y)',time:'8min'},
-    {id:'scalp_k',color:'rgba(167,139,250,.1)',tc:'var(--p)',time:'51min'},
-    {id:'Você',color:'rgba(0,229,160,.12)',tc:'var(--g)',time:'12min'},
-  ]
-  el.innerHTML = viewers.map(v=>`<div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border)"><div style="width:22px;height:22px;border-radius:50%;background:${v.color};color:${v.tc};display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;font-weight:700">${v.id.substring(0,2).toUpperCase()}</div><span style="font-family:var(--mono);font-size:11px;color:var(--t1);flex:1">${v.id}</span><span style="font-family:var(--mono);font-size:9px;color:var(--t3)">${v.time}</span></div>`).join('')
-}
-
-function swSide2(tab, el) {
-  document.querySelectorAll('.stab').forEach(t => t.classList.remove('active')); el.classList.add('active')
-  document.getElementById('side-chat2').style.display = tab==='chat2'?'flex':'none'
-  document.getElementById('side-audience').style.display = tab==='audience'?'block':'none'
-}
-
-// ==================== PITCH ANIMAÇÃO ====================
-function animPitchCount() {
-  let n = 0; const target = 3241
-  const interval = setInterval(() => {
-    n = Math.min(n + Math.ceil((target-n)/12), target)
-    const el = document.getElementById('p-t'); if(el)el.textContent = n.toLocaleString('pt-BR')
-    if(n>=target)clearInterval(interval)
-  }, 30)
-}
-
-// ==================== CALC ====================
-function swCalc(tab, el) {
-  document.querySelectorAll('.cnt').forEach(t=>t.classList.remove('active')); el.classList.add('active')
-  ;['notas','mensal','historico','declaracao'].forEach(t=>{const e=document.getElementById('calc-'+t);if(e)e.style.display=t===tab?'':'none'})
-}
-
-// ==================== LIVE COUNTERS ====================
-setInterval(() => {
-  const u = document.getElementById('live-count'); if(u){const v=parseInt(u.textContent.replace(/\D/g,''));u.textContent=(v+Math.floor((Math.random()-.4)*5)).toLocaleString('pt-BR')}
-  const spv = document.getElementById('sp-viewers'); if(spv){const v=parseInt(spv.textContent.replace(/\D/g,''));const nv=Math.max(1000,v+Math.floor((Math.random()-.3)*8));spv.textContent=nv.toLocaleString('pt-BR');const an=document.getElementById('aud-now');if(an)an.textContent=nv.toLocaleString('pt-BR')}
-  const sw=document.getElementById('sp-win');if(sw){const v=parseFloat(sw.textContent.replace(/\D/g,''));sw.textContent=Math.round(v+(Math.random()-.49)*30).toLocaleString('pt-BR')}
-}, 2000)
-
-
-// ==================== AUTH MODAL ====================
-function openAuthModal() {
-  document.getElementById('auth-modal-bg').classList.add('open')
-  switchAuthTab('login')
-}
-
-function closeAuthModal() {
-  document.getElementById('auth-modal-bg').classList.remove('open')
-  pendingRoomData = null
-}
-
-function switchAuthTab(tab) {
-  const isLogin = tab === 'login'
-  document.getElementById('auth-form-login').style.display = isLogin ? '' : 'none'
-  document.getElementById('auth-form-cad').style.display = isLogin ? 'none' : ''
-  document.getElementById('auth-tab-login').style.borderBottomColor = isLogin ? 'var(--g)' : 'transparent'
-  document.getElementById('auth-tab-login').style.color = isLogin ? 'var(--t1)' : 'var(--t3)'
-  document.getElementById('auth-tab-cad').style.borderBottomColor = isLogin ? 'transparent' : 'var(--g)'
-  document.getElementById('auth-tab-cad').style.color = isLogin ? 'var(--t3)' : 'var(--t1)'
-}
-
-async function authLogin() {
-  const email = document.getElementById('al-email').value.trim()
-  const senha = document.getElementById('al-pwd').value
-  if (!email) { toast('Informe seu email','t-r'); return }
-  if (!senha) { toast('Informe sua senha','t-r'); return }
-  const btn = document.getElementById('al-btn')
-  btn.textContent = 'ENTRANDO...'; btn.disabled = true
-  try {
-    const res = await fetch(API + '/auth/login', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({email, senha})
-    })
-    const data = await res.json()
-    if (res.ok && data.token) {
-      localStorage.setItem('tr_token', data.token)
-      currentUser.trader_id = data.trader_id || data.usuario?.trader_id || email.split('@')[0]
-      currentUser.nome = data.nome || email
-      currentUser.email = email
-      currentUser.loggedIn = true
-      updateUserUI()
-      toast('Bem-vindo, ' + currentUser.trader_id + '!', 't-g')
-    } else {
-      toast(data.erro || data.error || 'Email ou senha inválidos','t-r')
-      btn.textContent = 'ENTRAR →'; btn.disabled = false; return
-    }
-  } catch(e) {
-    // modo demo
-    currentUser.trader_id = email.split('@')[0] + '_' + Math.random().toString(36).substr(2,3)
-    currentUser.nome = email; currentUser.email = email; currentUser.loggedIn = true
-    updateUserUI(); toast('Modo demo','t-y')
-  }
-  closeAuthModal()
-  btn.textContent = 'ENTRAR →'; btn.disabled = false
-  if (pendingRoomData && pendingRoomData !== 'create') _doEnterRoom(pendingRoomData)
-  else if (pendingRoomData === 'create') _openCreateModal()
-  pendingRoomData = null
-}
-
-async function authCadastro() {
-  const nome = document.getElementById('ac-nome').value.trim()
-  const email = document.getElementById('ac-email').value.trim()
-  const senha = document.getElementById('ac-pwd').value
-  if (nome.length < 2) { toast('Informe seu nome','t-r'); return }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Email inválido','t-r'); return }
-  if (senha.length < 8) { toast('Senha muito curta (mín. 8 caracteres)','t-r'); return }
-  const btn = document.getElementById('ac-btn')
-  btn.textContent = 'CRIANDO...'; btn.disabled = true
-  const base = nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(' ')[0].replace(/[^a-z]/g,'').substring(0,8)
-  const tid = base + '_' + Math.random().toString(36).substr(2,3)
-  try {
-    const res = await fetch(API + '/auth/cadastro', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({nome, email, senha, trader_id: tid})
-    })
-    const data = await res.json()
-    if (res.ok) {
-      if (data.token) localStorage.setItem('tr_token', data.token)
-      currentUser.trader_id = data.trader_id || tid
-    } else {
-      toast(data.erro || data.error || 'Erro ao criar conta','t-r')
-      btn.textContent = 'CRIAR CONTA →'; btn.disabled = false; return
-    }
-  } catch(e) {
-    currentUser.trader_id = tid
-  }
-  currentUser.nome = nome; currentUser.email = email; currentUser.loggedIn = true
-  updateUserUI()
-  toast('Conta criada! Bem-vindo, ' + currentUser.trader_id + '!', 't-g')
-  closeAuthModal()
-  btn.textContent = 'CRIAR CONTA →'; btn.disabled = false
-  if (pendingRoomData && pendingRoomData !== 'create') _doEnterRoom(pendingRoomData)
-  else if (pendingRoomData === 'create') _openCreateModal()
-  pendingRoomData = null
-}
-
-function _openCreateModal() {
-  selectedAssets = []
-  document.getElementById('m-name').value = ''
-  document.getElementById('m-limit').value = 10
-  document.getElementById('m-lv').textContent = 10
-  const titles = {b3:'CRIAR SALA — B3',fx:'CRIAR SALA — FOREX',cr:'CRIAR SALA — CRIPTO'}
-  const btnCls = {b3:'btn-criar-b3',fx:'btn-criar-fx',cr:'btn-criar-cr'}
-  document.getElementById('m-title').textContent = titles[currentMkt]
-  document.getElementById('m-criar-btn').className = 'btn-criar ' + btnCls[currentMkt]
-  const wrap = document.getElementById('m-assets')
-  const selCls = {b3:'sel-b3',fx:'sel-fx',cr:'sel-cr'}[currentMkt]
-  wrap.innerHTML = ASSETS[currentMkt].map(a => `<div class="asset-chip" id="chip-${a.replace('/','_')}" onclick="toggleAsset('${a}','${selCls}')">${a}</div>`).join('')
-  document.getElementById('modal-bg').classList.add('open')
-}
+const ticker = document.getElementById('ticker')
+let th = ''
+for(let i=0;i<3;i++) TICKS.forEach(t => {
+  th += `<span class="tick-i"><span class="t-name">${t.n}</span><span class="t-val">${t.v}</span><span class="${t.up?'t-up':'t-dn'}">${t.c}</span></span>`
+})
+ticker.innerHTML = th
 
 // ==================== TOAST ====================
 function toast(msg, cls='t-g') {
@@ -1781,7 +879,6 @@ function toast(msg, cls='t-g') {
 
 // ==================== INIT ====================
 updateUserUI()
-renderRooms()
 </script>
 </body>
 </html>
