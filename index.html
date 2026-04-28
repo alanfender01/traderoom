@@ -652,6 +652,7 @@ function enterRoom(data) {
 function getSymbolForRoom(mercado, ativos) {
   const mapa = {
     'WIN': 'BMFBOVESPA:WIN1!', 'WDO': 'BMFBOVESPA:WDO1!',
+    'WINM26': 'BMFBOVESPA:WIN1!', 'WDOK26': 'BMFBOVESPA:WDO1!',
     'BTC': 'BINANCE:BTCUSDT', 'ETH': 'BINANCE:ETHUSDT', 'SOL': 'BINANCE:SOLUSDT',
     'EUR/USD': 'FX:EURUSD', 'GBP/USD': 'FX:GBPUSD', 'USD/JPY': 'FX:USDJPY',
     'XAU/USD': 'OANDA:XAUUSD', 'WTI': 'NYMEX:CL1!'
@@ -711,7 +712,7 @@ function setSymbol(symbol, el) {
 
 // ==================== CRIAR SALA ====================
 const ASSETS_BY_MKT = {
-  B3: ['WIN','WDO','WINV25','WDOV25','IBOV'],
+  B3: ['WIN','WDO','WINM26','WDOK26','IBOV'],
   Forex: ['EUR/USD','GBP/USD','USD/JPY','XAU/USD','WTI','USD/BRL'],
   Cripto: ['BTC','ETH','SOL','BNB','XRP']
 }
