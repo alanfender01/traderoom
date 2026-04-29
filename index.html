@@ -951,7 +951,7 @@ async function criarSala() {
     ativos: selectedAssets,
     limite,
     ativa: true,
-    criador_id: currentUser.loggedIn ? undefined : null
+    criador_id: currentUser.id || null
   }
   
   const { data, error } = await sb.from('salas').insert([novasSala]).select()
