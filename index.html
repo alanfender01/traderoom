@@ -269,6 +269,52 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .au-lbl{font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:1px;flex:1}
 .au-btn{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);transition:all .15s}
 .au-btn.on{background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25)}
+
+/* CREATOR/MEMBER BADGES */
+.badge-criador{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;background:rgba(245,166,35,.12);color:var(--y);border:1px solid rgba(245,166,35,.25)}
+.badge-freq{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;background:rgba(0,170,255,.08);color:var(--b);border:1px solid rgba(0,170,255,.2)}
+
+/* CREATOR PANEL */
+.creator-panel{background:rgba(245,166,35,.04);border-top:1px solid rgba(245,166,35,.15);padding:8px;flex-shrink:0}
+.cp-title{font-family:var(--mono);font-size:9px;color:var(--y);letter-spacing:2px;margin-bottom:6px}
+.cp-btns{display:flex;flex-direction:column;gap:5px}
+.cp-btn{font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:5px;cursor:pointer;border:1px solid;transition:all .15s;text-align:left;font-weight:700}
+.cp-end{background:rgba(245,166,35,.08);border-color:rgba(245,166,35,.25);color:var(--y)}
+.cp-end:hover{background:rgba(245,166,35,.16)}
+.cp-delete{background:rgba(255,69,96,.08);border-color:rgba(255,69,96,.25);color:var(--r)}
+.cp-delete:hover{background:rgba(255,69,96,.16)}
+
+/* MEMBER PANEL */
+.member-panel{background:rgba(0,170,255,.03);border-top:1px solid rgba(0,170,255,.1);padding:8px;flex-shrink:0}
+.mp-btn{font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:5px;cursor:pointer;border:1px solid rgba(0,170,255,.2);color:var(--b);background:rgba(0,170,255,.06);width:100%;transition:all .15s;font-weight:700}
+.mp-btn:hover{background:rgba(0,170,255,.14)}
+
+/* TRADERS LIST */
+.trader-row{display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--border)}
+.tr-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;flex-shrink:0}
+.tr-info{flex:1}
+.tr-id{font-size:11px;color:var(--t1);font-family:var(--mono)}
+.tr-actions{display:flex;gap:4px}
+.tr-act{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;border:1px solid;transition:all .15s}
+.tr-block{background:rgba(245,166,35,.06);border-color:rgba(245,166,35,.2);color:var(--y)}
+.tr-ban{background:rgba(255,69,96,.06);border-color:rgba(255,69,96,.2);color:var(--r)}
+
+/* AUTH REQUIRED MODAL */
+.auth-req{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:300}
+.auth-req.open{display:flex}
+.auth-req-box{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:2rem;width:360px;max-width:96vw;text-align:center}
+.ar-icon{font-size:32px;margin-bottom:12px}
+.ar-title{font-size:18px;font-weight:800;margin-bottom:6px}
+.ar-sub{font-family:var(--mono);font-size:11px;color:var(--t3);margin-bottom:1.5rem;line-height:1.5}
+.ar-btns{display:flex;gap:8px}
+
+/* CONFIRM DELETE */
+.confirm-del{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:300}
+.confirm-del.open{display:flex}
+.cd-box{background:var(--bg2);border:1px solid rgba(255,69,96,.3);border-radius:12px;padding:1.5rem;width:320px;text-align:center}
+.cd-title{font-size:16px;font-weight:800;color:var(--r);margin-bottom:8px}
+.cd-sub{font-family:var(--mono);font-size:11px;color:var(--t2);margin-bottom:1.2rem;line-height:1.5}
+.cd-btns{display:flex;gap:8px}
 </style>
 </head>
 <body>
@@ -408,6 +454,32 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   </div>
 </div>
 
+
+<!-- AUTH REQUIRED MODAL -->
+<div class="auth-req" id="auth-req">
+  <div class="auth-req-box">
+    <div class="ar-icon">🔐</div>
+    <div class="ar-title">Login necessário</div>
+    <div class="ar-sub">Para entrar em uma sala você precisa ter uma conta. É rápido e gratuito!</div>
+    <div class="ar-btns">
+      <button class="btn-g" style="flex:1" onclick="document.getElementById('auth-req').classList.remove('open')">CANCELAR</button>
+      <button class="btn-p" style="flex:2;padding:12px" onclick="document.getElementById('auth-req').classList.remove('open');go('s-login')">ENTRAR / CADASTRAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE MODAL -->
+<div class="confirm-del" id="confirm-del">
+  <div class="cd-box">
+    <div class="cd-title">⚠️ Excluir sala?</div>
+    <div class="cd-sub">Esta ação é permanente. A sala e todo o histórico serão removidos.</div>
+    <div class="cd-btns">
+      <button class="btn-g" style="flex:1" onclick="document.getElementById('confirm-del').classList.remove('open')">CANCELAR</button>
+      <button style="flex:2;padding:9px;background:rgba(255,69,96,.1);border:1px solid rgba(255,69,96,.3);border-radius:6px;color:var(--r);font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer" onclick="confirmarExcluirSala()">SIM, EXCLUIR</button>
+    </div>
+  </div>
+</div>
+
 <!-- SALA TRADING -->
 <div id="s-room" class="screen">
   <div class="rh">
@@ -454,6 +526,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="side-tabs">
         <div class="stab active" onclick="swSide('chat',this)">CHAT</div>
         <div class="stab" onclick="swSide('traders',this)">TRADERS</div>
+        <div class="stab" id="tab-gestao" style="display:none" onclick="swSide('gestao',this)">GESTÃO</div>
       </div>
       <div id="side-chat" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
         <div class="chat-msgs" id="chat-msgs"></div>
@@ -462,9 +535,25 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
           <div class="send-b" onclick="sendMsg()">↑</div>
         </div>
       </div>
-      <div id="side-traders" class="traders-tab" style="display:none">
+      <div id="side-traders" class="traders-tab" style="display:none;flex:1;overflow-y:auto;padding:8px">
         <div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:8px">PARTICIPANTES</div>
         <div id="traders-list"></div>
+      </div>
+      <div id="side-gestao" style="display:none;flex:1;overflow-y:auto;padding:8px">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:8px">GERENCIAR SALA</div>
+        <div id="gestao-content"></div>
+      </div>
+      <!-- CREATOR PANEL -->
+      <div class="creator-panel" id="creator-panel" style="display:none">
+        <div class="cp-title">👑 PAINEL DO CRIADOR</div>
+        <div class="cp-btns">
+          <button class="cp-btn cp-end" onclick="encerrarPregao()">⏹ ENCERRAR PREGÃO</button>
+          <button class="cp-btn cp-delete" onclick="document.getElementById('confirm-del').classList.add('open')">🗑 EXCLUIR SALA</button>
+        </div>
+      </div>
+      <!-- MEMBER PANEL -->
+      <div class="member-panel" id="member-panel" style="display:none">
+        <button class="mp-btn" onclick="sairDaSala()">↩ SAIR DA SALA</button>
       </div>
       <div class="audio-strip">
         <span class="au-lbl">ÁUDIO</span>
@@ -529,9 +618,9 @@ async function cadFinalizar() {
 async function loadUserProfile(user) {
   const { data } = await sb.from('usuarios').select('*').eq('eu_ia', user.id).single()
   if (data) {
-    currentUser = { trader_id: data.trader_id || user.email.split('@')[0], nome: data.nome, loggedIn: true }
+    currentUser = { id: user.id, trader_id: data.trader_id || user.email.split('@')[0], nome: data.nome, loggedIn: true }
   } else {
-    currentUser = { trader_id: user.email.split('@')[0], loggedIn: true }
+    currentUser = { id: user.id, trader_id: user.email.split('@')[0], loggedIn: true }
   }
   updateUserUI()
 }
@@ -615,7 +704,7 @@ function renderRooms(filter = '') {
     const limite = r.limite || 10
     const ocupacao = r.ocupacao || 0
     const lotada = ocupacao >= limite
-    const roomJson = JSON.stringify({ id: r.eu_ia, nome: r.nome, mercado: r.mercado, ativos }).replace(/"/g, '&quot;')
+    const roomJson = JSON.stringify({ id: r.eu_ia, nome: r.nome, mercado: r.mercado, ativos, criador_id: r.criador_id }).replace(/"/g, '&quot;')
     const btnHtml = lotada
       ? `<button class="enter-btn" style="background:rgba(255,69,96,.08);border-color:rgba(255,69,96,.3);color:var(--r);cursor:not-allowed" disabled>🔴 LOTADA</button>`
       : `<button class="enter-btn ${eb}" onclick='enterRoom(${roomJson})'>ENTRAR →</button>`
@@ -644,14 +733,106 @@ function switchMkt(mkt, el) {
 }
 
 // ==================== ENTRAR SALA ====================
+let currentRoom = null
+
 function enterRoom(data) {
+  if (!currentUser.loggedIn) {
+    document.getElementById('auth-req').classList.add('open')
+    return
+  }
+  currentRoom = data
   const ativos = data.ativos || []
   document.getElementById('room-name-tag').textContent = data.nome
   const simbolo = getSymbolForRoom(data.mercado, ativos)
   document.getElementById('room-asset-tag').textContent = ativos[0] || data.mercado
   currentSymbol = simbolo
+  
+  // Check if creator
+  const isCriador = data.criador_id && currentUser.id && data.criador_id === currentUser.id
+  
+  // Show/hide panels
+  document.getElementById('creator-panel').style.display = isCriador ? 'block' : 'none'
+  document.getElementById('member-panel').style.display = isCriador ? 'none' : 'block'
+  document.getElementById('tab-gestao').style.display = isCriador ? 'block' : 'none'
+  
+  // Set role tag
+  const roleTag = document.getElementById('room-role-tag')
+  if (isCriador) {
+    roleTag.textContent = '👑 CRIADOR'
+    roleTag.className = 'role-tag rt-host'
+  } else {
+    roleTag.textContent = 'FREQUENTADOR'
+    roleTag.className = 'role-tag rt-member'
+  }
+  
   go('s-room')
-  addChatMsg('SISTEMA','sys','Você entrou em ' + data.nome + '. Bom pregão!')
+  
+  // Add entry message with badge
+  const badge = isCriador ? ' [👑 CRIADOR]' : ' [FREQUENTADOR]'
+  addChatMsg('SISTEMA','sys', currentUser.trader_id + badge + ' entrou em ' + data.nome + '. Bom pregão!')
+  
+  // Render traders list
+  renderTradersList(isCriador)
+  
+  // Render gestao if creator
+  if (isCriador) renderGestao()
+}
+
+function renderTradersList(isCriador) {
+  const el = document.getElementById('traders-list')
+  if (!el) return
+  // Simulate some traders for now
+  const traders = [
+    { id: currentUser.trader_id, criador: isCriador },
+  ]
+  el.innerHTML = traders.map(t => `
+    <div class="trader-row">
+      <div class="tr-av" style="background:rgba(0,229,160,.1);color:var(--g)">${t.id.substring(0,2).toUpperCase()}</div>
+      <div class="tr-info">
+        <div class="tr-id">${t.id}</div>
+        <span class="${t.criador ? 'badge-criador' : 'badge-freq'}">${t.criador ? '👑 CRIADOR' : 'FREQUENTADOR'}</span>
+      </div>
+    </div>
+  `).join('')
+}
+
+function renderGestao() {
+  const el = document.getElementById('gestao-content')
+  if (!el || !currentRoom) return
+  el.innerHTML = `
+    <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:10px">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;margin-bottom:4px">SALA</div>
+      <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--t1)">${currentRoom.nome}</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:4px">${currentRoom.mercado}</div>
+    </div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:6px">FREQUENTADORES</div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--t3);padding:8px;background:var(--bg3);border-radius:6px">
+      Em breve — gestão em tempo real
+    </div>
+  `
+}
+
+async function excluirSala() {
+  document.getElementById('confirm-del').classList.add('open')
+}
+
+async function confirmarExcluirSala() {
+  document.getElementById('confirm-del').classList.remove('open')
+  if (!currentRoom) return
+  const { error } = await sb.from('salas').delete().eq('id', currentRoom.id)
+  if (error) { toast('Erro ao excluir sala','t-r'); return }
+  toast('Sala excluída!','t-g')
+  go('s-lobby')
+}
+
+function encerrarPregao() {
+  toast('Pregão encerrado! Sala permanece aberta para conversas.','t-y')
+  addChatMsg('SISTEMA','sys','👑 Criador encerrou o pregão. Sala continua aberta para discussões.')
+}
+
+function sairDaSala() {
+  toast('Você saiu da sala.','t-b')
+  go('s-lobby')
 }
 
 function getSymbolForRoom(mercado, ativos) {
@@ -806,7 +987,9 @@ function sendMsg() {
 function swSide(tab, el) {
   document.querySelectorAll('.stab').forEach(t => t.classList.remove('active')); el.classList.add('active')
   document.getElementById('side-chat').style.display = tab==='chat'?'flex':'none'
-  document.getElementById('side-traders').style.display = tab==='traders'?'block':'none'
+  document.getElementById('side-traders').style.display = tab==='traders'?'flex':'none'
+  const gestao = document.getElementById('side-gestao')
+  if (gestao) gestao.style.display = tab==='gestao'?'flex':'none'
 }
 
 // ==================== CADASTRO HELPERS ====================
@@ -888,4 +1071,3 @@ updateUserUI()
 </script>
 </body>
 </html>
-
