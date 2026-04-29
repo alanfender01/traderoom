@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -614,13 +613,18 @@ function renderRooms(filter = '') {
     const ativos = r.ativos && r.ativos.length > 0 ? r.ativos : defaultAtivos[currentMkt] || []
     const atTags = ativos.slice(0, 3).map(a => `<span class="at-tag ${atCls}">${a}</span>`).join('')
     const limite = r.limite || 10
+    const ocupacao = r.ocupacao || 0
+    const lotada = ocupacao >= limite
     const roomJson = JSON.stringify({ id: r.eu_ia, nome: r.nome, mercado: r.mercado, ativos }).replace(/"/g, '&quot;')
+    const btnHtml = lotada
+      ? `<button class="enter-btn" style="background:rgba(255,69,96,.08);border-color:rgba(255,69,96,.3);color:var(--r);cursor:not-allowed" disabled>🔴 LOTADA</button>`
+      : `<button class="enter-btn ${eb}" onclick='enterRoom(${roomJson})'>ENTRAR →</button>`
     html += `<div class="room-card">
       <div class="rc-top"><div class="rcd ${rcd}"></div><div class="rc-name">${r.nome}</div></div>
       <div class="rc-at">${atTags || `<span class="at-tag ${atCls}">${currentMkt}</span>`}</div>
       <div class="rc-bottom">
-        <span class="rc-meta">limite: ${limite} traders</span>
-        <button class="enter-btn ${eb}" onclick='enterRoom(${roomJson})'>ENTRAR →</button>
+        <span class="rc-meta">${ocupacao}/${limite} traders</span>
+        ${btnHtml}
       </div>
     </div>`
   })
@@ -884,3 +888,4 @@ updateUserUI()
 </script>
 </body>
 </html>
+
