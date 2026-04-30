@@ -705,7 +705,7 @@ function renderRooms(filter = '') {
     const limite = r.limite || 10
     const ocupacao = r.ocupacao || 0
     const lotada = ocupacao >= limite
-    const roomJson = JSON.stringify({ id: r.eu_ia, nome: r.nome, mercado: r.mercado, ativos, criador_id: r.criador_id }).replace(/"/g, '&quot;')
+    const roomJson = JSON.stringify({ id: r.id, eu_ia: r.eu_ia, nome: r.nome, mercado: r.mercado, ativos, criador_id: r.criador_id }).replace(/"/g, '&quot;')
     const btnHtml = lotada
       ? `<button class="enter-btn" style="background:rgba(255,69,96,.08);border-color:rgba(255,69,96,.3);color:var(--r);cursor:not-allowed" disabled>🔴 LOTADA</button>`
       : `<button class="enter-btn ${eb}" onclick='enterRoom(${roomJson})'>ENTRAR →</button>`
@@ -1072,7 +1072,7 @@ async function criarSala() {
   toast('"' + nome + '" criada com sucesso!','t-g')
   await loadRooms()
   if (data && data[0]) {
-    setTimeout(() => enterRoom({ id: data[0].eu_ia, nome, mercado, ativos: selectedAssets, criador_id: currentUser.id }), 500)
+    setTimeout(() => enterRoom({ id: data[0].id, eu_ia: data[0].eu_ia, nome, mercado, ativos: selectedAssets, criador_id: currentUser.id }), 500)
   }
 }
 
