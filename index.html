@@ -547,7 +547,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="creator-panel" id="creator-panel" style="display:none">
         <div class="cp-title">👑 PAINEL DO CRIADOR</div>
         <div class="cp-btns">
-          <button class="cp-btn cp-end" onclick="encerrarPregao()">⏹ ENCERRAR PREGÃO</button>
+          <button class="cp-btn cp-end" id="btn-encerrar" onclick="encerrarPregao()">⏹ ENCERRAR PREGÃO</button>
+          <button class="cp-btn" style="background:rgba(0,170,255,.08);border-color:rgba(0,170,255,.25);color:var(--b)" onclick="swSide('gestao',document.getElementById('tab-gestao'))">⚙️ GERENCIAR SALA</button>
           <button class="cp-btn cp-delete" onclick="document.getElementById('confirm-del').classList.add('open')">🗑 EXCLUIR SALA</button>
         </div>
       </div>
@@ -735,7 +736,7 @@ function switchMkt(mkt, el) {
 // ==================== ENTRAR SALA ====================
 let currentRoom = null
 
-function enterRoom(data) {
+async function enterRoom(data) {
   if (!currentUser.loggedIn) {
     document.getElementById('auth-req').classList.add('open')
     return
@@ -771,6 +772,36 @@ function enterRoom(data) {
   const badge = isCriador ? ' [👑 CRIADOR]' : ' [FREQUENTADOR]'
   addChatMsg('SISTEMA','sys', currentUser.trader_id + badge + ' entrou em ' + data.nome + '. Bom pregão!')
   
+  // Register member in DB if not creator
+  if (!isCriador && currentUser.loggedIn && currentRoom.id) {
+    const { data: existing } = await sb.from('sala_membros')
+      .select('id')
+      .eq('sala_id', currentRoom.id)
+      .eq('usuario_id', currentUser.id)
+      .single()
+    
+    if (!existing) {
+      await sb.from('sala_membros').insert({
+        sala_id: currentRoom.id,
+        usuario_id: currentUser.id,
+        trader_id: currentUser.trader_id
+      })
+    }
+    
+    // Check if banned
+    const { data: banned } = await sb.from('sala_membros')
+      .select('banido')
+      .eq('sala_id', currentRoom.id)
+      .eq('usuario_id', currentUser.id)
+      .single()
+    
+    if (banned?.banido) {
+      toast('Você foi banido desta sala!', 't-r')
+      go('s-lobby')
+      return
+    }
+  }
+  
   // Render traders list
   renderTradersList(isCriador)
   
@@ -778,38 +809,91 @@ function enterRoom(data) {
   if (isCriador) renderGestao()
 }
 
-function renderTradersList(isCriador) {
+async function renderTradersList(isCriador) {
   const el = document.getElementById('traders-list')
   if (!el) return
-  // Simulate some traders for now
-  const traders = [
-    { id: currentUser.trader_id, criador: isCriador },
-  ]
-  el.innerHTML = traders.map(t => `
+  
+  // Load from DB
+  const { data: membros } = await sb.from('sala_membros')
+    .select('*')
+    .eq('sala_id', currentRoom?.id || '')
+    .eq('banido', false)
+  
+  const lista = membros || []
+  
+  // Always show current user first
+  const myEntry = { trader_id: currentUser.trader_id, criador: isCriador, bloqueado: false }
+  const others = lista.filter(m => m.usuario_id !== currentUser.id)
+  
+  const allTraders = [myEntry, ...others]
+  
+  el.innerHTML = `<div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:8px">PARTICIPANTES (${allTraders.length})</div>` +
+  allTraders.map(t => `
     <div class="trader-row">
-      <div class="tr-av" style="background:rgba(0,229,160,.1);color:var(--g)">${t.id.substring(0,2).toUpperCase()}</div>
+      <div class="tr-av" style="background:${t.criador ? 'rgba(245,166,35,.1)' : 'rgba(0,170,255,.1)'};color:${t.criador ? 'var(--y)' : 'var(--b)'}">${(t.trader_id||'??').substring(0,2).toUpperCase()}</div>
       <div class="tr-info">
-        <div class="tr-id">${t.id}</div>
-        <span class="${t.criador ? 'badge-criador' : 'badge-freq'}">${t.criador ? '👑 CRIADOR' : 'FREQUENTADOR'}</span>
+        <div class="tr-id">${t.trader_id || 'anon'}</div>
+        <span class="${t.criador ? 'badge-criador' : 'badge-freq'}">${t.criador ? '👑 CRIADOR' : t.bloqueado ? '🔇 BLOQUEADO' : 'FREQUENTADOR'}</span>
       </div>
     </div>
   `).join('')
 }
 
-function renderGestao() {
+async function renderGestao() {
   const el = document.getElementById('gestao-content')
   if (!el || !currentRoom) return
+  
+  // Load members from DB
+  const { data: membros } = await sb.from('sala_membros')
+    .select('*')
+    .eq('sala_id', currentRoom.id)
+    .eq('banido', false)
+  
+  const lista = membros || []
+  
   el.innerHTML = `
     <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:10px">
       <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;margin-bottom:4px">SALA</div>
       <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--t1)">${currentRoom.nome}</div>
       <div style="font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:4px">${currentRoom.mercado}</div>
     </div>
-    <div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:6px">FREQUENTADORES</div>
-    <div style="font-family:var(--mono);font-size:11px;color:var(--t3);padding:8px;background:var(--bg3);border-radius:6px">
-      Em breve — gestão em tempo real
-    </div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:6px">FREQUENTADORES (${lista.length})</div>
+    ${lista.length === 0 
+      ? '<div style="font-family:var(--mono);font-size:11px;color:var(--t3);padding:8px;background:var(--bg3);border-radius:6px">Nenhum frequentador ainda.</div>'
+      : lista.map(m => `
+        <div style="display:flex;align-items:center;gap:6px;padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;margin-bottom:4px">
+          <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,170,255,.1);color:var(--b);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;font-weight:700;flex-shrink:0">${(m.trader_id||'??').substring(0,2).toUpperCase()}</div>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--t1);flex:1">${m.trader_id || 'anon'}</span>
+          ${m.bloqueado 
+            ? `<button onclick="desbloquear('${m.id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2);color:var(--g)">✓ DESBLOQUEAR</button>`
+            : `<button onclick="bloquear('${m.id}','${m.trader_id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);color:var(--y)">🔇 BLOQUEAR</button>`
+          }
+          <button onclick="banir('${m.id}','${m.trader_id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(255,69,96,.06);border:1px solid rgba(255,69,96,.2);color:var(--r)">⛔ BANIR</button>
+        </div>
+      `).join('')
+    }
   `
+}
+
+async function bloquear(membroId, traderId) {
+  await sb.from('sala_membros').update({ bloqueado: true }).eq('id', membroId)
+  toast(traderId + ' bloqueado!', 't-y')
+  addChatMsg('SISTEMA', 'sys', '🔇 ' + traderId + ' foi bloqueado pelo criador.')
+  renderGestao()
+}
+
+async function desbloquear(membroId) {
+  await sb.from('sala_membros').update({ bloqueado: false }).eq('id', membroId)
+  toast('Usuário desbloqueado!', 't-g')
+  renderGestao()
+}
+
+async function banir(membroId, traderId) {
+  await sb.from('sala_membros').update({ banido: true }).eq('id', membroId)
+  toast(traderId + ' banido!', 't-r')
+  addChatMsg('SISTEMA', 'sys', '⛔ ' + traderId + ' foi banido pelo criador.')
+  renderGestao()
+  renderTradersList(true)
 }
 
 async function excluirSala() {
@@ -825,13 +909,38 @@ async function confirmarExcluirSala() {
   go('s-lobby')
 }
 
-function encerrarPregao() {
-  toast('Pregão encerrado! Sala permanece aberta para conversas.','t-y')
-  addChatMsg('SISTEMA','sys','👑 Criador encerrou o pregão. Sala continua aberta para discussões.')
+async function encerrarPregao() {
+  const btn = document.getElementById('btn-encerrar')
+  const pregaoEncerrado = btn.dataset.encerrado === 'true'
+  
+  if (!pregaoEncerrado) {
+    btn.textContent = '▶ REABRIR PREGÃO'
+    btn.dataset.encerrado = 'true'
+    btn.style.background = 'rgba(0,229,160,.08)'
+    btn.style.borderColor = 'rgba(0,229,160,.25)'
+    btn.style.color = 'var(--g)'
+    toast('Pregão encerrado! Sala permanece aberta.','t-y')
+    addChatMsg('SISTEMA','sys','⏹ Criador encerrou o pregão. Sala continua aberta para discussões.')
+  } else {
+    btn.textContent = '⏹ ENCERRAR PREGÃO'
+    btn.dataset.encerrado = 'false'
+    btn.style.background = ''
+    btn.style.borderColor = ''
+    btn.style.color = ''
+    toast('Pregão reaberto!','t-g')
+    addChatMsg('SISTEMA','sys','▶ Criador reabriu o pregão!')
+  }
 }
 
-function sairDaSala() {
+async function sairDaSala() {
+  if (currentRoom && currentUser.id) {
+    await sb.from('sala_membros')
+      .delete()
+      .eq('sala_id', currentRoom.id)
+      .eq('usuario_id', currentUser.id)
+  }
   toast('Você saiu da sala.','t-b')
+  addChatMsg('SISTEMA','sys', currentUser.trader_id + ' saiu da sala.')
   go('s-lobby')
 }
 
@@ -1071,4 +1180,3 @@ updateUserUI()
 </script>
 </body>
 </html>
-
