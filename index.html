@@ -512,7 +512,7 @@ function iniciarRealtime(salaId) {
     .on('postgres_changes', {
       event: '*',
       schema: 'public',
-      table: 'sala_membros',
+      table: 'sala_eds',
       filter: 'sala_id=eq.' + salaId
     }, async (payload) => {
       // Atualiza listas automaticamente
@@ -671,11 +671,11 @@ async function enterRoom(data) {
   addChatMsg('SISTEMA','sys', currentUser.trader_id + (currentIsCriador ? ' [👑 CRIADOR]' : ' [FREQUENTADOR]') + ' entrou em ' + data.nome + '. Bom pregão!')
 
   if (!currentIsCriador && currentUser.id) {
-    const { data: existing } = await sb.from('sala_membros').select('eu_ia').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
+    const { data: existing } = await sb.from('sala_eds').select('id').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
     if (!existing) {
-      await sb.from('sala_membros').insert({ sala_id: currentRoom.id, usuario_id: currentUser.id, banido: false, bloqueado: false })
+      await sb.from('sala_eds').insert({ sala_id: currentRoom.id, usuario_id: currentUser.id, banido: false, bloqueado: false })
     }
-    const { data: membroAtual } = await sb.from('sala_membros').select('banido').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
+    const { data: membroAtual } = await sb.from('sala_eds').select('banido').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
     if (membroAtual?.banido) { toast('Você foi banido desta sala!','t-r'); go('s-lobby'); return }
   }
 
@@ -689,7 +689,7 @@ async function enterRoom(data) {
 // ==================== SAIR ====================
 async function sairDaSala() {
   if (currentRoom && currentUser.id) {
-    await sb.from('sala_membros').delete().eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id)
+    await sb.from('sala_eds').delete().eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id)
   }
   pararRealtime()
   toast('Você saiu da sala.','t-b')
@@ -698,7 +698,7 @@ async function sairDaSala() {
 
 async function sairDaSalaEVoltar() {
   if (!currentIsCriador && currentRoom && currentUser.id) {
-    await sb.from('sala_membros').delete().eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id)
+    await sb.from('sala_eds').delete().eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id)
   }
   pararRealtime()
   go('s-lobby')
@@ -708,7 +708,7 @@ async function sairDaSalaEVoltar() {
 async function renderTradersList(isCriador) {
   const el = document.getElementById('traders-list')
   if (!el) return
-  const { data: membros } = await sb.from('sala_membros').select('*').eq('sala_id', currentRoom?.id || '').eq('banido', false)
+  const { data: membros } = await sb.from('sala_eds').select('*').eq('sala_id', currentRoom?.id || '').eq('banido', false)
   const lista = membros || []
   const userIds = lista.map(m => m.usuario_id)
   let tradersMap = {}
@@ -731,7 +731,7 @@ async function renderTradersList(isCriador) {
 async function renderGestao() {
   const el = document.getElementById('gestao-content')
   if (!el || !currentRoom) return
-  const { data: membros } = await sb.from('sala_membros').select('eu_ia, usuario_id, bloqueado, banido').eq('sala_id', currentRoom.id).eq('banido', false)
+  const { data: membros } = await sb.from('sala_eds').select('id, usuario_id, bloqueado, banido').eq('sala_id', currentRoom.id).eq('banido', false)
   const lista = membros || []
   const userIds = lista.map(m => m.usuario_id)
   let tradersMap = {}
@@ -754,23 +754,23 @@ async function renderGestao() {
             <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,170,255,.1);color:var(--b);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;font-weight:700;flex-shrink:0">${tid.substring(0,2).toUpperCase()}</div>
             <span style="font-family:var(--mono);font-size:11px;color:var(--t1);flex:1">${tid}</span>
             ${m.bloqueado
-              ? `<button onclick="desbloquear('${m.eu_ia}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2);color:var(--g)">✓ DESBLOQUEAR</button>`
-              : `<button onclick="bloquear('${m.eu_ia}','${tid}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);color:var(--y)">🔇 BLOQUEAR</button>`}
-            <button onclick="banir('${m.eu_ia}','${tid}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(255,69,96,.06);border:1px solid rgba(255,69,96,.2);color:var(--r)">⛔ BANIR</button>
+              ? `<button onclick="desbloquear('${m.id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2);color:var(--g)">✓ DESBLOQUEAR</button>`
+              : `<button onclick="bloquear('${m.id}','${tid}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);color:var(--y)">🔇 BLOQUEAR</button>`}
+            <button onclick="banir('${m.id}','${tid}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(255,69,96,.06);border:1px solid rgba(255,69,96,.2);color:var(--r)">⛔ BANIR</button>
           </div>`}).join('')}`
 }
 
 async function bloquear(id, tid) {
-  await sb.from('sala_membros').update({ bloqueado: true }).eq('eu_ia', id)
+  await sb.from('sala_eds').update({ bloqueado: true }).eq('id', id)
   toast(tid + ' bloqueado!','t-y')
   addChatMsg('SISTEMA','sys','🔇 ' + tid + ' foi bloqueado.')
 }
 async function desbloquear(id) {
-  await sb.from('sala_membros').update({ bloqueado: false }).eq('eu_ia', id)
+  await sb.from('sala_eds').update({ bloqueado: false }).eq('id', id)
   toast('Desbloqueado!','t-g')
 }
 async function banir(id, tid) {
-  await sb.from('sala_membros').update({ banido: true }).eq('eu_ia', id)
+  await sb.from('sala_eds').update({ banido: true }).eq('id', id)
   toast(tid + ' banido!','t-r')
   addChatMsg('SISTEMA','sys','⛔ ' + tid + ' foi banido.')
 }
