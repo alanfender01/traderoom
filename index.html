@@ -515,8 +515,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
       <div class="audio-strip">
         <span class="au-lbl">ÁUDIO</span>
-        <div class="au-btn on">🎙</div>
-        <div class="au-btn">🎧</div>
+        <div class="au-btn on" id="btn-mic" onclick="toggleMic()" title="Desligar microfone">🎙</div>
       </div>
     </div>
   </div>
@@ -537,6 +536,135 @@ let currentRoom = null
 let currentIsCriador = false
 let realtimeChannel = null
 
+// ==================== ÁUDIO WebRTC ====================
+const ICE_SERVERS = {
+  iceServers: [
+    { urls: 'stun:stun.relay.metered.ca:80' },
+    { urls: 'turn:global.relay.metered.ca:80', username: '605115898a24d77bdad85390', credential: 'r6InRWBs//eDXHzi' },
+    { urls: 'turn:global.relay.metered.ca:80?transport=tcp', username: '605115898a24d77bdad85390', credential: 'r6InRWBs//eDXHzi' },
+    { urls: 'turn:global.relay.metered.ca:443', username: '605115898a24d77bdad85390', credential: 'r6InRWBs//eDXHzi' },
+    { urls: 'turns:global.relay.metered.ca:443?transport=tcp', username: '605115898a24d77bdad85390', credential: 'r6InRWBs//eDXHzi' }
+  ]
+}
+
+let localStream = null        // stream do microfone local
+let micAtivo = true           // estado do microfone
+let peerConnections = {}      // conexões com outros usuários
+let audioChannel = null       // canal realtime para sinalização
+
+async function iniciarAudio(salaId) {
+  try {
+    // Pede acesso ao microfone
+    localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+    micAtivo = true
+    atualizarBotaoMic()
+
+    // Canal de sinalização WebRTC via Supabase Realtime
+    audioChannel = sb.channel('audio-' + salaId, { config: { broadcast: { self: false } } })
+
+    audioChannel
+      .on('broadcast', { event: 'offer' }, async ({ payload }) => {
+        if (payload.to !== currentUser.id) return
+        await handleOffer(payload)
+      })
+      .on('broadcast', { event: 'answer' }, async ({ payload }) => {
+        if (payload.to !== currentUser.id) return
+        const pc = peerConnections[payload.from]
+        if (pc) await pc.setRemoteDescription(new RTCSessionDescription(payload.answer))
+      })
+      .on('broadcast', { event: 'ice' }, async ({ payload }) => {
+        if (payload.to !== currentUser.id) return
+        const pc = peerConnections[payload.from]
+        if (pc && payload.candidate) await pc.addIceCandidate(new RTCIceCandidate(payload.candidate))
+      })
+      .on('broadcast', { event: 'novo_usuario' }, async ({ payload }) => {
+        if (payload.userId === currentUser.id) return
+        // Novo usuário entrou — eu inicio a conexão com ele
+        await criarOffer(payload.userId)
+      })
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          // Avisa que entrei na sala de áudio
+          await audioChannel.send({ type: 'broadcast', event: 'novo_usuario', payload: { userId: currentUser.id } })
+        }
+      })
+
+  } catch (err) {
+    console.warn('Microfone não disponível:', err)
+    toast('Microfone não encontrado ou bloqueado.', 't-y')
+  }
+}
+
+async function criarOffer(targetId) {
+  const pc = criarPeerConnection(targetId)
+  const offer = await pc.createOffer()
+  await pc.setLocalDescription(offer)
+  await audioChannel.send({ type: 'broadcast', event: 'offer', payload: { from: currentUser.id, to: targetId, offer } })
+}
+
+async function handleOffer({ from, offer }) {
+  const pc = criarPeerConnection(from)
+  await pc.setRemoteDescription(new RTCSessionDescription(offer))
+  const answer = await pc.createAnswer()
+  await pc.setLocalDescription(answer)
+  await audioChannel.send({ type: 'broadcast', event: 'answer', payload: { from: currentUser.id, to: from, answer } })
+}
+
+function criarPeerConnection(targetId) {
+  if (peerConnections[targetId]) peerConnections[targetId].close()
+  const pc = new RTCPeerConnection(ICE_SERVERS)
+  peerConnections[targetId] = pc
+
+  // Adiciona stream local
+  if (localStream) localStream.getTracks().forEach(track => pc.addTrack(track, localStream))
+
+  // Recebe stream remoto e toca
+  pc.ontrack = (event) => {
+    let audioEl = document.getElementById('audio-' + targetId)
+    if (!audioEl) {
+      audioEl = document.createElement('audio')
+      audioEl.id = 'audio-' + targetId
+      audioEl.autoplay = true
+      document.body.appendChild(audioEl)
+    }
+    audioEl.srcObject = event.streams[0]
+  }
+
+  // Envia ICE candidates
+  pc.onicecandidate = async (event) => {
+    if (event.candidate) {
+      await audioChannel.send({ type: 'broadcast', event: 'ice', payload: { from: currentUser.id, to: targetId, candidate: event.candidate } })
+    }
+  }
+
+  return pc
+}
+
+function pararAudio() {
+  if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null }
+  Object.values(peerConnections).forEach(pc => pc.close())
+  peerConnections = {}
+  if (audioChannel) { sb.removeChannel(audioChannel); audioChannel = null }
+  // Remove elementos de áudio
+  document.querySelectorAll('[id^="audio-"]').forEach(el => el.remove())
+}
+
+function toggleMic() {
+  if (!localStream) return
+  micAtivo = !micAtivo
+  localStream.getAudioTracks().forEach(t => { t.enabled = micAtivo })
+  atualizarBotaoMic()
+  toast(micAtivo ? '🎙 Microfone ligado' : '🔇 Microfone desligado', micAtivo ? 't-g' : 't-y')
+}
+
+function atualizarBotaoMic() {
+  const btn = document.getElementById('btn-mic')
+  if (!btn) return
+  btn.textContent = micAtivo ? '🎙' : '🔇'
+  btn.className = micAtivo ? 'au-btn on' : 'au-btn'
+  btn.title = micAtivo ? 'Desligar microfone' : 'Ligar microfone'
+}
+
 // ==================== REALTIME ====================
 function iniciarRealtime(salaId) {
   if (realtimeChannel) { sb.removeChannel(realtimeChannel); realtimeChannel = null }
@@ -556,6 +684,7 @@ function iniciarRealtime(salaId) {
 
 function pararRealtime() {
   if (realtimeChannel) { sb.removeChannel(realtimeChannel); realtimeChannel = null }
+  pararAudio()
 }
 
 // ==================== AUTH ====================
@@ -705,6 +834,7 @@ async function enterRoom(data) {
   }
 
   iniciarRealtime(currentRoom.id)
+  iniciarAudio(currentRoom.id)
   await renderTradersList(currentIsCriador)
 }
 
