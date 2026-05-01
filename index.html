@@ -10,11 +10,10 @@
 <style>
 :root{
   --bg0:#080a0c;--bg1:#0d1014;--bg2:#121518;--bg3:#181c22;--bg4:#1e232b;
-  --g:#00e5a0;--b:#0af;--r:#ff4560;--y:#f5a623;--p:#a78bfa;--o:#ff6b35;
-  --gold:#c9a84c;--gold2:#e8c76a;
+  --g:#00e5a0;--b:#0af;--r:#ff4560;--y:#f5a623;--p:#a78bfa;
   --t1:#edf0f4;--t2:#b0bec5;--t3:#90a4ae;--t4:#6b7a8d;
   --border:#1a1f28;--border2:#252d38;
-  --mono:'JetBrains Mono',monospace;--display:'Syne',sans-serif;--serif:'Playfair Display',serif;
+  --mono:'JetBrains Mono',monospace;--display:'Syne',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg0);color:var(--t1);font-family:var(--display);min-height:100vh;overflow-x:hidden}
@@ -26,10 +25,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .topnav{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:50px;background:var(--bg1);border-bottom:1px solid var(--border);flex-shrink:0;position:sticky;top:0;z-index:50}
 .tn-logo{font-size:20px;font-weight:800;letter-spacing:-1px;cursor:pointer}
 .tn-logo span{color:var(--g)}
-.tn-nav{display:flex;gap:2px}
-.tn-tab{font-family:var(--mono);font-size:10px;padding:5px 11px;border-radius:5px;cursor:pointer;color:var(--t3);transition:all .15s;letter-spacing:.5px}
-.tn-tab:hover{color:var(--t2)}
-.tn-tab.active{background:var(--bg3);color:var(--t1)}
 .profile-chip{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer;transition:all .15s}
 .profile-chip:hover{border-color:var(--g)}
 .pc-av{width:26px;height:26px;border-radius:50%;background:rgba(0,229,160,.15);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--g)}
@@ -50,6 +45,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .t-r{background:rgba(255,69,96,.12);border:1px solid rgba(255,69,96,.3);color:var(--r)}
 .t-y{background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:var(--y)}
 .t-b{background:rgba(0,170,255,.12);border:1px solid rgba(0,170,255,.3);color:var(--b)}
+
+/* SPLASH */
 #s-splash{align-items:center;justify-content:center;text-align:center;padding:80px 24px;position:relative;overflow:hidden}
 .splash-corner{position:absolute;width:200px;height:200px;border:1px solid rgba(0,229,160,.06)}
 .c-tl{top:0;left:0;border-right:none;border-bottom:none}
@@ -64,6 +61,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .tick-i{font-family:var(--mono);font-size:11px;display:flex;gap:8px}
 .t-name{color:var(--t3)}.t-val{color:var(--t1);font-weight:500}.t-up{color:var(--g)}.t-dn{color:var(--r)}
+
+/* CADASTRO/LOGIN */
 #s-cadastro,#s-login{align-items:center;justify-content:center;padding:80px 24px}
 .form-card{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:2rem;width:380px;max-width:96vw;z-index:1}
 .fc-back{font-family:var(--mono);font-size:10px;color:var(--t3);cursor:pointer;margin-bottom:1.2rem;display:inline-flex;align-items:center;gap:5px;transition:color .15s}
@@ -97,6 +96,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .divider{display:flex;align-items:center;gap:10px;margin:1rem 0}
 .dl{flex:1;height:1px;background:var(--border)}
 .dt{font-family:var(--mono);font-size:10px;color:var(--t4)}
+
+/* LOBBY */
 #s-lobby{min-height:100vh}
 .market-tabs{display:flex;background:var(--bg1);border-bottom:1px solid var(--border);padding:0 16px;gap:2px;flex-shrink:0}
 .mtab{display:flex;align-items:center;gap:6px;padding:10px 14px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:all .18s;letter-spacing:.5px}
@@ -106,7 +107,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .mtab-n{font-family:var(--mono);font-size:9px;padding:1px 5px;border-radius:8px}
 .nb3{background:rgba(0,229,160,.1);color:var(--g)}.nfx{background:rgba(0,170,255,.1);color:var(--b)}.ncr{background:rgba(167,139,250,.1);color:var(--p)}
 .lobby-body{display:flex;flex:1;overflow:hidden;height:calc(100vh - 100px)}
-.lobby-main{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin;scrollbar-color:var(--bg4) transparent}
+.lobby-main{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin}
 .lobby-side{width:210px;background:var(--bg1);border-left:1px solid var(--border);padding:12px;overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
 .search-row{display:flex;gap:7px;margin-bottom:12px}
 .search-inp{flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--t1);font-family:var(--mono);font-size:12px;padding:7px 10px;outline:none;transition:border-color .15s}
@@ -160,6 +161,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .loading-rooms{text-align:center;padding:40px;font-family:var(--mono);font-size:11px;color:var(--t3)}
 .loading-spin{display:inline-block;width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--g);border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* MODALS */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);align-items:flex-start;justify-content:center;padding:20px 16px;z-index:200;overflow-y:auto}
 .modal-bg.open{display:flex}
 .modal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;width:430px;max-width:96vw}
@@ -182,17 +185,30 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .btn-criar-b3{background:rgba(0,229,160,.1);border-color:rgba(0,229,160,.25);color:var(--g)}
 .btn-criar-fx{background:rgba(0,170,255,.1);border-color:rgba(0,170,255,.25);color:var(--b)}
 .btn-criar-cr{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.25);color:var(--p)}
+.auth-req{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:300}
+.auth-req.open{display:flex}
+.auth-req-box{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:2rem;width:360px;max-width:96vw;text-align:center}
+.ar-icon{font-size:32px;margin-bottom:12px}
+.ar-title{font-size:18px;font-weight:800;margin-bottom:6px}
+.ar-sub{font-family:var(--mono);font-size:11px;color:var(--t3);margin-bottom:1.5rem;line-height:1.5}
+.ar-btns{display:flex;gap:8px}
+.confirm-del{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:300}
+.confirm-del.open{display:flex}
+.cd-box{background:var(--bg2);border:1px solid rgba(255,69,96,.3);border-radius:12px;padding:1.5rem;width:320px;text-align:center}
+.cd-title{font-size:16px;font-weight:800;color:var(--r);margin-bottom:8px}
+.cd-sub{font-family:var(--mono);font-size:11px;color:var(--t2);margin-bottom:1.2rem;line-height:1.5}
+.cd-btns{display:flex;gap:8px}
+
+/* SALA */
 #s-room{min-height:100vh}
 .rh{display:flex;align-items:center;justify-content:space-between;padding:0 12px;height:44px;background:var(--bg1);border-bottom:1px solid var(--border);flex-shrink:0}
 .rh-l{display:flex;align-items:center;gap:10px}
 .rh-back{font-family:var(--mono);font-size:10px;color:var(--t3);cursor:pointer;padding:3px 8px;border:1px solid var(--border2);border-radius:4px;transition:all .15s}
 .rh-back:hover{border-color:var(--t2);color:var(--t1)}
 .rh-name{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--t1)}
-.rh-c{display:flex;align-items:center;gap:10px}
 .rh-asset{font-family:var(--mono);font-size:12px;font-weight:700;background:var(--bg3);border:1px solid var(--border2);padding:3px 10px;border-radius:14px}
 .rh-r{display:flex;align-items:center;gap:8px}
 .rh-dot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:pulse 2s infinite}
-.rh-users{font-family:var(--mono);font-size:10px;color:var(--t2);display:flex;align-items:center;gap:4px}
 .role-tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px}
 .rt-host{background:rgba(245,166,35,.1);color:var(--y);border:1px solid rgba(245,166,35,.2)}
 .rt-member{background:rgba(138,146,160,.08);color:var(--t3);border:1px solid var(--border)}
@@ -227,38 +243,46 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .chat-inp:focus{border-color:var(--g)}
 .send-b{width:28px;background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.2);border-radius:5px;color:var(--g);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
 .send-b:hover{background:rgba(0,229,160,.18)}
-.trader-row{display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--border)}
-.tr-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;flex-shrink:0}
-.tr-info{flex:1}
-.tr-id{font-size:11px;color:var(--t1);font-family:var(--mono)}
-.audio-strip{display:flex;align-items:center;gap:5px;padding:6px 8px;background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0}
-.au-lbl{font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:1px;flex:1}
-.au-btn{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);transition:all .15s}
-.au-btn.on{background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25)}
-.badge-criador{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;background:rgba(245,166,35,.12);color:var(--y);border:1px solid rgba(245,166,35,.25)}
-.badge-freq{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;background:rgba(0,170,255,.08);color:var(--b);border:1px solid rgba(0,170,255,.2)}
+
+/* TRADERS LIST */
+.traders-panel{flex:1;overflow-y:auto;padding:8px}
+.trader-row{display:flex;align-items:center;gap:7px;padding:7px 6px;border-bottom:1px solid var(--border);border-radius:6px;transition:background .15s}
+.trader-row:hover{background:var(--bg3)}
+.tr-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;flex-shrink:0}
+.tr-info{flex:1;min-width:0}
+.tr-name{font-family:var(--mono);font-size:11px;color:var(--t1);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tr-badge{font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:3px;margin-top:2px;display:inline-block}
+.badge-criador{background:rgba(245,166,35,.12);color:var(--y);border:1px solid rgba(245,166,35,.25)}
+.badge-freq{background:rgba(0,170,255,.08);color:var(--b);border:1px solid rgba(0,170,255,.2)}
+.badge-bloqueado{background:rgba(255,69,96,.08);color:var(--r);border:1px solid rgba(255,69,96,.2)}
+
+/* ✅ AÇÕES DO CRIADOR — ícones pequenos ao lado do trader */
+.tr-actions{display:flex;gap:3px;flex-shrink:0}
+.tr-act{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid;font-size:11px;transition:all .15s}
+.act-mute{background:rgba(245,166,35,.06);border-color:rgba(245,166,35,.2);color:var(--y)}
+.act-mute:hover{background:rgba(245,166,35,.18)}
+.act-block{background:rgba(255,107,53,.06);border-color:rgba(255,107,53,.2);color:var(--o, #ff6b35)}
+.act-block:hover{background:rgba(255,107,53,.18)}
+.act-ban{background:rgba(255,69,96,.06);border-color:rgba(255,69,96,.2);color:var(--r)}
+.act-ban:hover{background:rgba(255,69,96,.18)}
+
+/* CREATOR PANEL */
 .creator-panel{background:rgba(245,166,35,.04);border-top:1px solid rgba(245,166,35,.15);padding:8px;flex-shrink:0}
 .cp-title{font-family:var(--mono);font-size:9px;color:var(--y);letter-spacing:2px;margin-bottom:6px}
 .cp-btns{display:flex;flex-direction:column;gap:5px}
 .cp-btn{font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:5px;cursor:pointer;border:1px solid;transition:all .15s;text-align:left;font-weight:700}
 .cp-end{background:rgba(245,166,35,.08);border-color:rgba(245,166,35,.25);color:var(--y)}.cp-end:hover{background:rgba(245,166,35,.16)}
 .cp-delete{background:rgba(255,69,96,.08);border-color:rgba(255,69,96,.25);color:var(--r)}.cp-delete:hover{background:rgba(255,69,96,.16)}
+
+/* MEMBER PANEL */
 .member-panel{background:rgba(0,170,255,.03);border-top:1px solid rgba(0,170,255,.1);padding:8px;flex-shrink:0}
 .mp-btn{font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:5px;cursor:pointer;border:1px solid rgba(0,170,255,.2);color:var(--b);background:rgba(0,170,255,.06);width:100%;transition:all .15s;font-weight:700}
 .mp-btn:hover{background:rgba(0,170,255,.14)}
-.auth-req{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:300}
-.auth-req.open{display:flex}
-.auth-req-box{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:2rem;width:360px;max-width:96vw;text-align:center}
-.ar-icon{font-size:32px;margin-bottom:12px}
-.ar-title{font-size:18px;font-weight:800;margin-bottom:6px}
-.ar-sub{font-family:var(--mono);font-size:11px;color:var(--t3);margin-bottom:1.5rem;line-height:1.5}
-.ar-btns{display:flex;gap:8px}
-.confirm-del{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:300}
-.confirm-del.open{display:flex}
-.cd-box{background:var(--bg2);border:1px solid rgba(255,69,96,.3);border-radius:12px;padding:1.5rem;width:320px;text-align:center}
-.cd-title{font-size:16px;font-weight:800;color:var(--r);margin-bottom:8px}
-.cd-sub{font-family:var(--mono);font-size:11px;color:var(--t2);margin-bottom:1.2rem;line-height:1.5}
-.cd-btns{display:flex;gap:8px}
+
+.audio-strip{display:flex;align-items:center;gap:5px;padding:6px 8px;background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0}
+.au-lbl{font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:1px;flex:1}
+.au-btn{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);transition:all .15s}
+.au-btn.on{background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25)}
 </style>
 </head>
 <body>
@@ -333,7 +357,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <div id="s-lobby" class="screen">
   <div class="topnav">
     <div class="tn-logo" onclick="go('s-lobby')">TRADE<span>ROOM</span></div>
-    <div class="tn-nav"><div class="tn-tab active">SALAS</div></div>
     <div class="profile-chip" onclick="toast('Perfil em breve!','t-b')">
       <div class="pc-av" id="lobby-av">TR</div>
       <span class="pc-id" id="lobby-uid">visitante</span>
@@ -423,10 +446,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="rh-back" onclick="sairDaSalaEVoltar()">← LOBBY</div>
       <div class="rh-name" id="room-name-tag">SALA</div>
     </div>
-    <div class="rh-c"><div class="rh-asset" id="room-asset-tag">WIN</div></div>
+    <div class="rh-asset" id="room-asset-tag">WIN</div>
     <div class="rh-r">
       <div class="rh-dot"></div>
-      <div class="rh-users" id="room-users-tag">AO VIVO</div>
       <div class="role-tag rt-member" id="room-role-tag">MEMBRO</div>
     </div>
   </div>
@@ -448,18 +470,20 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="tv-wrap" id="tv-wrap"></div>
       <div class="bottom-op">
         <span class="op-lbl">MARCAR:</span>
-        <button class="op-b op-long" onclick="toast('✅ Marcado: COMPRADO','t-g')">▲ COMPRADO</button>
-        <button class="op-b op-short" onclick="toast('🔴 Marcado: VENDIDO','t-r')">▼ VENDIDO</button>
-        <button class="op-b op-flat" onclick="toast('⬜ Marcado: NEUTRO','t-y')">■ NEUTRO</button>
+        <button class="op-b op-long" onclick="toast('✅ COMPRADO','t-g')">▲ COMPRADO</button>
+        <button class="op-b op-short" onclick="toast('🔴 VENDIDO','t-r')">▼ VENDIDO</button>
+        <button class="op-b op-flat" onclick="toast('⬜ NEUTRO','t-y')">■ NEUTRO</button>
         <div class="op-spacer"></div>
       </div>
     </div>
     <div class="room-side">
+      <!-- APENAS 2 ABAS: CHAT e TRADERS -->
       <div class="side-tabs">
         <div class="stab active" onclick="swSide('chat',this)">CHAT</div>
         <div class="stab" onclick="swSide('traders',this)">TRADERS</div>
-        <div class="stab" id="tab-gestao" style="display:none" onclick="swSide('gestao',this)">GESTÃO</div>
       </div>
+
+      <!-- CHAT -->
       <div id="side-chat" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
         <div class="chat-msgs" id="chat-msgs"></div>
         <div class="chat-inp-row">
@@ -467,19 +491,28 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
           <div class="send-b" onclick="sendMsg()">↑</div>
         </div>
       </div>
-      <div id="side-traders" style="display:none;flex:1;overflow-y:auto;padding:8px"><div id="traders-list"></div></div>
-      <div id="side-gestao" style="display:none;flex:1;overflow-y:auto;padding:8px"><div id="gestao-content"></div></div>
+
+      <!-- TRADERS — com ícones de ação para o criador -->
+      <div id="side-traders" style="display:none;flex:1;overflow-y:auto">
+        <div class="traders-panel">
+          <div id="traders-list"></div>
+        </div>
+      </div>
+
+      <!-- PAINEL CRIADOR (simples) -->
       <div class="creator-panel" id="creator-panel" style="display:none">
         <div class="cp-title">👑 PAINEL DO CRIADOR</div>
         <div class="cp-btns">
           <button class="cp-btn cp-end" id="btn-encerrar" onclick="encerrarPregao()">⏹ ENCERRAR PREGÃO</button>
-          <button class="cp-btn" style="background:rgba(0,170,255,.08);border-color:rgba(0,170,255,.25);color:var(--b)" onclick="swSide('gestao',document.getElementById('tab-gestao'))">⚙️ GERENCIAR SALA</button>
           <button class="cp-btn cp-delete" onclick="document.getElementById('confirm-del').classList.add('open')">🗑 EXCLUIR SALA</button>
         </div>
       </div>
+
+      <!-- PAINEL FREQUENTADOR -->
       <div class="member-panel" id="member-panel" style="display:none">
         <button class="mp-btn" onclick="sairDaSala()">↩ SAIR DA SALA</button>
       </div>
+
       <div class="audio-strip">
         <span class="au-lbl">ÁUDIO</span>
         <div class="au-btn on">🎙</div>
@@ -507,19 +540,9 @@ let realtimeChannel = null
 // ==================== REALTIME ====================
 function iniciarRealtime(salaId) {
   if (realtimeChannel) { sb.removeChannel(realtimeChannel); realtimeChannel = null }
-
   realtimeChannel = sb.channel('sala-' + salaId)
-    .on('postgres_changes', {
-      event: '*',
-      schema: 'public',
-      table: 'sala_membros',
-      filter: 'sala_id=eq.' + salaId
-    }, async (payload) => {
-      // Atualiza listas automaticamente
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'sala_membros', filter: 'sala_id=eq.' + salaId }, async (payload) => {
       await renderTradersList(currentIsCriador)
-      if (currentIsCriador) await renderGestao()
-
-      // Mensagem no chat
       if (payload.eventType === 'INSERT' && payload.new?.usuario_id !== currentUser.id) {
         const { data: u } = await sb.from('usuarios').select('trader_id').eq('id', payload.new.usuario_id).single()
         addChatMsg('SISTEMA', 'sys', '🟢 ' + (u?.trader_id || 'alguém') + ' entrou na sala.')
@@ -660,9 +683,10 @@ async function enterRoom(data) {
   document.getElementById('room-name-tag').textContent = data.nome
   document.getElementById('room-asset-tag').textContent = data.ativos?.[0] || data.mercado
   currentSymbol = getSymbolForRoom(data.mercado, data.ativos || [])
+
   document.getElementById('creator-panel').style.display = currentIsCriador ? 'block' : 'none'
   document.getElementById('member-panel').style.display = currentIsCriador ? 'none' : 'block'
-  document.getElementById('tab-gestao').style.display = currentIsCriador ? 'block' : 'none'
+
   const roleTag = document.getElementById('room-role-tag')
   roleTag.textContent = currentIsCriador ? '👑 CRIADOR' : 'FREQUENTADOR'
   roleTag.className = currentIsCriador ? 'role-tag rt-host' : 'role-tag rt-member'
@@ -670,6 +694,7 @@ async function enterRoom(data) {
   go('s-room')
   addChatMsg('SISTEMA','sys', currentUser.trader_id + (currentIsCriador ? ' [👑 CRIADOR]' : ' [FREQUENTADOR]') + ' entrou em ' + data.nome + '. Bom pregão!')
 
+  // Registra frequentador
   if (!currentIsCriador && currentUser.id) {
     const { data: existing } = await sb.from('sala_membros').select('eu_ia').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
     if (!existing) {
@@ -679,11 +704,8 @@ async function enterRoom(data) {
     if (membroAtual?.banido) { toast('Você foi banido desta sala!','t-r'); go('s-lobby'); return }
   }
 
-  // ✅ Inicia realtime — atualiza tudo automaticamente
   iniciarRealtime(currentRoom.id)
-
   await renderTradersList(currentIsCriador)
-  if (currentIsCriador) await renderGestao()
 }
 
 // ==================== SAIR ====================
@@ -708,71 +730,88 @@ async function sairDaSalaEVoltar() {
 async function renderTradersList(isCriador) {
   const el = document.getElementById('traders-list')
   if (!el) return
-  const { data: membros } = await sb.from('sala_membros').select('*').eq('sala_id', currentRoom?.id || '').eq('banido', false)
-  const lista = membros || []
-  const userIds = lista.map(m => m.usuario_id)
-  let tradersMap = {}
-  if (userIds.length > 0) {
-    const { data: usuarios } = await sb.from('usuarios').select('id, trader_id').in('id', userIds)
-    if (usuarios) usuarios.forEach(u => { tradersMap[u.id] = u.trader_id })
-  }
-  const myEntry = { trader_id: currentUser.trader_id, criador: isCriador }
-  const others = lista.filter(m => m.usuario_id !== currentUser.id).map(m => ({ trader_id: tradersMap[m.usuario_id] || 'anon', bloqueado: m.bloqueado }))
-  const allTraders = [myEntry, ...others]
-  el.innerHTML = `<div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:8px">PARTICIPANTES (${allTraders.length})</div>` +
-    allTraders.map(t => `<div class="trader-row">
-      <div class="tr-av" style="background:${t.criador?'rgba(245,166,35,.1)':'rgba(0,170,255,.1)'};color:${t.criador?'var(--y)':'var(--b)'}">${(t.trader_id||'??').substring(0,2).toUpperCase()}</div>
-      <div class="tr-info"><div class="tr-id">${t.trader_id||'anon'}</div>
-      <span class="${t.criador?'badge-criador':'badge-freq'}">${t.criador?'👑 CRIADOR':t.bloqueado?'🔇 BLOQUEADO':'FREQUENTADOR'}</span></div>
-    </div>`).join('')
-}
 
-// ==================== GESTÃO ====================
-async function renderGestao() {
-  const el = document.getElementById('gestao-content')
-  if (!el || !currentRoom) return
-  const { data: membros } = await sb.from('sala_membros').select('eu_ia, usuario_id, bloqueado, banido').eq('sala_id', currentRoom.id).eq('banido', false)
+  // Busca membros do banco
+  const { data: membros } = await sb.from('sala_membros')
+    .select('eu_ia, usuario_id, bloqueado, banido')
+    .eq('sala_id', currentRoom?.id || '')
+    .eq('banido', false)
+
   const lista = membros || []
+
+  // Busca trader_ids
   const userIds = lista.map(m => m.usuario_id)
   let tradersMap = {}
   if (userIds.length > 0) {
     const { data: usuarios } = await sb.from('usuarios').select('id, trader_id').in('id', userIds)
     if (usuarios) usuarios.forEach(u => { tradersMap[u.id] = u.trader_id })
   }
-  el.innerHTML = `
-    <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:10px">
-      <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;margin-bottom:4px">SALA</div>
-      <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--t1)">${currentRoom.nome}</div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:4px">${currentRoom.mercado}</div>
+
+  // Monta lista: criador primeiro, depois frequentadores
+  const criadorEntry = {
+    id: null,
+    trader_id: currentIsCriador ? currentUser.trader_id : null,
+    isCriador: true,
+    isMe: currentIsCriador
+  }
+
+  // Criador na sala — busca o trader_id do criador se não for o usuário atual
+  let criadorTraderId = currentIsCriador ? currentUser.trader_id : null
+  if (!currentIsCriador && currentRoom.criador_id) {
+    const { data: cri } = await sb.from('usuarios').select('trader_id').eq('id', currentRoom.criador_id).single()
+    criadorTraderId = cri?.trader_id || 'criador'
+  }
+
+  let html = `<div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:8px;padding:0 2px">PARTICIPANTES (${lista.length + 1})</div>`
+
+  // Criador
+  html += `<div class="trader-row">
+    <div class="tr-av" style="background:rgba(245,166,35,.15);color:var(--y)">${(criadorTraderId||'CR').substring(0,2).toUpperCase()}</div>
+    <div class="tr-info">
+      <div class="tr-name">${criadorTraderId || 'criador'}</div>
+      <span class="tr-badge badge-criador">👑 CRIADOR</span>
     </div>
-    <div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:6px">FREQUENTADORES (${lista.length})</div>
-    ${lista.length === 0
-      ? '<div style="font-family:var(--mono);font-size:11px;color:var(--t3);padding:8px;background:var(--bg3);border-radius:6px">Nenhum frequentador ainda.</div>'
-      : lista.map(m => {
-          const tid = tradersMap[m.usuario_id] || m.usuario_id?.substring(0,8) || 'anon'
-          return `<div style="display:flex;align-items:center;gap:6px;padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;margin-bottom:4px">
-            <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,170,255,.1);color:var(--b);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;font-weight:700;flex-shrink:0">${tid.substring(0,2).toUpperCase()}</div>
-            <span style="font-family:var(--mono);font-size:11px;color:var(--t1);flex:1">${tid}</span>
-            ${m.bloqueado
-              ? `<button onclick="desbloquear('${m.eu_ia}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2);color:var(--g)">✓ DESBLOQUEAR</button>`
-              : `<button onclick="bloquear('${m.eu_ia}','${tid}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);color:var(--y)">🔇 BLOQUEAR</button>`}
-            <button onclick="banir('${m.eu_ia}','${tid}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(255,69,96,.06);border:1px solid rgba(255,69,96,.2);color:var(--r)">⛔ BANIR</button>
-          </div>`}).join('')}`
+  </div>`
+
+  // Frequentadores
+  lista.forEach(m => {
+    const tid = tradersMap[m.usuario_id] || 'anon'
+    const isMe = m.usuario_id === currentUser.id
+    const badge = m.bloqueado
+      ? `<span class="tr-badge badge-bloqueado">🔇 BLOQUEADO</span>`
+      : `<span class="tr-badge badge-freq">${isMe ? 'VOCÊ' : 'FREQUENTADOR'}</span>`
+
+    // Ícones de ação — só o criador vê, e não em si mesmo
+    const acoes = isCriador && !isMe ? `
+      <div class="tr-actions">
+        <div class="tr-act act-mute" title="Silenciar" onclick="bloquear('${m.eu_ia}','${tid}',${!m.bloqueado})">${m.bloqueado ? '🔊' : '🔇'}</div>
+        <div class="tr-act act-ban" title="Banir" onclick="banir('${m.eu_ia}','${tid}')">⛔</div>
+      </div>` : ''
+
+    html += `<div class="trader-row">
+      <div class="tr-av" style="background:rgba(0,170,255,.1);color:var(--b)">${tid.substring(0,2).toUpperCase()}</div>
+      <div class="tr-info">
+        <div class="tr-name">${tid}</div>
+        ${badge}
+      </div>
+      ${acoes}
+    </div>`
+  })
+
+  el.innerHTML = html
 }
 
-async function bloquear(id, tid) {
-  await sb.from('sala_membros').update({ bloqueado: true }).eq('eu_ia', id)
-  toast(tid + ' bloqueado!','t-y')
-  addChatMsg('SISTEMA','sys','🔇 ' + tid + ' foi bloqueado.')
+// ==================== AÇÕES DO CRIADOR ====================
+async function bloquear(membroId, traderId, silenciar) {
+  await sb.from('sala_membros').update({ bloqueado: silenciar }).eq('eu_ia', membroId)
+  toast(silenciar ? traderId + ' silenciado!' : traderId + ' desbloqueado!', silenciar ? 't-y' : 't-g')
+  addChatMsg('SISTEMA','sys', silenciar ? '🔇 ' + traderId + ' foi silenciado.' : '🔊 ' + traderId + ' foi desbloqueado.')
 }
-async function desbloquear(id) {
-  await sb.from('sala_membros').update({ bloqueado: false }).eq('eu_ia', id)
-  toast('Desbloqueado!','t-g')
-}
-async function banir(id, tid) {
-  await sb.from('sala_membros').update({ banido: true }).eq('eu_ia', id)
-  toast(tid + ' banido!','t-r')
-  addChatMsg('SISTEMA','sys','⛔ ' + tid + ' foi banido.')
+
+async function banir(membroId, traderId) {
+  await sb.from('sala_membros').update({ banido: true }).eq('eu_ia', membroId)
+  toast(traderId + ' banido!','t-r')
+  addChatMsg('SISTEMA','sys','⛔ ' + traderId + ' foi banido da sala.')
 }
 
 async function confirmarExcluirSala() {
@@ -791,7 +830,7 @@ async function encerrarPregao() {
     btn.textContent = '▶ REABRIR PREGÃO'; btn.dataset.encerrado = 'true'
     btn.style.cssText = 'background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25);color:var(--g)'
     toast('Pregão encerrado!','t-y')
-    addChatMsg('SISTEMA','sys','⏹ Criador encerrou o pregão.')
+    addChatMsg('SISTEMA','sys','⏹ Criador encerrou o pregão. Sala continua aberta.')
   } else {
     btn.textContent = '⏹ ENCERRAR PREGÃO'; btn.dataset.encerrado = 'false'
     btn.style.cssText = ''
@@ -806,6 +845,7 @@ function getSymbolForRoom(mercado, ativos) {
   return mercado === 'Cripto' ? 'BINANCE:BTCUSDT' : mercado === 'Forex' ? 'FX:EURUSD' : 'BMFBOVESPA:WIN1!'
 }
 
+// ==================== TRADINGVIEW ====================
 function initTradingView() {
   const wrap = document.getElementById('tv-wrap'); wrap.innerHTML = ''
   const container = document.createElement('div'); container.id = 'tv-chart-container'; container.style.cssText = 'width:100%;height:100%'
@@ -821,6 +861,7 @@ function setSymbol(symbol, el) {
   if (tvWidget) { try { tvWidget.chart().setSymbol(symbol) } catch(e) { initTradingView() } } else { initTradingView() }
 }
 
+// ==================== CRIAR SALA ====================
 const ASSETS_BY_MKT = { B3:['WIN','WDO','WINM26','WDOK26','IBOV'], Forex:['EUR/USD','GBP/USD','USD/JPY','XAU/USD','WTI','USD/BRL'], Cripto:['BTC','ETH','SOL','BNB','XRP'] }
 
 function openModal() {
@@ -853,6 +894,7 @@ async function criarSala() {
 }
 function closeModal() { document.getElementById('modal-bg').classList.remove('open') }
 
+// ==================== CHAT ====================
 function addChatMsg(u, cls, body) {
   const el = document.getElementById('chat-msgs'); if(!el)return
   const now = new Date(); const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`
@@ -865,9 +907,9 @@ function swSide(tab, el) {
   document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active')); el.classList.add('active')
   document.getElementById('side-chat').style.display = tab==='chat'?'flex':'none'
   document.getElementById('side-traders').style.display = tab==='traders'?'flex':'none'
-  const g = document.getElementById('side-gestao'); if(g) g.style.display = tab==='gestao'?'flex':'none'
 }
 
+// ==================== HELPERS ====================
 const ADJS=['scalp','flux','day','turbo','dark','sharp','rapid','micro']
 const SUFX=['_rx','_z9','_k4x','_404','_77','_xp','_hit','_fx']
 let currentId='trader_jo4x'
@@ -878,6 +920,7 @@ function togglePwd(id,btn){const el=document.getElementById(id);const show=el.ty
 function checkStrength(el){const v=el.value;const score=[v.length>=8,/[A-Z]|[a-z]/.test(v),/\d/.test(v),/[^A-Za-z0-9]/.test(v)].filter(Boolean).length;const cols=['#ff4560','#f5a623','#0af','#00e5a0'];for(let i=0;i<4;i++)document.getElementById('str'+i).style.background=i<score?cols[score-1]:'var(--border2)'}
 function cadNext(){const nome=document.getElementById('c-nome').value.trim();const email=document.getElementById('c-email').value.trim();if(nome.length<2){toast('Informe seu nome','t-r');return}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Email inválido','t-r');return}document.getElementById('cad-step1').style.display='none';document.getElementById('cad-step2').style.display=''}
 
+// ==================== TICKER ====================
 const TICKS=[{n:'WIN',v:'192.075',c:'+0,87%',up:true},{n:'WDO',v:'4.999',c:'-0,32%',up:false},{n:'EUR/USD',v:'1.0892',c:'+0,14%',up:true},{n:'XAU/USD',v:'3.320',c:'+0,22%',up:true},{n:'BTC/USD',v:'94.450',c:'+1,8%',up:true},{n:'GBP/USD',v:'1.2748',c:'-0,08%',up:false},{n:'IBOV',v:'128.450',c:'+0,44%',up:true},{n:'ETH/USD',v:'1.720',c:'+2,1%',up:true}]
 const ticker=document.getElementById('ticker');let th='';for(let i=0;i<3;i++)TICKS.forEach(t=>{th+=`<span class="tick-i"><span class="t-name">${t.n}</span><span class="t-val">${t.v}</span><span class="${t.up?'t-up':'t-dn'}">${t.c}</span></span>`});ticker.innerHTML=th
 
