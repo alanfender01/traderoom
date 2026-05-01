@@ -208,10 +208,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .btn-criar-fx{background:rgba(0,170,255,.1);border-color:rgba(0,170,255,.25);color:var(--b)}
 .btn-criar-cr{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.25);color:var(--p)}
 
-/* AUTH MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);align-items:flex-start;justify-content:center;padding:20px 16px;z-index:200;overflow-y:auto}
-.modal-bg.open{display:flex}
-
 /* SALA TRADING */
 #s-room{min-height:100vh}
 .rh{display:flex;align-items:center;justify-content:space-between;padding:0 12px;height:44px;background:var(--bg1);border-bottom:1px solid var(--border);flex-shrink:0}
@@ -262,9 +258,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .send-b{width:28px;background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.2);border-radius:5px;color:var(--g);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
 .send-b:hover{background:rgba(0,229,160,.18)}
 .traders-tab{flex:1;overflow-y:auto;padding:8px}
-.trader-row{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border)}
+.trader-row{display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--border)}
 .tr-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;flex-shrink:0}
-.tr-id{font-size:11px;color:var(--t1);flex:1;font-family:var(--mono)}
+.tr-info{flex:1}
+.tr-id{font-size:11px;color:var(--t1);font-family:var(--mono)}
 .audio-strip{display:flex;align-items:center;gap:5px;padding:6px 8px;background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0}
 .au-lbl{font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:1px;flex:1}
 .au-btn{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);transition:all .15s}
@@ -288,16 +285,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .member-panel{background:rgba(0,170,255,.03);border-top:1px solid rgba(0,170,255,.1);padding:8px;flex-shrink:0}
 .mp-btn{font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:5px;cursor:pointer;border:1px solid rgba(0,170,255,.2);color:var(--b);background:rgba(0,170,255,.06);width:100%;transition:all .15s;font-weight:700}
 .mp-btn:hover{background:rgba(0,170,255,.14)}
-
-/* TRADERS LIST */
-.trader-row{display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--border)}
-.tr-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;flex-shrink:0}
-.tr-info{flex:1}
-.tr-id{font-size:11px;color:var(--t1);font-family:var(--mono)}
-.tr-actions{display:flex;gap:4px}
-.tr-act{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;border:1px solid;transition:all .15s}
-.tr-block{background:rgba(245,166,35,.06);border-color:rgba(245,166,35,.2);color:var(--y)}
-.tr-ban{background:rgba(255,69,96,.06);border-color:rgba(255,69,96,.2);color:var(--r)}
 
 /* AUTH REQUIRED MODAL */
 .auth-req{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:300}
@@ -454,7 +441,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   </div>
 </div>
 
-
 <!-- AUTH REQUIRED MODAL -->
 <div class="auth-req" id="auth-req">
   <div class="auth-req-box">
@@ -511,9 +497,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <div class="ct-sep"></div>
         <div class="tft" onclick="setSymbol('OANDA:XAUUSD',this)">GOLD</div>
       </div>
-      <div class="tv-wrap" id="tv-wrap">
-        <!-- TradingView Widget -->
-      </div>
+      <div class="tv-wrap" id="tv-wrap"></div>
       <div class="bottom-op">
         <span class="op-lbl">MARCAR:</span>
         <button class="op-b op-long" onclick="toast('✅ Marcado: COMPRADO','t-g')">▲ COMPRADO</button>
@@ -606,18 +590,18 @@ async function cadFinalizar() {
   const { data, error } = await sb.auth.signUp({ email, password: p1, options: { data: { nome, trader_id: currentId } } })
   btn.textContent = 'CRIAR CONTA →'; btn.disabled = false
   if (error) { toast(error.message || 'Erro ao criar conta','t-r'); return }
-  // Salva na tabela usuarios
-  await sb.from('usuarios').insert({ eu_ia: data.user?.id, nome, e_mail: email, trader_id: currentId })
+  // ✅ CORRIGIDO: colunas corretas da tabela usuarios
+  await sb.from('usuarios').insert({ id: data.user?.id, email, trader_id: currentId })
   document.getElementById('final-id').textContent = '#' + currentId
   document.getElementById('final-email').textContent = email
   document.getElementById('cad-step2').style.display = 'none'
   document.getElementById('cad-step3').style.display = ''
-  currentUser = { trader_id: currentId, nome, loggedIn: true }
+  currentUser = { id: data.user?.id, trader_id: currentId, nome, loggedIn: true }
   updateUserUI()
 }
 
 async function loadUserProfile(user) {
-  const { data } = await sb.from('usuarios').select('*').eq('eu_ia', user.id).single()
+  const { data } = await sb.from('usuarios').select('*').eq('id', user.id).single()
   if (data) {
     currentUser = { id: user.id, trader_id: data.trader_id || user.email.split('@')[0], nome: data.nome, loggedIn: true }
   } else {
@@ -652,14 +636,11 @@ function updateUserUI() {
 async function loadRooms() {
   const el = document.getElementById('rooms-list')
   el.innerHTML = '<div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div>'
-  
   const { data, error } = await sb.from('salas').select('*').eq('ativa', true).order('criado_em', { ascending: false })
-  
   if (error) {
     el.innerHTML = '<div class="loading-rooms" style="color:var(--r)">Erro ao carregar salas. Tente novamente.</div>'
     return
   }
-  
   allRooms = data || []
   renderRooms('')
   updateCounts()
@@ -683,21 +664,16 @@ function renderRooms(filter = '') {
     const matchSearch = !filter || r.nome.toLowerCase().includes(filter.toLowerCase())
     return matchMkt && matchSearch
   })
-  
   if (!filtered.length) {
     el.innerHTML = '<div class="loading-rooms">Nenhuma sala encontrada.</div>'
     return
   }
-  
   const mktMap = { B3: 'b3', Forex: 'fx', Cripto: 'cr' }
   const mkt = mktMap[currentMkt] || 'b3'
   const eb = { b3: 'eb3', fx: 'efx', cr: 'ecr' }[mkt]
   const rcd = `rcd-${mkt}`
   const atCls = { b3: 'at-b3', fx: 'at-fx', cr: 'at-cr' }[mkt]
-  
-  // Default ativos por mercado
   const defaultAtivos = { B3: ['WIN', 'WDO'], Forex: ['EUR/USD', 'GBP/USD'], Cripto: ['BTC', 'ETH'] }
-  
   let html = `<div class="sec-label">SALAS ABERTAS — ${filtered.length} SALAS</div>`
   filtered.forEach(r => {
     const ativos = r.ativos && r.ativos.length > 0 ? r.ativos : defaultAtivos[currentMkt] || []
@@ -747,16 +723,13 @@ async function enterRoom(data) {
   const simbolo = getSymbolForRoom(data.mercado, ativos)
   document.getElementById('room-asset-tag').textContent = ativos[0] || data.mercado
   currentSymbol = simbolo
-  
-  // Check if creator
+
   const isCriador = data.criador_id && currentUser.id && data.criador_id === currentUser.id
-  
-  // Show/hide panels
+
   document.getElementById('creator-panel').style.display = isCriador ? 'block' : 'none'
   document.getElementById('member-panel').style.display = isCriador ? 'none' : 'block'
   document.getElementById('tab-gestao').style.display = isCriador ? 'block' : 'none'
-  
-  // Set role tag
+
   const roleTag = document.getElementById('room-role-tag')
   if (isCriador) {
     roleTag.textContent = '👑 CRIADOR'
@@ -765,68 +738,60 @@ async function enterRoom(data) {
     roleTag.textContent = 'FREQUENTADOR'
     roleTag.className = 'role-tag rt-member'
   }
-  
+
   go('s-room')
-  
-  // Add entry message with badge
+
   const badge = isCriador ? ' [👑 CRIADOR]' : ' [FREQUENTADOR]'
   addChatMsg('SISTEMA','sys', currentUser.trader_id + badge + ' entrou em ' + data.nome + '. Bom pregão!')
-  
-  // Register member in DB if not creator
+
+  // ✅ CORRIGIDO: registra frequentador com colunas corretas
   if (!isCriador && currentUser.loggedIn && currentRoom.id) {
+    // Verifica se já existe registro
     const { data: existing } = await sb.from('sala_membros')
-      .select('id')
+      .select('eu_ia')
       .eq('sala_id', currentRoom.id)
       .eq('usuario_id', currentUser.id)
       .single()
-    
+
     if (!existing) {
       await sb.from('sala_membros').insert({
         sala_id: currentRoom.id,
-        usuario_id: currentUser.id,
-        trader_id: currentUser.trader_id
+        usuario_id: currentUser.id
       })
     }
-    
-    // Check if banned
-    const { data: banned } = await sb.from('sala_membros')
+
+    // Verifica se foi banido
+    const { data: membroAtual } = await sb.from('sala_membros')
       .select('banido')
       .eq('sala_id', currentRoom.id)
       .eq('usuario_id', currentUser.id)
       .single()
-    
-    if (banned?.banido) {
+
+    if (membroAtual?.banido) {
       toast('Você foi banido desta sala!', 't-r')
       go('s-lobby')
       return
     }
   }
-  
-  // Render traders list
+
   renderTradersList(isCriador)
-  
-  // Render gestao if creator
   if (isCriador) renderGestao()
 }
 
 async function renderTradersList(isCriador) {
   const el = document.getElementById('traders-list')
   if (!el) return
-  
-  // Load from DB
+
   const { data: membros } = await sb.from('sala_membros')
     .select('*')
     .eq('sala_id', currentRoom?.id || '')
     .eq('banido', false)
-  
+
   const lista = membros || []
-  
-  // Always show current user first
   const myEntry = { trader_id: currentUser.trader_id, criador: isCriador, bloqueado: false }
   const others = lista.filter(m => m.usuario_id !== currentUser.id)
-  
   const allTraders = [myEntry, ...others]
-  
+
   el.innerHTML = `<div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:8px">PARTICIPANTES (${allTraders.length})</div>` +
   allTraders.map(t => `
     <div class="trader-row">
@@ -842,15 +807,27 @@ async function renderTradersList(isCriador) {
 async function renderGestao() {
   const el = document.getElementById('gestao-content')
   if (!el || !currentRoom) return
-  
-  // Load members from DB
+
+  // ✅ Busca membros com join na tabela usuarios para pegar o trader_id
   const { data: membros } = await sb.from('sala_membros')
-    .select('*')
+    .select('eu_ia, usuario_id, bloqueado, banido')
     .eq('sala_id', currentRoom.id)
     .eq('banido', false)
-  
+
   const lista = membros || []
-  
+
+  // Busca os trader_ids dos membros
+  const userIds = lista.map(m => m.usuario_id)
+  let tradersMap = {}
+  if (userIds.length > 0) {
+    const { data: usuarios } = await sb.from('usuarios')
+      .select('id, trader_id')
+      .in('id', userIds)
+    if (usuarios) {
+      usuarios.forEach(u => { tradersMap[u.id] = u.trader_id })
+    }
+  }
+
   el.innerHTML = `
     <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:10px">
       <div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;margin-bottom:4px">SALA</div>
@@ -858,46 +835,44 @@ async function renderGestao() {
       <div style="font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:4px">${currentRoom.mercado}</div>
     </div>
     <div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:6px">FREQUENTADORES (${lista.length})</div>
-    ${lista.length === 0 
+    ${lista.length === 0
       ? '<div style="font-family:var(--mono);font-size:11px;color:var(--t3);padding:8px;background:var(--bg3);border-radius:6px">Nenhum frequentador ainda.</div>'
-      : lista.map(m => `
-        <div style="display:flex;align-items:center;gap:6px;padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;margin-bottom:4px">
-          <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,170,255,.1);color:var(--b);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;font-weight:700;flex-shrink:0">${(m.trader_id||'??').substring(0,2).toUpperCase()}</div>
-          <span style="font-family:var(--mono);font-size:11px;color:var(--t1);flex:1">${m.trader_id || 'anon'}</span>
-          ${m.bloqueado 
-            ? `<button onclick="desbloquear('${m.id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2);color:var(--g)">✓ DESBLOQUEAR</button>`
-            : `<button onclick="bloquear('${m.id}','${m.trader_id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);color:var(--y)">🔇 BLOQUEAR</button>`
-          }
-          <button onclick="banir('${m.id}','${m.trader_id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(255,69,96,.06);border:1px solid rgba(255,69,96,.2);color:var(--r)">⛔ BANIR</button>
-        </div>
-      `).join('')
+      : lista.map(m => {
+          const tid = tradersMap[m.usuario_id] || m.usuario_id?.substring(0,8) || 'anon'
+          return `
+          <div style="display:flex;align-items:center;gap:6px;padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;margin-bottom:4px">
+            <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,170,255,.1);color:var(--b);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;font-weight:700;flex-shrink:0">${tid.substring(0,2).toUpperCase()}</div>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--t1);flex:1">${tid}</span>
+            ${m.bloqueado
+              ? `<button onclick="desbloquear('${m.eu_ia}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2);color:var(--g)">✓ DESBLOQUEAR</button>`
+              : `<button onclick="bloquear('${m.eu_ia}','${tid}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);color:var(--y)">🔇 BLOQUEAR</button>`
+            }
+            <button onclick="banir('${m.eu_ia}','${tid}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;background:rgba(255,69,96,.06);border:1px solid rgba(255,69,96,.2);color:var(--r)">⛔ BANIR</button>
+          </div>`
+        }).join('')
     }
   `
 }
 
 async function bloquear(membroId, traderId) {
-  await sb.from('sala_membros').update({ bloqueado: true }).eq('id', membroId)
+  await sb.from('sala_membros').update({ bloqueado: true }).eq('eu_ia', membroId)
   toast(traderId + ' bloqueado!', 't-y')
   addChatMsg('SISTEMA', 'sys', '🔇 ' + traderId + ' foi bloqueado pelo criador.')
   renderGestao()
 }
 
 async function desbloquear(membroId) {
-  await sb.from('sala_membros').update({ bloqueado: false }).eq('id', membroId)
+  await sb.from('sala_membros').update({ bloqueado: false }).eq('eu_ia', membroId)
   toast('Usuário desbloqueado!', 't-g')
   renderGestao()
 }
 
 async function banir(membroId, traderId) {
-  await sb.from('sala_membros').update({ banido: true }).eq('id', membroId)
+  await sb.from('sala_membros').update({ banido: true }).eq('eu_ia', membroId)
   toast(traderId + ' banido!', 't-r')
   addChatMsg('SISTEMA', 'sys', '⛔ ' + traderId + ' foi banido pelo criador.')
   renderGestao()
   renderTradersList(true)
-}
-
-async function excluirSala() {
-  document.getElementById('confirm-del').classList.add('open')
 }
 
 async function confirmarExcluirSala() {
@@ -912,7 +887,6 @@ async function confirmarExcluirSala() {
 async function encerrarPregao() {
   const btn = document.getElementById('btn-encerrar')
   const pregaoEncerrado = btn.dataset.encerrado === 'true'
-  
   if (!pregaoEncerrado) {
     btn.textContent = '▶ REABRIR PREGÃO'
     btn.dataset.encerrado = 'true'
@@ -970,7 +944,6 @@ function initTradingView() {
   container.id = 'tv-chart-container'
   container.style.cssText = 'width:100%;height:100%'
   wrap.appendChild(container)
-  
   const script = document.createElement('script')
   script.src = 'https://s3.tradingview.com/tv.js'
   script.onload = () => {
@@ -1029,7 +1002,7 @@ function updateModalMkt(mkt) {
   const wrap = document.getElementById('m-assets')
   const sc = selCls[mkt] || 'sel-b3'
   selectedAssets = []
-  wrap.innerHTML = (ASSETS_BY_MKT[mkt] || []).map(a => 
+  wrap.innerHTML = (ASSETS_BY_MKT[mkt] || []).map(a =>
     `<div class="asset-chip" id="chip-${a.replace('/','_')}" onclick="toggleAsset('${a}','${sc}')">${a}</div>`
   ).join('')
 }
@@ -1050,29 +1023,17 @@ async function criarSala() {
   const mercado = document.getElementById('m-mercado').value
   const limite = parseInt(document.getElementById('m-limit').value)
   if (!nome) { toast('Dê um nome à sala','t-r'); return }
-  
   const btn = document.getElementById('m-criar-btn')
   btn.textContent = 'CRIANDO...'; btn.disabled = true
-  
-  const novasSala = {
-    nome,
-    mercado,
-    ativos: selectedAssets,
-    limite,
-    ativa: true,
-    criador_id: currentUser.id || null
-  }
-  
+  const novasSala = { nome, mercado, ativos: selectedAssets, limite, ativa: true, criador_id: currentUser.id || null }
   const { data, error } = await sb.from('salas').insert([novasSala]).select()
   btn.textContent = '▶ CRIAR SALA'; btn.disabled = false
-  
   if (error) { toast('Erro ao criar sala: ' + (error.message || ''),'t-r'); return }
-  
   closeModal()
   toast('"' + nome + '" criada com sucesso!','t-g')
   await loadRooms()
   if (data && data[0]) {
-    setTimeout(() => enterRoom({ id: data[0].id, eu_ia: data[0].eu_ia, nome, mercado, ativos: selectedAssets, criador_id: currentUser.id }), 500)
+    setTimeout(() => enterRoom({ id: data[0].id, nome, mercado, ativos: selectedAssets, criador_id: currentUser.id }), 500)
   }
 }
 
