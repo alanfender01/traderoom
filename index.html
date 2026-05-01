@@ -696,7 +696,7 @@ async function enterRoom(data) {
 
   // Registra frequentador
   if (!currentIsCriador && currentUser.id) {
-    const { data: existing } = await sb.from('sala_membros').select('eu_ia').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
+    const { data: existing } = await sb.from('sala_membros').select('membro_id').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
     if (!existing) {
       await sb.from('sala_membros').insert({ sala_id: currentRoom.id, usuario_id: currentUser.id, banido: false, bloqueado: false })
     }
@@ -733,7 +733,7 @@ async function renderTradersList(isCriador) {
 
   // Busca membros do banco
   const { data: membros } = await sb.from('sala_membros')
-    .select('eu_ia, usuario_id, bloqueado, banido')
+    .select('membro_id, usuario_id, bloqueado, banido')
     .eq('sala_id', currentRoom?.id || '')
     .eq('banido', false)
 
@@ -784,8 +784,8 @@ async function renderTradersList(isCriador) {
     // Ícones de ação — só o criador vê, e não em si mesmo
     const acoes = isCriador && !isMe ? `
       <div class="tr-actions">
-        <div class="tr-act act-mute" title="Silenciar" onclick="bloquear('${m.eu_ia}','${tid}',${!m.bloqueado})">${m.bloqueado ? '🔊' : '🔇'}</div>
-        <div class="tr-act act-ban" title="Banir" onclick="banir('${m.eu_ia}','${tid}')">⛔</div>
+        <div class="tr-act act-mute" title="Silenciar" onclick="bloquear('${m.membro_id}','${tid}',${!m.bloqueado})">${m.bloqueado ? '🔊' : '🔇'}</div>
+        <div class="tr-act act-ban" title="Banir" onclick="banir('${m.membro_id}','${tid}')">⛔</div>
       </div>` : ''
 
     html += `<div class="trader-row">
@@ -803,13 +803,13 @@ async function renderTradersList(isCriador) {
 
 // ==================== AÇÕES DO CRIADOR ====================
 async function bloquear(membroId, traderId, silenciar) {
-  await sb.from('sala_membros').update({ bloqueado: silenciar }).eq('eu_ia', membroId)
+  await sb.from('sala_membros').update({ bloqueado: silenciar }).eq('membro_id', membroId)
   toast(silenciar ? traderId + ' silenciado!' : traderId + ' desbloqueado!', silenciar ? 't-y' : 't-g')
   addChatMsg('SISTEMA','sys', silenciar ? '🔇 ' + traderId + ' foi silenciado.' : '🔊 ' + traderId + ' foi desbloqueado.')
 }
 
 async function banir(membroId, traderId) {
-  await sb.from('sala_membros').update({ banido: true }).eq('eu_ia', membroId)
+  await sb.from('sala_membros').update({ banido: true }).eq('membro_id', membroId)
   toast(traderId + ' banido!','t-r')
   addChatMsg('SISTEMA','sys','⛔ ' + traderId + ' foi banido da sala.')
 }
