@@ -780,145 +780,6 @@ async function cadFinalizar() {
   document.getElementById('cad-step3').style.display = ''
   currentUser = { id: data.user?.id, trader_id: currentId, nome, loggedIn: true }
   
-// ==================== ADMIN ====================
-const ADMIN_SENHA = 'TR@dm1n2025!'  // Mude essa senha!
-
-// Ativa admin com sequência de teclas: A D M I N
-let adminSeq = []
-const ADMIN_CODE = ['a','d','m','i','n']
-document.addEventListener('keydown', (e) => {
-  adminSeq.push(e.key.toLowerCase())
-  if (adminSeq.length > 5) adminSeq.shift()
-  if (adminSeq.join('') === ADMIN_CODE.join('')) {
-    document.getElementById('admin-login').style.display = 'flex'
-    document.getElementById('admin-pwd').focus()
-  }
-})
-
-function verificarAdmin() {
-  const pwd = document.getElementById('admin-pwd').value
-  if (pwd === ADMIN_SENHA) {
-    document.getElementById('admin-login').style.display = 'none'
-    document.getElementById('admin-pwd').value = ''
-    abrirAdmin()
-  } else {
-    toast('Senha incorreta!', 't-r')
-  }
-}
-
-async function abrirAdmin() {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'))
-  document.getElementById('s-admin').style.display = 'flex'
-  
-  // Carrega usuários
-  const { data: usuarios } = await sb.from('usuarios').select('*').order('criado_em', { ascending: false })
-  const elU = document.getElementById('admin-usuarios')
-  elU.innerHTML = usuarios?.map(u => `
-    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px">
-      <div style="color:var(--t1);font-weight:700">${u.trader_id || 'sem id'}</div>
-      <div style="color:var(--t3)">${u.email}</div>
-      <div style="color:var(--t4)">${u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-BR') : '-'}</div>
-    </div>
-  `).join('') || 'Nenhum usuário'
-
-  // Carrega salas
-  const { data: salas } = await sb.from('salas').select('*').order('criado_em', { ascending: false })
-  const elS = document.getElementById('admin-salas')
-  elS.innerHTML = salas?.map(s => `
-    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;display:flex;align-items:center;gap:8px">
-      <div style="flex:1">
-        <div style="color:var(--t1);font-weight:700">${s.nome}</div>
-        <div style="color:var(--t3)">${s.mercado} · ${s.ativa ? '🟢 ativa' : '🔴 inativa'}</div>
-      </div>
-      <button onclick="excluirSalaAdmin('${s.id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);border-radius:3px;color:var(--r);cursor:pointer">🗑</button>
-    </div>
-  `).join('') || 'Nenhuma sala'
-}
-
-async function excluirSalaAdmin(salaId) {
-  if (!confirm('Excluir esta sala?')) return
-  await sb.from('salas').delete().eq('id', salaId)
-  toast('Sala excluída!', 't-g')
-  abrirAdmin()
-}
-
-updateUserUI()
-}
-
-async function loadUserProfile(user) {
-  const { data } = await sb.from('usuarios').select('*').eq('id', user.id).single()
-  if (data) {
-    currentUser = { id: user.id, trader_id: data.trader_id || user.email.split('@')[0], nome: data.nome, loggedIn: true }
-  } else {
-    currentUser = { id: user.id, trader_id: user.email.split('@')[0], loggedIn: true }
-  }
-  
-// ==================== ADMIN ====================
-const ADMIN_SENHA = 'TR@dm1n2025!'  // Mude essa senha!
-
-// Ativa admin com sequência de teclas: A D M I N
-let adminSeq = []
-const ADMIN_CODE = ['a','d','m','i','n']
-document.addEventListener('keydown', (e) => {
-  adminSeq.push(e.key.toLowerCase())
-  if (adminSeq.length > 5) adminSeq.shift()
-  if (adminSeq.join('') === ADMIN_CODE.join('')) {
-    document.getElementById('admin-login').style.display = 'flex'
-    document.getElementById('admin-pwd').focus()
-  }
-})
-
-function verificarAdmin() {
-  const pwd = document.getElementById('admin-pwd').value
-  if (pwd === ADMIN_SENHA) {
-    document.getElementById('admin-login').style.display = 'none'
-    document.getElementById('admin-pwd').value = ''
-    abrirAdmin()
-  } else {
-    toast('Senha incorreta!', 't-r')
-  }
-}
-
-async function abrirAdmin() {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'))
-  document.getElementById('s-admin').style.display = 'flex'
-  
-  // Carrega usuários
-  const { data: usuarios } = await sb.from('usuarios').select('*').order('criado_em', { ascending: false })
-  const elU = document.getElementById('admin-usuarios')
-  elU.innerHTML = usuarios?.map(u => `
-    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px">
-      <div style="color:var(--t1);font-weight:700">${u.trader_id || 'sem id'}</div>
-      <div style="color:var(--t3)">${u.email}</div>
-      <div style="color:var(--t4)">${u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-BR') : '-'}</div>
-    </div>
-  `).join('') || 'Nenhum usuário'
-
-  // Carrega salas
-  const { data: salas } = await sb.from('salas').select('*').order('criado_em', { ascending: false })
-  const elS = document.getElementById('admin-salas')
-  elS.innerHTML = salas?.map(s => `
-    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;display:flex;align-items:center;gap:8px">
-      <div style="flex:1">
-        <div style="color:var(--t1);font-weight:700">${s.nome}</div>
-        <div style="color:var(--t3)">${s.mercado} · ${s.ativa ? '🟢 ativa' : '🔴 inativa'}</div>
-      </div>
-      <button onclick="excluirSalaAdmin('${s.id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);border-radius:3px;color:var(--r);cursor:pointer">🗑</button>
-    </div>
-  `).join('') || 'Nenhuma sala'
-}
-
-async function excluirSalaAdmin(salaId) {
-  if (!confirm('Excluir esta sala?')) return
-  await sb.from('salas').delete().eq('id', salaId)
-  toast('Sala excluída!', 't-g')
-  abrirAdmin()
-}
-
-updateUserUI()
-}
-
-sb.auth.getSession().then(({ data }) => { if (data.session?.user) loadUserProfile(data.session.user) })
 
 // ==================== NAV ====================
 function go(id) {
@@ -931,73 +792,6 @@ function go(id) {
   window.scrollTo(0, 0)
 }
 
-// ==================== ADMIN ====================
-const ADMIN_SENHA = 'TR@dm1n2025!'  // Mude essa senha!
-
-// Ativa admin com sequência de teclas: A D M I N
-let adminSeq = []
-const ADMIN_CODE = ['a','d','m','i','n']
-document.addEventListener('keydown', (e) => {
-  adminSeq.push(e.key.toLowerCase())
-  if (adminSeq.length > 5) adminSeq.shift()
-  if (adminSeq.join('') === ADMIN_CODE.join('')) {
-    document.getElementById('admin-login').style.display = 'flex'
-    document.getElementById('admin-pwd').focus()
-  }
-})
-
-function verificarAdmin() {
-  const pwd = document.getElementById('admin-pwd').value
-  if (pwd === ADMIN_SENHA) {
-    document.getElementById('admin-login').style.display = 'none'
-    document.getElementById('admin-pwd').value = ''
-    abrirAdmin()
-  } else {
-    toast('Senha incorreta!', 't-r')
-  }
-}
-
-async function abrirAdmin() {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'))
-  document.getElementById('s-admin').style.display = 'flex'
-  
-  // Carrega usuários
-  const { data: usuarios } = await sb.from('usuarios').select('*').order('criado_em', { ascending: false })
-  const elU = document.getElementById('admin-usuarios')
-  elU.innerHTML = usuarios?.map(u => `
-    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px">
-      <div style="color:var(--t1);font-weight:700">${u.trader_id || 'sem id'}</div>
-      <div style="color:var(--t3)">${u.email}</div>
-      <div style="color:var(--t4)">${u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-BR') : '-'}</div>
-    </div>
-  `).join('') || 'Nenhum usuário'
-
-  // Carrega salas
-  const { data: salas } = await sb.from('salas').select('*').order('criado_em', { ascending: false })
-  const elS = document.getElementById('admin-salas')
-  elS.innerHTML = salas?.map(s => `
-    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;display:flex;align-items:center;gap:8px">
-      <div style="flex:1">
-        <div style="color:var(--t1);font-weight:700">${s.nome}</div>
-        <div style="color:var(--t3)">${s.mercado} · ${s.ativa ? '🟢 ativa' : '🔴 inativa'}</div>
-      </div>
-      <button onclick="excluirSalaAdmin('${s.id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);border-radius:3px;color:var(--r);cursor:pointer">🗑</button>
-    </div>
-  `).join('') || 'Nenhuma sala'
-}
-
-async function excluirSalaAdmin(salaId) {
-  if (!confirm('Excluir esta sala?')) return
-  await sb.from('salas').delete().eq('id', salaId)
-  toast('Sala excluída!', 't-g')
-  abrirAdmin()
-}
-
-updateUserUI() {
-  const av = (currentUser.trader_id || 'TR').substring(0,2).toUpperCase()
-  document.getElementById('lobby-av').textContent = av
-  document.getElementById('lobby-uid').textContent = currentUser.trader_id || 'visitante'
-}
 
 // ==================== ROOMS ====================
 async function loadRooms() {
@@ -1355,10 +1149,14 @@ const ticker=document.getElementById('ticker');let th='';for(let i=0;i<3;i++)TIC
 function toast(msg,cls='t-g'){const wrap=document.getElementById('toast-wrap');const el=document.createElement('div');el.className='toast '+cls;el.textContent=msg;wrap.appendChild(el);setTimeout(()=>el.remove(),2600)}
 
 
-// ==================== ADMIN ====================
-const ADMIN_SENHA = 'TR@dm1n2025!'  // Mude essa senha!
 
-// Ativa admin com sequência de teclas: A D M I N
+function updateUserUI() {
+  const av = (currentUser.trader_id || 'TR').substring(0,2).toUpperCase()
+  document.getElementById('lobby-av').textContent = av
+  document.getElementById('lobby-uid').textContent = currentUser.trader_id || 'visitante'
+}
+
+const ADMIN_SENHA = 'TR@dm1n2025!'
 let adminSeq = []
 const ADMIN_CODE = ['a','d','m','i','n']
 document.addEventListener('keydown', (e) => {
@@ -1369,54 +1167,34 @@ document.addEventListener('keydown', (e) => {
     document.getElementById('admin-pwd').focus()
   }
 })
-
 function verificarAdmin() {
   const pwd = document.getElementById('admin-pwd').value
   if (pwd === ADMIN_SENHA) {
     document.getElementById('admin-login').style.display = 'none'
     document.getElementById('admin-pwd').value = ''
     abrirAdmin()
-  } else {
-    toast('Senha incorreta!', 't-r')
-  }
+  } else { toast('Senha incorreta!', 't-r') }
 }
-
 async function abrirAdmin() {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'))
+  document.querySelectorAll('.screen').forEach(s => { s.classList.remove('on'); s.style.display = '' })
   document.getElementById('s-admin').style.display = 'flex'
-  
-  // Carrega usuários
   const { data: usuarios } = await sb.from('usuarios').select('*').order('criado_em', { ascending: false })
-  const elU = document.getElementById('admin-usuarios')
-  elU.innerHTML = usuarios?.map(u => `
-    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px">
-      <div style="color:var(--t1);font-weight:700">${u.trader_id || 'sem id'}</div>
-      <div style="color:var(--t3)">${u.email}</div>
-      <div style="color:var(--t4)">${u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-BR') : '-'}</div>
-    </div>
-  `).join('') || 'Nenhum usuário'
-
-  // Carrega salas
+  document.getElementById('admin-usuarios').innerHTML = (usuarios||[]).map(u =>
+    '<div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px"><div style="color:var(--t1);font-weight:700">' + (u.trader_id||'sem id') + '</div><div style="color:var(--t3)">' + u.email + '</div></div>'
+  ).join('') || 'Nenhum'
   const { data: salas } = await sb.from('salas').select('*').order('criado_em', { ascending: false })
-  const elS = document.getElementById('admin-salas')
-  elS.innerHTML = salas?.map(s => `
-    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;display:flex;align-items:center;gap:8px">
-      <div style="flex:1">
-        <div style="color:var(--t1);font-weight:700">${s.nome}</div>
-        <div style="color:var(--t3)">${s.mercado} · ${s.ativa ? '🟢 ativa' : '🔴 inativa'}</div>
-      </div>
-      <button onclick="excluirSalaAdmin('${s.id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);border-radius:3px;color:var(--r);cursor:pointer">🗑</button>
-    </div>
-  `).join('') || 'Nenhuma sala'
+  document.getElementById('admin-salas').innerHTML = (salas||[]).map(s =>
+    '<div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;display:flex;align-items:center;gap:8px"><div style="flex:1"><div style="color:var(--t1);font-weight:700">' + s.nome + '</div><div style="color:var(--t3)">' + s.mercado + '</div></div><button onclick="excluirSalaAdmin(\'' + s.id + '\')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);border-radius:3px;color:var(--r);cursor:pointer">Excluir</button></div>'
+  ).join('') || 'Nenhuma'
 }
-
 async function excluirSalaAdmin(salaId) {
   if (!confirm('Excluir esta sala?')) return
   await sb.from('salas').delete().eq('id', salaId)
-  toast('Sala excluída!', 't-g')
+  toast('Sala excluida!', 't-g')
   abrirAdmin()
 }
 
+}
 updateUserUI()
 </script>
 
