@@ -581,6 +581,15 @@ async function iniciarAudio(salaId) {
         const pc = peerConnections[payload.from]
         if (pc && payload.candidate) await pc.addIceCandidate(new RTCIceCandidate(payload.candidate))
       })
+      .on('broadcast', { event: 'mute_comando' }, ({ payload }) => {
+        if (payload.to !== currentUser.id) return
+        if (localStream) {
+          localStream.getAudioTracks().forEach(t => { t.enabled = !payload.mutar })
+          micAtivo = !payload.mutar
+          atualizarBotaoMic()
+          toast(payload.mutar ? '🔇 Criador mutou seu microfone' : '🔊 Criador liberou seu microfone', payload.mutar ? 't-r' : 't-g')
+        }
+      })
       .on('broadcast', { event: 'novo_usuario' }, async ({ payload }) => {
         if (payload.userId === currentUser.id) return
         // Novo usuário entrou — eu inicio a conexão com ele
@@ -770,7 +779,70 @@ async function cadFinalizar() {
   document.getElementById('cad-step2').style.display = 'none'
   document.getElementById('cad-step3').style.display = ''
   currentUser = { id: data.user?.id, trader_id: currentId, nome, loggedIn: true }
-  updateUserUI()
+  
+// ==================== ADMIN ====================
+const ADMIN_SENHA = 'TR@dm1n2025!'  // Mude essa senha!
+
+// Ativa admin com sequência de teclas: A D M I N
+let adminSeq = []
+const ADMIN_CODE = ['a','d','m','i','n']
+document.addEventListener('keydown', (e) => {
+  adminSeq.push(e.key.toLowerCase())
+  if (adminSeq.length > 5) adminSeq.shift()
+  if (adminSeq.join('') === ADMIN_CODE.join('')) {
+    document.getElementById('admin-login').style.display = 'flex'
+    document.getElementById('admin-pwd').focus()
+  }
+})
+
+function verificarAdmin() {
+  const pwd = document.getElementById('admin-pwd').value
+  if (pwd === ADMIN_SENHA) {
+    document.getElementById('admin-login').style.display = 'none'
+    document.getElementById('admin-pwd').value = ''
+    abrirAdmin()
+  } else {
+    toast('Senha incorreta!', 't-r')
+  }
+}
+
+async function abrirAdmin() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'))
+  document.getElementById('s-admin').style.display = 'flex'
+  
+  // Carrega usuários
+  const { data: usuarios } = await sb.from('usuarios').select('*').order('criado_em', { ascending: false })
+  const elU = document.getElementById('admin-usuarios')
+  elU.innerHTML = usuarios?.map(u => `
+    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px">
+      <div style="color:var(--t1);font-weight:700">${u.trader_id || 'sem id'}</div>
+      <div style="color:var(--t3)">${u.email}</div>
+      <div style="color:var(--t4)">${u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-BR') : '-'}</div>
+    </div>
+  `).join('') || 'Nenhum usuário'
+
+  // Carrega salas
+  const { data: salas } = await sb.from('salas').select('*').order('criado_em', { ascending: false })
+  const elS = document.getElementById('admin-salas')
+  elS.innerHTML = salas?.map(s => `
+    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;display:flex;align-items:center;gap:8px">
+      <div style="flex:1">
+        <div style="color:var(--t1);font-weight:700">${s.nome}</div>
+        <div style="color:var(--t3)">${s.mercado} · ${s.ativa ? '🟢 ativa' : '🔴 inativa'}</div>
+      </div>
+      <button onclick="excluirSalaAdmin('${s.id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);border-radius:3px;color:var(--r);cursor:pointer">🗑</button>
+    </div>
+  `).join('') || 'Nenhuma sala'
+}
+
+async function excluirSalaAdmin(salaId) {
+  if (!confirm('Excluir esta sala?')) return
+  await sb.from('salas').delete().eq('id', salaId)
+  toast('Sala excluída!', 't-g')
+  abrirAdmin()
+}
+
+updateUserUI()
 }
 
 async function loadUserProfile(user) {
@@ -780,7 +852,70 @@ async function loadUserProfile(user) {
   } else {
     currentUser = { id: user.id, trader_id: user.email.split('@')[0], loggedIn: true }
   }
-  updateUserUI()
+  
+// ==================== ADMIN ====================
+const ADMIN_SENHA = 'TR@dm1n2025!'  // Mude essa senha!
+
+// Ativa admin com sequência de teclas: A D M I N
+let adminSeq = []
+const ADMIN_CODE = ['a','d','m','i','n']
+document.addEventListener('keydown', (e) => {
+  adminSeq.push(e.key.toLowerCase())
+  if (adminSeq.length > 5) adminSeq.shift()
+  if (adminSeq.join('') === ADMIN_CODE.join('')) {
+    document.getElementById('admin-login').style.display = 'flex'
+    document.getElementById('admin-pwd').focus()
+  }
+})
+
+function verificarAdmin() {
+  const pwd = document.getElementById('admin-pwd').value
+  if (pwd === ADMIN_SENHA) {
+    document.getElementById('admin-login').style.display = 'none'
+    document.getElementById('admin-pwd').value = ''
+    abrirAdmin()
+  } else {
+    toast('Senha incorreta!', 't-r')
+  }
+}
+
+async function abrirAdmin() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'))
+  document.getElementById('s-admin').style.display = 'flex'
+  
+  // Carrega usuários
+  const { data: usuarios } = await sb.from('usuarios').select('*').order('criado_em', { ascending: false })
+  const elU = document.getElementById('admin-usuarios')
+  elU.innerHTML = usuarios?.map(u => `
+    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px">
+      <div style="color:var(--t1);font-weight:700">${u.trader_id || 'sem id'}</div>
+      <div style="color:var(--t3)">${u.email}</div>
+      <div style="color:var(--t4)">${u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-BR') : '-'}</div>
+    </div>
+  `).join('') || 'Nenhum usuário'
+
+  // Carrega salas
+  const { data: salas } = await sb.from('salas').select('*').order('criado_em', { ascending: false })
+  const elS = document.getElementById('admin-salas')
+  elS.innerHTML = salas?.map(s => `
+    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;display:flex;align-items:center;gap:8px">
+      <div style="flex:1">
+        <div style="color:var(--t1);font-weight:700">${s.nome}</div>
+        <div style="color:var(--t3)">${s.mercado} · ${s.ativa ? '🟢 ativa' : '🔴 inativa'}</div>
+      </div>
+      <button onclick="excluirSalaAdmin('${s.id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);border-radius:3px;color:var(--r);cursor:pointer">🗑</button>
+    </div>
+  `).join('') || 'Nenhuma sala'
+}
+
+async function excluirSalaAdmin(salaId) {
+  if (!confirm('Excluir esta sala?')) return
+  await sb.from('salas').delete().eq('id', salaId)
+  toast('Sala excluída!', 't-g')
+  abrirAdmin()
+}
+
+updateUserUI()
 }
 
 sb.auth.getSession().then(({ data }) => { if (data.session?.user) loadUserProfile(data.session.user) })
@@ -796,7 +931,70 @@ function go(id) {
   window.scrollTo(0, 0)
 }
 
-function updateUserUI() {
+function 
+// ==================== ADMIN ====================
+const ADMIN_SENHA = 'TR@dm1n2025!'  // Mude essa senha!
+
+// Ativa admin com sequência de teclas: A D M I N
+let adminSeq = []
+const ADMIN_CODE = ['a','d','m','i','n']
+document.addEventListener('keydown', (e) => {
+  adminSeq.push(e.key.toLowerCase())
+  if (adminSeq.length > 5) adminSeq.shift()
+  if (adminSeq.join('') === ADMIN_CODE.join('')) {
+    document.getElementById('admin-login').style.display = 'flex'
+    document.getElementById('admin-pwd').focus()
+  }
+})
+
+function verificarAdmin() {
+  const pwd = document.getElementById('admin-pwd').value
+  if (pwd === ADMIN_SENHA) {
+    document.getElementById('admin-login').style.display = 'none'
+    document.getElementById('admin-pwd').value = ''
+    abrirAdmin()
+  } else {
+    toast('Senha incorreta!', 't-r')
+  }
+}
+
+async function abrirAdmin() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'))
+  document.getElementById('s-admin').style.display = 'flex'
+  
+  // Carrega usuários
+  const { data: usuarios } = await sb.from('usuarios').select('*').order('criado_em', { ascending: false })
+  const elU = document.getElementById('admin-usuarios')
+  elU.innerHTML = usuarios?.map(u => `
+    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px">
+      <div style="color:var(--t1);font-weight:700">${u.trader_id || 'sem id'}</div>
+      <div style="color:var(--t3)">${u.email}</div>
+      <div style="color:var(--t4)">${u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-BR') : '-'}</div>
+    </div>
+  `).join('') || 'Nenhum usuário'
+
+  // Carrega salas
+  const { data: salas } = await sb.from('salas').select('*').order('criado_em', { ascending: false })
+  const elS = document.getElementById('admin-salas')
+  elS.innerHTML = salas?.map(s => `
+    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;display:flex;align-items:center;gap:8px">
+      <div style="flex:1">
+        <div style="color:var(--t1);font-weight:700">${s.nome}</div>
+        <div style="color:var(--t3)">${s.mercado} · ${s.ativa ? '🟢 ativa' : '🔴 inativa'}</div>
+      </div>
+      <button onclick="excluirSalaAdmin('${s.id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);border-radius:3px;color:var(--r);cursor:pointer">🗑</button>
+    </div>
+  `).join('') || 'Nenhuma sala'
+}
+
+async function excluirSalaAdmin(salaId) {
+  if (!confirm('Excluir esta sala?')) return
+  await sb.from('salas').delete().eq('id', salaId)
+  toast('Sala excluída!', 't-g')
+  abrirAdmin()
+}
+
+updateUserUI() {
   const av = (currentUser.trader_id || 'TR').substring(0,2).toUpperCase()
   document.getElementById('lobby-av').textContent = av
   document.getElementById('lobby-uid').textContent = currentUser.trader_id || 'visitante'
@@ -987,6 +1185,27 @@ async function renderTradersList(isCriador) {
 }
 
 // ==================== AÇÕES DO CRIADOR ====================
+// Muta microfone remoto pelo criador
+function mutarMicRemoto(userId, mutar) {
+  const pc = peerConnections[userId]
+  if (pc) {
+    pc.getSenders().forEach(sender => {
+      if (sender.track && sender.track.kind === 'audio') {
+        sender.track.enabled = !mutar
+      }
+    })
+  }
+  // Também avisa via broadcast para o usuário mutar seu próprio mic
+  if (audioChannel) {
+    audioChannel.send({
+      type: 'broadcast',
+      event: 'mute_comando',
+      payload: { to: userId, mutar }
+    })
+  }
+  toast(mutar ? 'Microfone do trader mutado!' : 'Microfone liberado!', mutar ? 't-y' : 't-g')
+}
+
 async function bloquear(membroId, traderId, silenciar) {
   await sb.from('sala_membros').update({ bloqueado: silenciar }).eq('membro_id', membroId)
   toast(silenciar ? traderId + ' silenciado!' : traderId + ' desbloqueado!', silenciar ? 't-y' : 't-g')
@@ -1136,7 +1355,100 @@ const ticker=document.getElementById('ticker');let th='';for(let i=0;i<3;i++)TIC
 
 function toast(msg,cls='t-g'){const wrap=document.getElementById('toast-wrap');const el=document.createElement('div');el.className='toast '+cls;el.textContent=msg;wrap.appendChild(el);setTimeout(()=>el.remove(),2600)}
 
+
+// ==================== ADMIN ====================
+const ADMIN_SENHA = 'TR@dm1n2025!'  // Mude essa senha!
+
+// Ativa admin com sequência de teclas: A D M I N
+let adminSeq = []
+const ADMIN_CODE = ['a','d','m','i','n']
+document.addEventListener('keydown', (e) => {
+  adminSeq.push(e.key.toLowerCase())
+  if (adminSeq.length > 5) adminSeq.shift()
+  if (adminSeq.join('') === ADMIN_CODE.join('')) {
+    document.getElementById('admin-login').style.display = 'flex'
+    document.getElementById('admin-pwd').focus()
+  }
+})
+
+function verificarAdmin() {
+  const pwd = document.getElementById('admin-pwd').value
+  if (pwd === ADMIN_SENHA) {
+    document.getElementById('admin-login').style.display = 'none'
+    document.getElementById('admin-pwd').value = ''
+    abrirAdmin()
+  } else {
+    toast('Senha incorreta!', 't-r')
+  }
+}
+
+async function abrirAdmin() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'))
+  document.getElementById('s-admin').style.display = 'flex'
+  
+  // Carrega usuários
+  const { data: usuarios } = await sb.from('usuarios').select('*').order('criado_em', { ascending: false })
+  const elU = document.getElementById('admin-usuarios')
+  elU.innerHTML = usuarios?.map(u => `
+    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px">
+      <div style="color:var(--t1);font-weight:700">${u.trader_id || 'sem id'}</div>
+      <div style="color:var(--t3)">${u.email}</div>
+      <div style="color:var(--t4)">${u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-BR') : '-'}</div>
+    </div>
+  `).join('') || 'Nenhum usuário'
+
+  // Carrega salas
+  const { data: salas } = await sb.from('salas').select('*').order('criado_em', { ascending: false })
+  const elS = document.getElementById('admin-salas')
+  elS.innerHTML = salas?.map(s => `
+    <div style="padding:8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;display:flex;align-items:center;gap:8px">
+      <div style="flex:1">
+        <div style="color:var(--t1);font-weight:700">${s.nome}</div>
+        <div style="color:var(--t3)">${s.mercado} · ${s.ativa ? '🟢 ativa' : '🔴 inativa'}</div>
+      </div>
+      <button onclick="excluirSalaAdmin('${s.id}')" style="font-family:var(--mono);font-size:9px;padding:2px 6px;background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);border-radius:3px;color:var(--r);cursor:pointer">🗑</button>
+    </div>
+  `).join('') || 'Nenhuma sala'
+}
+
+async function excluirSalaAdmin(salaId) {
+  if (!confirm('Excluir esta sala?')) return
+  await sb.from('salas').delete().eq('id', salaId)
+  toast('Sala excluída!', 't-g')
+  abrirAdmin()
+}
+
 updateUserUI()
 </script>
+
+<!-- ADMIN PANEL -->
+<div id="s-admin" class="screen" style="display:none;flex-direction:column;min-height:100vh;padding:20px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--g)">⚙️ PAINEL ADMIN</div>
+    <button onclick="go('s-lobby')" style="font-family:var(--mono);font-size:11px;padding:6px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--t2);cursor:pointer">← SAIR</button>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <!-- USUARIOS -->
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:16px">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--g);letter-spacing:2px;margin-bottom:12px">USUÁRIOS</div>
+      <div id="admin-usuarios">Carregando...</div>
+    </div>
+    <!-- SALAS -->
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:16px">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--b);letter-spacing:2px;margin-bottom:12px">SALAS</div>
+      <div id="admin-salas">Carregando...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="admin-login" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);align-items:center;justify-content:center;z-index:999">
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:2rem;width:320px;text-align:center">
+    <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--g);margin-bottom:16px">⚙️ ACESSO RESTRITO</div>
+    <input type="password" id="admin-pwd" placeholder="Senha admin" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--t1);font-family:var(--mono);font-size:13px;padding:9px 12px;outline:none;margin-bottom:12px" onkeydown="if(event.key==='Enter')verificarAdmin()">
+    <button onclick="verificarAdmin()" style="width:100%;padding:10px;background:var(--g);border:none;border-radius:6px;color:#080a0c;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer">ENTRAR</button>
+    <div onclick="document.getElementById('admin-login').style.display='none'" style="font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:10px;cursor:pointer">CANCELAR</div>
+  </div>
+</div>
 </body>
 </html>
