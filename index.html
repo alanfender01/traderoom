@@ -778,6 +778,7 @@ function iniciarRealtime(salaId) {
 function pararRealtime() {
   if (realtimeChannel) { sb.removeChannel(realtimeChannel); realtimeChannel = null }
   pararAudio()
+  pararPollingChat()
 }
 
 // ==================== AUTH ====================
@@ -1150,24 +1151,46 @@ async function carregarHistoricoChat() {
   })
 }
 
+var chatPollingInterval = null
+var ultimaMsgId = null
+
 async function iniciarRealtimeChat(salaId) {
-  // Escuta novas mensagens em tempo real
-  sb.channel('chat-' + salaId)
-    .on('postgres_changes', {
-      event: 'INSERT',
-      schema: 'public',
-      table: 'mensagens',
-      filter: 'sala_id=eq.' + salaId
-    }, async (payload) => {
-      const msg = payload.new
-      // Ignora mensagens do próprio usuário (já exibidas no sendMsg)
-      if (msg.usuario_id === currentUser.id) return
-      // Busca trader_id do remetente
-      const { data: u } = await sb.from('usuarios').select('trader_id').eq('id', msg.usuario_id).single()
-      const tid = u ? u.trader_id : 'anon'
-      addChatMsg(tid, 'other', msg.conteudo)
+  if (chatPollingInterval) clearInterval(chatPollingInterval)
+
+  // Polling a cada 3 segundos buscando mensagens novas
+  chatPollingInterval = setInterval(async function() {
+    var query = sb.from('mensagens')
+      .select('id, conteudo, usuario_id')
+      .eq('sala_id', salaId)
+      .order('enviado_em', { ascending: true })
+
+    if (ultimaMsgId) {
+      query = query.gt('id', ultimaMsgId)
+    }
+
+    var res = await query.limit(20)
+    var msgs = res.data || []
+
+    if (msgs.length === 0) return
+
+    var userIds = [...new Set(msgs.map(function(m) { return m.usuario_id }))]
+    var tradersMap = {}
+    var resU = await sb.from('usuarios').select('id, trader_id').in('id', userIds)
+    if (resU.data) resU.data.forEach(function(u) { tradersMap[u.id] = u.trader_id })
+
+    msgs.forEach(function(m) {
+      if (m.usuario_id === currentUser.id) return // já exibiu ao enviar
+      var tid = tradersMap[m.usuario_id] || 'anon'
+      addChatMsg(tid, 'other', m.conteudo)
     })
-    .subscribe()
+
+    ultimaMsgId = msgs[msgs.length - 1].id
+  }, 3000)
+}
+
+function pararPollingChat() {
+  if (chatPollingInterval) { clearInterval(chatPollingInterval); chatPollingInterval = null }
+  ultimaMsgId = null
 }
 
 // ==================== HELPERS ====================
