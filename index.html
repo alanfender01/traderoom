@@ -927,6 +927,7 @@ async function enterRoom(data) {
     else b.classList.remove('locked')
   })
   await renderTradersList(currentIsCriador)
+  await carregarHistoricoChat()
 }
 
 // ==================== SAIR ====================
@@ -1105,6 +1106,12 @@ async function sendMsg() {
     const { data: membro } = await sb.from('sala_membros').select('bloqueado').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
     if (membro && membro.bloqueado) { toast('Voce esta silenciado 🔇', 't-r'); inp.value = ''; return }
   }
+  // Salva no banco
+  await sb.from('mensagens').insert({
+    sala_id: currentRoom.id,
+    usuario_id: currentUser.id,
+    conteudo: txt
+  })
   addChatMsg(currentUser.trader_id || 'Voce', 'me', txt)
   inp.value = ''
 }
@@ -1112,6 +1119,30 @@ function swSide(tab, el) {
   document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active')); el.classList.add('active')
   document.getElementById('side-chat').style.display = tab==='chat'?'flex':'none'
   document.getElementById('side-traders').style.display = tab==='traders'?'flex':'none'
+}
+
+// ==================== HISTÓRICO DO CHAT ====================
+async function carregarHistoricoChat() {
+  const { data: msgs } = await sb.from('mensagens')
+    .select('conteudo, enviado_em, usuario_id')
+    .eq('sala_id', currentRoom.id)
+    .order('enviado_em', { ascending: true })
+    .limit(50)
+
+  if (!msgs || msgs.length === 0) return
+
+  // Busca trader_ids de todos que enviaram mensagens
+  const userIds = [...new Set(msgs.map(m => m.usuario_id))]
+  let tradersMap = {}
+  const { data: usuarios } = await sb.from('usuarios').select('id, trader_id').in('id', userIds)
+  if (usuarios) usuarios.forEach(u => { tradersMap[u.id] = u.trader_id })
+
+  msgs.forEach(m => {
+    const tid = tradersMap[m.usuario_id] || 'anon'
+    const isMe = m.usuario_id === currentUser.id
+    const cls = isMe ? 'me' : 'other'
+    addChatMsg(tid, cls, m.conteudo)
+  })
 }
 
 // ==================== HELPERS ====================
