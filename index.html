@@ -249,7 +249,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .traders-panel{flex:1;overflow-y:auto;padding:8px}
 .trader-row{display:flex;align-items:center;gap:7px;padding:7px 6px;border-bottom:1px solid var(--border);border-radius:6px;transition:background .15s}
 .trader-row:hover{background:var(--bg3)}
-.tr-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;flex-shrink:0}
+.tr-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;flex-shrink:0;transition:box-shadow .1s}
+.tr-av.falando{box-shadow:0 0 0 2px var(--g),0 0 8px rgba(0,229,160,.5);animation:fala 1s ease-in-out infinite}
+@keyframes fala{0%,100%{box-shadow:0 0 0 2px var(--g),0 0 6px rgba(0,229,160,.4)}50%{box-shadow:0 0 0 3px var(--g),0 0 14px rgba(0,229,160,.7)}}
 .tr-info{flex:1;min-width:0}
 .tr-name{font-family:var(--mono);font-size:11px;color:var(--t1);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tr-badge{font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:3px;margin-top:2px;display:inline-block}
@@ -559,6 +561,7 @@ async function iniciarAudio(salaId) {
     localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
     micAtivo = true
     atualizarBotaoMic()
+    iniciarDetectorLocal()
 
     // Canal de sinalização WebRTC via Supabase Realtime
     audioChannel = sb.channel('audio-' + salaId, { config: { broadcast: { self: false } } })
@@ -629,6 +632,7 @@ function criarPeerConnection(targetId) {
       document.body.appendChild(audioEl)
     }
     audioEl.srcObject = event.streams[0]
+    adicionarDetectorRemoto(targetId, event.streams[0])
   }
 
   // Envia ICE candidates
@@ -656,6 +660,51 @@ function toggleMic() {
   localStream.getAudioTracks().forEach(t => { t.enabled = micAtivo })
   atualizarBotaoMic()
   toast(micAtivo ? '🎙 Microfone ligado' : '🔇 Microfone desligado', micAtivo ? 't-g' : 't-y')
+}
+
+// ==================== DETECTOR DE VOZ ====================
+let audioContextLocal = null
+let analisadores = {}  // userId -> analyser
+
+function iniciarDetectorLocal() {
+  if (!localStream) return
+  audioContextLocal = new (window.AudioContext || window.webkitAudioContext)()
+  const source = audioContextLocal.createMediaStreamSource(localStream)
+  const analyser = audioContextLocal.createAnalyser()
+  analyser.fftSize = 512
+  source.connect(analyser)
+  analisadores['local'] = { analyser, userId: currentUser.id }
+  verificarVoz()
+}
+
+function adicionarDetectorRemoto(userId, stream) {
+  if (!audioContextLocal) audioContextLocal = new (window.AudioContext || window.webkitAudioContext)()
+  const source = audioContextLocal.createMediaStreamSource(stream)
+  const analyser = audioContextLocal.createAnalyser()
+  analyser.fftSize = 512
+  source.connect(analyser)
+  analisadores[userId] = { analyser, userId }
+}
+
+function verificarVoz() {
+  const data = new Uint8Array(128)
+  const THRESHOLD = 20
+
+  setInterval(() => {
+    Object.entries(analisadores).forEach(([key, { analyser, userId }]) => {
+      analyser.getByteFrequencyData(data)
+      const volume = data.reduce((a, b) => a + b, 0) / data.length
+      const falando = volume > THRESHOLD
+
+      // Encontra avatar do usuário na lista
+      const avId = key === 'local' ? 'av-me' : 'av-' + userId
+      const av = document.getElementById(avId)
+      if (av) {
+        if (falando) av.classList.add('falando')
+        else av.classList.remove('falando')
+      }
+    })
+  }, 150)
 }
 
 function atualizarBotaoMic() {
@@ -902,7 +951,7 @@ async function renderTradersList(isCriador) {
 
   // Criador
   html += `<div class="trader-row">
-    <div class="tr-av" style="background:rgba(245,166,35,.15);color:var(--y)">${(criadorTraderId||'CR').substring(0,2).toUpperCase()}</div>
+    <div class="tr-av" id="${currentIsCriador ? 'av-me' : 'av-criador'}" style="background:rgba(245,166,35,.15);color:var(--y)">${(criadorTraderId||'CR').substring(0,2).toUpperCase()}</div>
     <div class="tr-info">
       <div class="tr-name">${criadorTraderId || 'criador'}</div>
       <span class="tr-badge badge-criador">👑 CRIADOR</span>
@@ -925,7 +974,7 @@ async function renderTradersList(isCriador) {
       </div>` : ''
 
     html += `<div class="trader-row">
-      <div class="tr-av" style="background:rgba(0,170,255,.1);color:var(--b)">${tid.substring(0,2).toUpperCase()}</div>
+      <div class="tr-av" id="${isMe ? 'av-me' : 'av-' + m.usuario_id}" style="background:rgba(0,170,255,.1);color:var(--b)">${tid.substring(0,2).toUpperCase()}</div>
       <div class="tr-info">
         <div class="tr-name">${tid}</div>
         ${badge}
