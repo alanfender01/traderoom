@@ -1042,7 +1042,28 @@ function addChatMsg(u, cls, body) {
   d.innerHTML = `<div class="cmsg-hd"><span class="cmsg-u ${cls}">${u}</span><span class="cmsg-t">${t}</span></div><div class="cmsg-body ${cls==='sys'?'sys':''}">${body}</div>`
   el.appendChild(d); el.scrollTop = el.scrollHeight
 }
-function sendMsg() { const inp = document.getElementById('chat-inp'); const txt = inp.value.trim(); if(!txt)return; addChatMsg(currentUser.trader_id||'Você','me',txt); inp.value='' }
+async function sendMsg() {
+  const inp = document.getElementById('chat-inp')
+  const txt = inp.value.trim()
+  if (!txt) return
+
+  // Verifica se está bloqueado
+  if (!currentIsCriador && currentRoom?.id && currentUser?.id) {
+    const { data: membro } = await sb.from('sala_membros')
+      .select('bloqueado')
+      .eq('sala_id', currentRoom.id)
+      .eq('usuario_id', currentUser.id)
+      .single()
+    if (membro?.bloqueado) {
+      toast('Você está silenciado e não pode enviar mensagens 🔇', 't-r')
+      inp.value = ''
+      return
+    }
+  }
+
+  addChatMsg(currentUser.trader_id || 'Você', 'me', txt)
+  inp.value = ''
+}
 function swSide(tab, el) {
   document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active')); el.classList.add('active')
   document.getElementById('side-chat').style.display = tab==='chat'?'flex':'none'
