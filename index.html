@@ -928,6 +928,7 @@ async function enterRoom(data) {
   })
   await renderTradersList(currentIsCriador)
   await carregarHistoricoChat()
+  iniciarRealtimeChat(currentRoom.id)
 }
 
 // ==================== SAIR ====================
@@ -1137,12 +1138,36 @@ async function carregarHistoricoChat() {
   const { data: usuarios } = await sb.from('usuarios').select('id, trader_id').in('id', userIds)
   if (usuarios) usuarios.forEach(u => { tradersMap[u.id] = u.trader_id })
 
+  // Limpa apenas as mensagens de sistema (entrada/saída) e mantém o histórico
+  const chatEl = document.getElementById('chat-msgs')
+  if (chatEl) chatEl.innerHTML = ''
+
   msgs.forEach(m => {
     const tid = tradersMap[m.usuario_id] || 'anon'
     const isMe = m.usuario_id === currentUser.id
     const cls = isMe ? 'me' : 'other'
     addChatMsg(tid, cls, m.conteudo)
   })
+}
+
+async function iniciarRealtimeChat(salaId) {
+  // Escuta novas mensagens em tempo real
+  sb.channel('chat-' + salaId)
+    .on('postgres_changes', {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'mensagens',
+      filter: 'sala_id=eq.' + salaId
+    }, async (payload) => {
+      const msg = payload.new
+      // Ignora mensagens do próprio usuário (já exibidas no sendMsg)
+      if (msg.usuario_id === currentUser.id) return
+      // Busca trader_id do remetente
+      const { data: u } = await sb.from('usuarios').select('trader_id').eq('id', msg.usuario_id).single()
+      const tid = u ? u.trader_id : 'anon'
+      addChatMsg(tid, 'other', msg.conteudo)
+    })
+    .subscribe()
 }
 
 // ==================== HELPERS ====================
