@@ -218,6 +218,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .tft{font-family:var(--mono);font-size:10px;color:var(--t3);padding:2px 7px;border-radius:3px;cursor:pointer;transition:all .1s;border:1px solid transparent}
 .tft.active{background:rgba(0,229,160,.1);color:var(--g);border-color:rgba(0,229,160,.2)}
 .tft:hover{color:var(--t1)}
+.tft.locked{opacity:.4;cursor:not-allowed}
 .ct-sep{width:1px;height:12px;background:var(--border2);margin:0 2px}
 .tv-wrap{flex:1;position:relative;overflow:hidden}
 .bottom-op{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bg1);border-top:1px solid var(--border);flex-shrink:0}
@@ -835,6 +836,11 @@ async function enterRoom(data) {
 
   iniciarRealtime(currentRoom.id)
   iniciarAudio(currentRoom.id)
+  // Bloqueia botões do gráfico para frequentadores
+  document.querySelectorAll('.tft').forEach(b => {
+    if (!currentIsCriador) b.classList.add('locked')
+    else b.classList.remove('locked')
+  })
   await renderTradersList(currentIsCriador)
 }
 
@@ -986,6 +992,10 @@ function initTradingView() {
 }
 
 function setSymbol(symbol, el) {
+  if (!currentIsCriador) {
+    toast('Só o criador pode mudar o gráfico 👑', 't-y')
+    return
+  }
   document.querySelectorAll('.tft').forEach(b => b.classList.remove('active')); el.classList.add('active')
   currentSymbol = symbol
   if (tvWidget) { try { tvWidget.chart().setSymbol(symbol) } catch(e) { initTradingView() } } else { initTradingView() }
