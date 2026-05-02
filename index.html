@@ -1152,25 +1152,22 @@ async function carregarHistoricoChat() {
 }
 
 var chatPollingInterval = null
-var ultimaMsgId = null
+var ultimoTimestampChat = null
 
 async function iniciarRealtimeChat(salaId) {
   if (chatPollingInterval) clearInterval(chatPollingInterval)
+  // Inicia com o timestamp atual para pegar só mensagens novas
+  ultimoTimestampChat = new Date().toISOString()
 
-  // Polling a cada 3 segundos buscando mensagens novas
   chatPollingInterval = setInterval(async function() {
-    var query = sb.from('mensagens')
-      .select('id, conteudo, usuario_id')
+    var res = await sb.from('mensagens')
+      .select('id, conteudo, usuario_id, enviado_em')
       .eq('sala_id', salaId)
+      .gt('enviado_em', ultimoTimestampChat)
       .order('enviado_em', { ascending: true })
+      .limit(20)
 
-    if (ultimaMsgId) {
-      query = query.gt('id', ultimaMsgId)
-    }
-
-    var res = await query.limit(20)
     var msgs = res.data || []
-
     if (msgs.length === 0) return
 
     var userIds = [...new Set(msgs.map(function(m) { return m.usuario_id }))]
@@ -1179,18 +1176,17 @@ async function iniciarRealtimeChat(salaId) {
     if (resU.data) resU.data.forEach(function(u) { tradersMap[u.id] = u.trader_id })
 
     msgs.forEach(function(m) {
-      if (m.usuario_id === currentUser.id) return // já exibiu ao enviar
+      if (m.usuario_id === currentUser.id) return
       var tid = tradersMap[m.usuario_id] || 'anon'
       addChatMsg(tid, 'other', m.conteudo)
+      ultimoTimestampChat = m.enviado_em
     })
-
-    ultimaMsgId = msgs[msgs.length - 1].id
   }, 3000)
 }
 
 function pararPollingChat() {
   if (chatPollingInterval) { clearInterval(chatPollingInterval); chatPollingInterval = null }
-  ultimaMsgId = null
+  ultimoTimestampChat = null
 }
 
 // ==================== HELPERS ====================
