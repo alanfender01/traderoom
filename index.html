@@ -3,6 +3,12 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="theme-color" content="#00e5a0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TradeRoom">
+<link rel="manifest" href="/manifest.json">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TradeRoom</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
@@ -939,6 +945,8 @@ async function enterRoom(data) {
   }
   iniciarRealtime(currentRoom.id)
   iniciarAudio(currentRoom.id)
+  // Mostra apenas os ativos da sala na toolbar
+  atualizarToolbar(data.ativos || [], data.mercado)
   document.querySelectorAll('.tft').forEach(b => {
     if (!currentIsCriador) b.classList.add('locked')
     else b.classList.remove('locked')
@@ -1050,6 +1058,30 @@ async function encerrarPregao() {
   }
 }
 
+function atualizarToolbar(ativos, mercado) {
+  var mapa = {
+    'WIN':'BMFBOVESPA:WIN1!','WDO':'BMFBOVESPA:WDO1!',
+    'BTC':'BINANCE:BTCUSDT','ETH':'BINANCE:ETHUSDT','SOL':'BINANCE:SOLUSDT',
+    'EUR/USD':'FX:EURUSD','GBP/USD':'FX:GBPUSD','USD/JPY':'FX:USDJPY',
+    'XAU/USD':'OANDA:XAUUSD','WTI':'NYMEX:CL1!','IBOV':'BMFBOVESPA:IBOV',
+    'BNB':'BINANCE:BNBUSDT','XRP':'BINANCE:XRPUSDT','USD/BRL':'FX:USDBRL'
+  }
+  var toolbar = document.querySelector('.chart-toolbar')
+  if (!toolbar) return
+  var lista = ativos && ativos.length > 0 ? ativos :
+    mercado === 'B3' ? ['WIN','WDO'] :
+    mercado === 'Forex' ? ['EUR/USD','GBP/USD'] : ['BTC','ETH']
+  var sep = '<div class="ct-sep"></div>'
+  var html = '<span style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:1px">GRAFICO:</span>'
+  lista.forEach(function(ativo, i) {
+    var symbol = mapa[ativo] || 'BMFBOVESPA:WIN1!'
+    if (i > 0) html += sep
+    var cls = i === 0 ? 'tft active' : 'tft'
+    html += '<div class="' + cls + '" onclick="setSymbol(' + JSON.stringify(symbol) + ',this)">' + ativo + '</div>'
+  })
+  toolbar.innerHTML = html
+}
+
 function getSymbolForRoom(mercado, ativos) {
   const mapa = { 'WIN':'BMFBOVESPA:WIN1!','WDO':'BMFBOVESPA:WDO1!','BTC':'BINANCE:BTCUSDT','ETH':'BINANCE:ETHUSDT','SOL':'BINANCE:SOLUSDT','EUR/USD':'FX:EURUSD','GBP/USD':'FX:GBPUSD','USD/JPY':'FX:USDJPY','XAU/USD':'OANDA:XAUUSD','WTI':'NYMEX:CL1!' }
   if (ativos && ativos.length > 0 && mapa[ativos[0]]) return mapa[ativos[0]]
@@ -1091,8 +1123,14 @@ function updateModalMkt(mkt) {
 }
 function toggleAsset(a, cls) {
   const chip = document.getElementById('chip-'+a.replace('/','_'))
-  if (selectedAssets.includes(a)) { selectedAssets = selectedAssets.filter(x=>x!==a); chip.className='asset-chip' }
-  else { selectedAssets.push(a); chip.className='asset-chip '+cls }
+  if (selectedAssets.includes(a)) {
+    selectedAssets = selectedAssets.filter(x=>x!==a)
+    chip.className='asset-chip'
+  } else {
+    if (selectedAssets.length >= 2) { toast('Máximo 2 ativos por sala', 't-y'); return }
+    selectedAssets.push(a)
+    chip.className='asset-chip '+cls
+  }
 }
 async function criarSala() {
   const nome = document.getElementById('m-name').value.trim()
@@ -1221,6 +1259,7 @@ const TICKS=[{n:'WIN',v:'192.075',c:'+0,87%',up:true},{n:'WDO',v:'4.999',c:'-0,3
 const ticker=document.getElementById('ticker');let th='';for(let i=0;i<3;i++)TICKS.forEach(t=>{th+='<span class="tick-i"><span class="t-name">'+t.n+'</span><span class="t-val">'+t.v+'</span><span class="'+(t.up?'t-up':'t-dn')+'">'+t.c+'</span></span>'});ticker.innerHTML=th
 
 function toast(msg,cls){if(!cls)cls='t-g';const wrap=document.getElementById('toast-wrap');const el=document.createElement('div');el.className='toast '+cls;el.textContent=msg;wrap.appendChild(el);setTimeout(function(){el.remove()},2600)}
+
 
 updateUserUI()
 </script>
