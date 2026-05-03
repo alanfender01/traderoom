@@ -884,50 +884,26 @@ function updateCounts() {
 
 function renderRooms(filter) {
   if (filter === undefined) filter = ''
-  var el = document.getElementById('rooms-list')
-  var filtered = allRooms.filter(function(r) {
-    return r.mercado === currentMkt && (!filter || r.nome.toLowerCase().includes(filter.toLowerCase()))
-  })
-  if (!filtered.length) {
-    el.style.minHeight = ''
-    el.innerHTML = '<div class="loading-rooms">Nenhuma sala encontrada.</div>'
-    return
-  }
-  var mktCls = { B3:'orb-b3', Forex:'orb-fx', Cripto:'orb-cr' }[currentMkt] || 'orb-b3'
-  var defAtivo = { B3:'WIN', Forex:'EUR/USD', Cripto:'BTC' }
-  var POS = [
-    [3,4],[35,3],[63,5],
-    [18,40],[47,38],[66,41],
-    [5,70],[35,72],[62,70],
-    [24,20],[52,22],[72,18]
-  ]
-  var DELAYS = ['0s','-1.8s','-0.9s','-3.1s','-2.2s','-1.4s','-2.8s','-0.5s','-3.5s','-1.2s','-2.5s','-0.3s']
-  var SPEEDS = ['3.8s','4.2s','3.5s','4.4s','3.9s','4.1s','3.6s','4.3s','3.7s','4.0s','3.8s','4.2s']
-  var rows = filtered.length <= 3 ? 1 : filtered.length <= 6 ? 2 : 3
-  el.style.minHeight = (rows * 190 + 80) + 'px'
-  var html = ''
-  filtered.forEach(function(r, i) {
-    var pos = POS[i % POS.length]
-    var lotada = (r.ocupacao || 0) >= (r.limite || 10)
-    var ativo = r.ativos && r.ativos.length > 0 ? r.ativos[0] : defAtivo[currentMkt] || 'WIN'
-    var occ = r.ocupacao || 0
-    var lim = r.limite || 10
-    var nome = r.nome.length > 10 ? r.nome.substring(0,9) + '...' : r.nome
-    var atStr = r.ativos ? r.ativos.join(',') : ''
-    html += '<div class="orb-room ' + mktCls + (lotada ? ' orb-lotada' : '') + '" style="left:' + pos[0] + '%;top:' + pos[1] + '%;animation-delay:' + DELAYS[i%12] + ';animation-duration:' + SPEEDS[i%12] + '" data-id="' + r.id + '" data-nome="' + r.nome.replace(/"/g,"'") + '" data-mercado="' + r.mercado + '" data-criador="' + (r.criador_id||'') + '" data-ativos="' + atStr + '">'
-      + '<div class="orb-room-name">' + nome + '</div>'
-      + '<div class="orb-room-asset">' + ativo + '</div>'
-      + '<div class="orb-room-occ">' + occ + '/' + lim + ' traders</div>'
-      + '<div class="orb-room-btn ' + (lotada ? 'no' : 'ok') + '">' + (lotada ? 'LOTADA' : 'ENTRAR') + '</div>'
-      + '</div>'
+  const el = document.getElementById('rooms-list')
+  const filtered = allRooms.filter(r => r.mercado === currentMkt && (!filter || r.nome.toLowerCase().includes(filter.toLowerCase())))
+  if (!filtered.length) { el.innerHTML = '<div class="loading-rooms">Nenhuma sala encontrada.</div>'; return }
+  const mkt = { B3:'b3', Forex:'fx', Cripto:'cr' }[currentMkt] || 'b3'
+  const eb = { b3:'eb3', fx:'efx', cr:'ecr' }[mkt]
+  const rcd = 'rcd-' + mkt
+  const atCls = { b3:'at-b3', fx:'at-fx', cr:'at-cr' }[mkt]
+  const defAtivos = { B3:['WIN','WDO'], Forex:['EUR/USD','GBP/USD'], Cripto:['BTC','ETH'] }
+  let html = '<div class="sec-label">SALAS ABERTAS &mdash; ' + filtered.length + ' SALAS</div>'
+  filtered.forEach(r => {
+    const ativos = r.ativos && r.ativos.length > 0 ? r.ativos : defAtivos[currentMkt] || []
+    const atTags = ativos.slice(0,3).map(a => '<span class="at-tag ' + atCls + '">' + a + '</span>').join('')
+    const limite = r.limite || 10, ocupacao = r.ocupacao || 0, lotada = ocupacao >= limite
+    const roomJson = JSON.stringify({ id:r.id, nome:r.nome, mercado:r.mercado, ativos, criador_id:r.criador_id }).replace(/"/g,'&quot;')
+    const btnHtml = lotada
+      ? '<button class="enter-btn" style="background:rgba(255,69,96,.08);border-color:rgba(255,69,96,.3);color:var(--r);cursor:not-allowed" disabled>LOTADA</button>'
+      : '<button class="enter-btn ' + eb + '" onclick="enterRoom(' + roomJson + ')">ENTRAR</button>'
+    html += '<div class="room-card"><div class="rc-top"><div class="rcd ' + rcd + '"></div><div class="rc-name">' + r.nome + '</div></div><div class="rc-at">' + atTags + '</div><div class="rc-bottom"><span class="rc-meta">' + ocupacao + '/' + limite + ' traders</span>' + btnHtml + '</div></div>'
   })
   el.innerHTML = html
-  el.querySelectorAll('.orb-room:not(.orb-lotada)').forEach(function(orb) {
-    orb.addEventListener('click', function() {
-      var ativos = this.dataset.ativos ? this.dataset.ativos.split(',').filter(Boolean) : []
-      enterRoom({ id:this.dataset.id, nome:this.dataset.nome, mercado:this.dataset.mercado, ativos:ativos, criador_id:this.dataset.criador })
-    })
-  })
 }
 function filterRooms(v) { renderRooms(v) }
 function switchMkt(mkt, el) {
