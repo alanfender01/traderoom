@@ -1077,7 +1077,7 @@ function atualizarToolbar(ativos, mercado) {
     var symbol = mapa[ativo] || 'BMFBOVESPA:WIN1!'
     if (i > 0) html += sep
     var cls = i === 0 ? 'tft active' : 'tft'
-    html += '<div class="' + cls + '" onclick="setSymbol(' + JSON.stringify(symbol) + ',this)">' + ativo + '</div>'
+    html += '<div class="' + cls + '" onclick="setSymbol(\'' + symbol + '\',this)">' + ativo + '</div>'
   })
   toolbar.innerHTML = html
 }
