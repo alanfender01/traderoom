@@ -265,6 +265,23 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .au-lbl{font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:1px;flex:1}
 .au-btn{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);transition:all .15s}
 .au-btn.on{background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25)}
+
+.orb-room{position:absolute;width:150px;height:150px;border-radius:50%;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;box-sizing:border-box;transition:box-shadow .3s,transform .3s;animation:orb-float-room 4s ease-in-out infinite;z-index:1}
+@keyframes orb-float-room{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.orb-room:hover{animation-play-state:paused;transform:scale(1.08) !important;z-index:10}
+.orb-b3{background:radial-gradient(circle at 36% 30%,#c0ffe0 3%,#00e57a 36%,#006e3c 70%,#001a0e);box-shadow:0 8px 28px rgba(0,210,100,.45)}
+.orb-b3:hover{box-shadow:0 0 28px #00ff88,0 0 60px rgba(0,255,136,.6),0 0 100px rgba(0,255,136,.22)}
+.orb-fx{background:radial-gradient(circle at 36% 30%,#ffc0ca 3%,#ff4560 36%,#9e1228 70%,#280408);box-shadow:0 8px 28px rgba(255,69,96,.45)}
+.orb-fx:hover{box-shadow:0 0 28px #ff4560,0 0 60px rgba(255,69,96,.6),0 0 100px rgba(255,69,96,.22)}
+.orb-cr{background:radial-gradient(circle at 36% 30%,#fff6b8 3%,#f5c030 36%,#a86800 70%,#311e00);box-shadow:0 8px 28px rgba(245,180,48,.45)}
+.orb-cr:hover{box-shadow:0 0 28px #f5d030,0 0 60px rgba(245,208,48,.6),0 0 100px rgba(245,208,48,.22)}
+.orb-room-name{font-family:var(--mono);font-size:10px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:.5px;margin-bottom:2px;text-shadow:0 1px 4px rgba(0,0,0,.7)}
+.orb-room-asset{font-family:var(--mono);font-size:17px;font-weight:700;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.8);margin-bottom:3px}
+.orb-room-occ{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.8);margin-bottom:6px}
+.orb-room-btn{font-family:var(--mono);font-size:9px;font-weight:700;padding:4px 11px;border-radius:8px;border:none;background:none;line-height:1.5}
+.orb-room-btn.ok{background:rgba(255,255,255,.22);color:#fff;cursor:pointer}
+.orb-room-btn.no{background:rgba(0,0,0,.35);color:rgba(255,255,255,.4);cursor:default}
+#rooms-list{position:relative;min-height:480px}
 </style>
 </head>
 <body>
