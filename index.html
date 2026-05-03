@@ -902,7 +902,7 @@ function renderRooms(filter) {
       ? '<div class="btn-lotada">👥 LOTADA</div>'
       : '<div class="btn-aberta" onclick="event.stopPropagation();enterRoom(' + roomJson + ')">🔓 ABERTA</div>'
 
-    html += '<div class="nc ' + cls + '" onclick="enterRoom(' + roomJson + ')">'
+    html += '<div class="nc ' + cls + '" ' + (lotada ? 'style="cursor:not-allowed;opacity:.75"' : 'onclick="enterRoom(' + roomJson + ')"') + '>'
       + '<div class="nc-bar ' + cls + '"></div>'
       + '<div class="nc-top">'
         + '<div class="nc-circle ' + cls + '">TR</div>'
