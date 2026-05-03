@@ -942,6 +942,8 @@ function switchMkt(mkt, el) {
 
 // ==================== ENTRAR SALA ====================
 async function enterRoom(data) {
+  const _occ = data.ocupacao || 0; const _lim = data.limite || 10;
+  if (data.criador_id === FAKE_ID || _occ >= _lim) { toast("Sala lotada! Tente outra.", "t-r"); return }
   if (!currentUser.loggedIn) { document.getElementById('auth-req').classList.add('open'); return }
   currentRoom = data
   currentIsCriador = !!(data.criador_id && currentUser.id && data.criador_id === currentUser.id)
