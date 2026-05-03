@@ -1036,9 +1036,11 @@ async function banir(membroId, traderId) {
 async function confirmarExcluirSala() {
   document.getElementById('confirm-del').classList.remove('open')
   if (!currentRoom) return
+  await sb.from('sala_membros').delete().eq('sala_id', currentRoom.id)
   await sb.from('salas').delete().eq('id', currentRoom.id)
   toast('Sala excluida!','t-g')
   pararRealtime()
+  currentRoom = null
   go('s-lobby')
 }
 
