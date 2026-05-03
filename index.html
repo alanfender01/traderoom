@@ -894,7 +894,7 @@ function renderRooms(filter) {
     var ativo = ativos[0] || currentMkt
     var limite = r.limite || 10
     var ocupacao = r.ocupacao || 0
-    var lotada = ocupacao >= limite
+    var lotada = ocupacao >= limite || r.criador_id === FAKE_ID
     var occ = String(ocupacao).padStart(2,'0') + '/' + String(limite).padStart(2,'0')
     var roomJson = JSON.stringify({ id:r.id, nome:r.nome, mercado:r.mercado, ativos:ativos, criador_id:r.criador_id }).replace(/"/g,'&quot;')
 
