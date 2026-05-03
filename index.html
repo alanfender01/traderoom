@@ -891,7 +891,7 @@ function renderRooms(filter) {
 
   filtered.forEach(function(r) {
     var ativos = r.ativos && r.ativos.length > 0 ? r.ativos : { B3:['WIN'], Forex:['EUR/USD'], Cripto:['BTC'] }[currentMkt]
-    var ativo = ativos[0] || currentMkt
+    var ativo = ativos.length > 1 ? ativos.join(' / ') : (ativos[0] || currentMkt)
     var limite = r.limite || 10
     var ocupacao = r.ocupacao || 0
     var lotada = ocupacao >= limite || r.criador_id === FAKE_ID
@@ -920,7 +920,7 @@ function renderRooms(filter) {
         + '</div>'
         + '<div class="nc-divline"></div>'
         + '<div class="nc-block">'
-          + '<div class="nc-lbl">Ativo</div>'
+          + '<div class="nc-lbl">' + (ativos.length > 1 ? 'Ativos' : 'Ativo') + '</div>'
           + '<div class="nc-val-sm">' + ativo + '</div>'
         + '</div>'
       + '</div>'
