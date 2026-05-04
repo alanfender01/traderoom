@@ -956,6 +956,7 @@ async function enterRoom(data) {
   roleTag.textContent = currentIsCriador ? '👑 CRIADOR' : 'FREQUENTADOR'
   roleTag.className = currentIsCriador ? 'role-tag rt-host' : 'role-tag rt-member'
   go('s-room')
+  document.getElementById('chat-msgs').innerHTML = ''
   addChatMsg('SISTEMA','sys', currentUser.trader_id + (currentIsCriador ? ' [CRIADOR]' : ' [FREQUENTADOR]') + ' entrou em ' + data.nome + '. Bom pregao!')
   if (!currentIsCriador && currentUser.id) {
     const { data: existing } = await sb.from('sala_membros').select('membro_id').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
