@@ -358,8 +358,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="fc-back" onclick="document.getElementById('cad-step1').style.display='';document.getElementById('cad-step2').style.display='none'">← VOLTAR</div>
     <div class="steps"><div class="step-bar done"></div><div class="step-bar active"></div></div>
     <div class="fc-title">Crie sua senha</div>
-    <div class="field"><label>SENHA</label><div class="pwd-wrap"><input type="password" id="c-pwd1" placeholder="Mínimo 8 caracteres" oninput="checkStrength(this)"><span class="pwd-toggle" onclick="togglePwd('c-pwd1',this)">MOSTRAR</span></div><div class="strength-bar"><div class="sb" id="str0"></div><div class="sb" id="str1"></div><div class="sb" id="str2"></div><div class="sb" id="str3"></div></div></div>
-    <div class="field"><label>CONFIRMAR SENHA</label><input type="password" id="c-pwd2" placeholder="Repita a senha"></div>
+    <div class="field"><label>SENHA</label><div class="pwd-wrap"><input type="password" id="c-pwd1" placeholder="Mínimo 6 caracteres" oninput="checkStrength(this)" autocomplete="new-password"><span class="pwd-toggle" onclick="togglePwd('c-pwd1',this)">MOSTRAR</span></div><div class="strength-bar"><div class="sb" id="str0"></div><div class="sb" id="str1"></div><div class="sb" id="str2"></div><div class="sb" id="str3"></div></div></div>
+    <div class="field"><label>CONFIRMAR SENHA</label><input type="password" id="c-pwd2" placeholder="Repita a senha" autocomplete="new-password"></div>
     <button class="btn-p" style="width:100%;margin-top:8px" id="btn-cad-fin" onclick="cadFinalizar()">CRIAR CONTA →</button>
   </div>
   <div class="form-card" id="cad-step3" style="display:none;text-align:center">
@@ -807,18 +807,19 @@ async function cadFinalizar() {
   const p2 = document.getElementById('c-pwd2').value
   const email = document.getElementById('c-email').value.trim()
   const nome = document.getElementById('c-nome').value.trim()
-  if (p1.length < 8) { toast('Senha muito curta','t-r'); return }
-  if (p1 !== p2) { toast('Senhas nao conferem','t-r'); return }
+  if (!p1 || p1.length < 6) { toast('Senha deve ter ao menos 6 caracteres (digitados: ' + p1.length + ')', 't-r'); return }
+  if (p1 !== p2) { toast('Senhas nao conferem', 't-r'); return }
   const btn = document.getElementById('btn-cad-fin'); btn.textContent = 'CRIANDO...'; btn.disabled = true
   const { data, error } = await sb.auth.signUp({ email, password: p1, options: { data: { nome, trader_id: currentId } } })
   btn.textContent = 'CRIAR CONTA →'; btn.disabled = false
-  if (error) { toast(error.message || 'Erro ao criar conta','t-r'); return }
-  await sb.from('usuarios').insert({ id: data.user?.id, email, trader_id: currentId })
+  if (error) { toast('Erro: ' + (error.message || 'Tente novamente'), 't-r'); return }
+  if (!data.user) { toast('Verifique seu email para confirmar o cadastro!', 't-b'); return }
+  await sb.from('usuarios').insert({ id: data.user.id, email, trader_id: currentId })
   document.getElementById('final-id').textContent = '#' + currentId
   document.getElementById('final-email').textContent = email
   document.getElementById('cad-step2').style.display = 'none'
   document.getElementById('cad-step3').style.display = ''
-  currentUser = { id: data.user?.id, trader_id: currentId, nome, loggedIn: true }
+  currentUser = { id: data.user.id, trader_id: currentId, nome, loggedIn: true }
   updateUserUI()
 }
 
