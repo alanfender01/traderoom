@@ -783,6 +783,16 @@ function iniciarRealtime(salaId) {
       }
       if (payload.eventType === 'DELETE') { addChatMsg('SISTEMA', 'sys', '🔴 Um trader saiu da sala.') }
     })
+    .on('broadcast', { event: 'symbol_change' }, ({ payload }) => {
+      if (currentIsCriador) return
+      currentSymbol = payload.symbol
+      document.querySelectorAll('.tft').forEach(b => {
+        const oc = b.getAttribute('onclick') || ''
+        if (oc.includes("'" + payload.symbol + "'")) b.classList.add('active')
+        else b.classList.remove('active')
+      })
+      if (tvWidget) { try { tvWidget.chart().setSymbol(payload.symbol) } catch(e) { initTradingView() } } else { initTradingView() }
+    })
     .subscribe()
 }
 
@@ -1106,6 +1116,7 @@ function setSymbol(symbol, el) {
   document.querySelectorAll('.tft').forEach(b => b.classList.remove('active')); el.classList.add('active')
   currentSymbol = symbol
   if (tvWidget) { try { tvWidget.chart().setSymbol(symbol) } catch(e) { initTradingView() } } else { initTradingView() }
+  if (realtimeChannel) realtimeChannel.send({ type: 'broadcast', event: 'symbol_change', payload: { symbol } })
 }
 
 // ==================== CRIAR SALA ====================
