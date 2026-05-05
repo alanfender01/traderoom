@@ -1198,10 +1198,10 @@ async function iniciarRealtimeChat(salaId) {
     var resU = await sb.from('usuarios').select('id, trader_id').in('id', userIds)
     if (resU.data) resU.data.forEach(function(u) { tradersMap[u.id] = u.trader_id })
     msgs.forEach(function(m) {
+      ultimoTimestampChat = m.enviado_em
       if (m.usuario_id === currentUser.id) return
       var tid = tradersMap[m.usuario_id] || 'anon'
       addChatMsg(tid, 'other', m.conteudo)
-      ultimoTimestampChat = m.enviado_em
     })
   }, 3000)
 }
