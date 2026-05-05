@@ -59,7 +59,7 @@ CREATE TABLE membros_sala (
 -- ─────────────────────────────────────────────
 CREATE TABLE sessoes (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  sala_id       UUID REFERENCES salas(id),
+  sala_id       UUID REFERENCES salas(id) ON DELETE CASCADE,
   iniciada_em   TIMESTAMP DEFAULT NOW(),
   encerrada_em  TIMESTAMP,
   total_traders INT DEFAULT 0,
@@ -72,7 +72,7 @@ CREATE TABLE sessoes (
 -- ─────────────────────────────────────────────
 CREATE TABLE mensagens (
   id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  sessao_id   UUID REFERENCES sessoes(id),
+  sessao_id   UUID REFERENCES sessoes(id) ON DELETE CASCADE,
   usuario_id  UUID REFERENCES usuarios(id),
   conteudo    TEXT NOT NULL,
   tipo        VARCHAR(20) DEFAULT 'chat',       -- chat | sistema | anotacao

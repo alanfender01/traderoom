@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="theme-color" content="#00e5a0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TradeRoom">
+<link rel="manifest" href="/manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeRoom</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@700;800&family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --bg0:#080a0c;--bg1:#0d1014;--bg2:#121518;--bg3:#181c22;--bg4:#1e232b;
+  --g:#00e5a0;--b:#0af;--r:#ff4560;--y:#f5a623;--p:#a78bfa;
+  --t1:#edf0f4;--t2:#b0bec5;--t3:#90a4ae;--t4:#6b7a8d;
+  --border:#1a1f28;--border2:#252d38;
+  --mono:'JetBrains Mono',monospace;--display:'Syne',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg0);color:var(--t1);font-family:var(--display);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,160,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,160,.02) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;z-index:0}
+.screen{display:none;width:100%;min-height:100vh;position:relative;z-index:1}
+.screen.on{display:flex;flex-direction:column}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.screen.on{animation:fi .22s ease}
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:50px;background:var(--bg1);border-bottom:1px solid var(--border);flex-shrink:0;position:sticky;top:0;z-index:50}
+.tn-logo{font-size:20px;font-weight:800;letter-spacing:-1px;cursor:pointer}
+.tn-logo span{color:var(--g)}
+.profile-chip{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer;transition:all .15s}
+.profile-chip:hover{border-color:var(--g)}
+.pc-av{width:26px;height:26px;border-radius:50%;background:rgba(0,229,160,.15);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--g)}
+.pc-id{font-family:var(--mono);font-size:11px;color:var(--t1)}
+.btn-p{padding:12px 28px;background:var(--g);border:none;border-radius:7px;color:#080a0c;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:opacity .15s}
+.btn-p:hover{opacity:.85}
+.btn-g{padding:12px 24px;background:transparent;border:1px solid var(--border2);border-radius:7px;color:var(--t2);font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s}
+.btn-g:hover{border-color:var(--t2);color:var(--t1)}
+.field{margin-bottom:13px}
+.field label{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;display:block;margin-bottom:5px}
+.field input,.field select{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--t1);font-family:var(--mono);font-size:13px;padding:9px 12px;outline:none;transition:border-color .15s}
+.field input:focus,.field select:focus{border-color:var(--g)}
+.field input::placeholder{color:var(--t4)}
+.toast-wrap{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:6px;align-items:center}
+.toast{font-family:var(--mono);font-size:11px;padding:8px 18px;border-radius:20px;white-space:nowrap;animation:toastIn .2s ease;pointer-events:none}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.t-g{background:rgba(0,229,160,.12);border:1px solid rgba(0,229,160,.3);color:var(--g)}
+.t-r{background:rgba(255,69,96,.12);border:1px solid rgba(255,69,96,.3);color:var(--r)}
+.t-y{background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:var(--y)}
+.t-b{background:rgba(0,170,255,.12);border:1px solid rgba(0,170,255,.3);color:var(--b)}
+#s-splash{align-items:center;justify-content:center;text-align:center;padding:80px 24px;position:relative;overflow:hidden}
+.splash-corner{position:absolute;width:200px;height:200px;border:1px solid rgba(0,229,160,.06)}
+.c-tl{top:0;left:0;border-right:none;border-bottom:none}
+.c-br{bottom:0;right:0;border-left:none;border-top:none}
+.splash-eyebrow{font-family:var(--mono);font-size:10px;color:var(--g);letter-spacing:4px;margin-bottom:14px;opacity:.7}
+.splash-title{font-family:var(--display);font-size:clamp(48px,8vw,80px);font-weight:800;letter-spacing:-3px;margin-bottom:12px;line-height:1}
+.splash-title span{color:var(--g)}
+.splash-sub{font-family:var(--mono);font-size:12px;color:var(--t3);margin-bottom:2.5rem;letter-spacing:.5px}
+.splash-btns{display:flex;flex-direction:column;gap:10px;width:280px}
+.splash-ticker{position:fixed;bottom:0;left:0;right:0;height:34px;background:var(--bg2);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:10}
+.ticker-inner{display:flex;gap:32px;animation:scroll 25s linear infinite;white-space:nowrap;padding-left:100%}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tick-i{font-family:var(--mono);font-size:11px;display:flex;gap:8px}
+.t-name{color:var(--t3)}.t-val{color:var(--t1);font-weight:500}.t-up{color:var(--g)}.t-dn{color:var(--r)}
+#s-cadastro,#s-login{align-items:center;justify-content:center;padding:80px 24px}
+.form-card{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:2rem;width:380px;max-width:96vw;z-index:1}
+.fc-back{font-family:var(--mono);font-size:10px;color:var(--t3);cursor:pointer;margin-bottom:1.2rem;display:inline-flex;align-items:center;gap:5px;transition:color .15s}
+.fc-back:hover{color:var(--t1)}
+.fc-title{font-size:22px;font-weight:800;margin-bottom:4px}
+.fc-sub{font-family:var(--mono);font-size:11px;color:var(--t3);margin-bottom:1.5rem;line-height:1.5}
+.steps{display:flex;gap:5px;margin-bottom:1.4rem}
+.step-bar{height:3px;flex:1;border-radius:2px;background:var(--border2);transition:background .25s}
+.step-bar.active{background:var(--g)}.step-bar.done{background:rgba(0,229,160,.35)}
+.id-block{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;margin-bottom:1.3rem}
+.ib-label{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px;margin-bottom:7px}
+.ib-row{display:flex;align-items:center;gap:8px}
+.ib-hash{font-family:var(--mono);font-size:13px;color:var(--t3)}
+.ib-val{font-family:var(--mono);font-size:17px;font-weight:700;color:var(--g);flex:1}
+.ib-regen{font-family:var(--mono);font-size:9px;color:var(--t3);cursor:pointer;padding:4px 8px;border:1px solid var(--border2);border-radius:4px;transition:all .15s}
+.ib-regen:hover{border-color:var(--g);color:var(--g)}
+.ib-note{font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:6px;line-height:1.5}
+.pwd-wrap{position:relative}
+.pwd-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:10px;color:var(--t3);cursor:pointer}
+.strength-bar{display:flex;gap:3px;margin-top:5px}
+.sb{height:3px;flex:1;border-radius:2px;background:var(--border2);transition:background .2s}
+.success-ico{width:56px;height:56px;border-radius:50%;background:rgba(0,229,160,.1);border:1.5px solid rgba(0,229,160,.3);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 1rem;animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.cred-box{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:13px;margin:1rem 0}
+.cred-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0}
+.cred-row:not(:last-child){border-bottom:1px solid var(--border)}
+.cred-lbl{font-family:var(--mono);font-size:10px;color:var(--t3)}
+.cred-val{font-family:var(--mono);font-size:12px;color:var(--t1)}
+.cred-val.green{color:var(--g);font-size:14px;font-weight:700}
+.warn-note{background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.15);border-radius:6px;padding:9px 11px;font-family:var(--mono);font-size:10px;color:rgba(245,166,35,.7);line-height:1.5;margin-bottom:1rem}
+.divider{display:flex;align-items:center;gap:10px;margin:1rem 0}
+.dl{flex:1;height:1px;background:var(--border)}
+.dt{font-family:var(--mono);font-size:10px;color:var(--t4)}
+#s-lobby{min-height:100vh}
+.market-tabs{display:flex;background:var(--bg1);border-bottom:1px solid var(--border);padding:0 16px;gap:2px;flex-shrink:0}
+.mtab{display:flex;align-items:center;gap:6px;padding:10px 14px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:all .18s;letter-spacing:.5px}
+.mtab:hover{color:var(--t2)}
+.mtab.ab3{color:#00aaff;border-bottom-color:#00aaff}.mtab.afx{color:#ff2040;border-bottom-color:#ff2040}.mtab.acr{color:#ffe000;border-bottom-color:#ffe000}
+.mtab-dot{width:6px;height:6px;border-radius:50%}
+.mtab-n{font-family:var(--mono);font-size:9px;padding:1px 5px;border-radius:8px}
+.nb3{background:rgba(0,150,255,.12);color:#00aaff}.nfx{background:rgba(255,30,60,.12);color:#ff2040}.ncr{background:rgba(255,220,0,.12);color:#ffe000}
+.lobby-body{display:flex;flex:1;overflow:hidden;height:calc(100vh - 100px)}
+.lobby-main{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin}
+.lobby-side{width:210px;background:var(--bg1);border-left:1px solid var(--border);padding:12px;overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
+.search-row{display:flex;gap:7px;margin-bottom:12px}
+.search-inp{flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--t1);font-family:var(--mono);font-size:12px;padding:7px 10px;outline:none;transition:border-color .15s}
+.search-inp:focus{border-color:var(--g)}
+.new-btn{padding:7px 14px;border-radius:6px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .15s;border:1px solid}
+.nb3-btn{background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25);color:var(--g)}.nb3-btn:hover{background:rgba(0,229,160,.16)}
+.nfx-btn{background:rgba(0,170,255,.08);border-color:rgba(0,170,255,.25);color:var(--b)}
+.ncr-btn{background:rgba(167,139,250,.08);border-color:rgba(167,139,250,.25);color:var(--p)}
+.sec-label{font-family:var(--mono);font-size:9px;color:var(--t2);letter-spacing:2px;margin:8px 0 12px}
+
+/* ============ CARDS NEON ============ */
+.neon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-bottom:20px}
+.nc{position:relative;border-radius:14px;padding:20px 18px 16px;cursor:pointer;transition:transform .18s,box-shadow .18s}
+.nc:hover{transform:translateY(-3px)}
+/* B3 - Azul */
+.nb{background:#020d1a;border:2px solid #007fff;box-shadow:0 0 16px rgba(0,127,255,.4),0 0 36px rgba(0,127,255,.15),inset 0 0 18px rgba(0,80,180,.06)}
+.nb:hover{box-shadow:0 0 26px rgba(0,160,255,.75),0 0 55px rgba(0,127,255,.3),inset 0 0 28px rgba(0,100,220,.1)}
+.nb .nc-bar{background:linear-gradient(90deg,#0090ff,#004a9f);box-shadow:0 0 10px rgba(0,144,255,.55)}
+.nb .nc-circle{border:2px solid #007fff;box-shadow:0 0 12px rgba(0,127,255,.55),inset 0 0 8px rgba(0,80,200,.25);color:#00aaff;text-shadow:0 0 8px #00aaff}
+.nb .nc-sala{color:#2a6a99}
+.nb .nc-nome{color:#00aaff;text-shadow:0 0 8px rgba(0,170,255,.7)}
+.nb .nc-lbl{color:#1a4d77}
+.nb .nc-val{color:#00aaff;text-shadow:0 0 7px rgba(0,170,255,.55)}
+.nb .nc-div{border-color:rgba(0,127,255,.2)}
+.nb .btn-aberta{border:2px solid #007fff;color:#00aaff;box-shadow:0 0 8px rgba(0,127,255,.4);background:rgba(0,50,140,.25)}
+.nb .btn-aberta:hover{background:rgba(0,100,220,.35);box-shadow:0 0 16px rgba(0,170,255,.65)}
+.nb .btn-lotada{border:2px solid rgba(0,127,255,.25);color:rgba(0,170,255,.3);background:rgba(0,20,60,.2);cursor:not-allowed}
+/* Forex - Vermelho */
+.nr{background:#0f0202;border:2px solid #cc0022;box-shadow:0 0 16px rgba(200,0,40,.4),0 0 36px rgba(180,0,30,.15),inset 0 0 18px rgba(140,0,20,.06)}
+.nr:hover{box-shadow:0 0 26px rgba(255,30,60,.75),0 0 55px rgba(200,0,40,.3),inset 0 0 28px rgba(160,0,30,.1)}
+.nr .nc-bar{background:linear-gradient(90deg,#ff1a45,#880015);box-shadow:0 0 10px rgba(255,20,60,.55)}
+.nr .nc-circle{border:2px solid #cc0022;box-shadow:0 0 12px rgba(200,0,40,.55),inset 0 0 8px rgba(140,0,20,.25);color:#ff2040;text-shadow:0 0 8px #ff2040}
+.nr .nc-sala{color:#7a1525}
+.nr .nc-nome{color:#ff2040;text-shadow:0 0 8px rgba(255,30,60,.7)}
+.nr .nc-lbl{color:#661020}
+.nr .nc-val{color:#ff2040;text-shadow:0 0 7px rgba(255,30,60,.55)}
+.nr .nc-div{border-color:rgba(200,0,40,.2)}
+.nr .btn-aberta{border:2px solid #cc0022;color:#ff2040;box-shadow:0 0 8px rgba(200,0,40,.4);background:rgba(100,0,15,.25)}
+.nr .btn-aberta:hover{background:rgba(160,0,25,.35);box-shadow:0 0 16px rgba(255,30,60,.65)}
+.nr .btn-lotada{border:2px solid rgba(200,0,40,.25);color:rgba(255,50,80,.3);background:rgba(60,0,10,.2);cursor:not-allowed}
+/* Cripto - Amarelo */
+.ny{background:#0e0c00;border:2px solid #ccbb00;box-shadow:0 0 16px rgba(200,185,0,.4),0 0 36px rgba(190,170,0,.15),inset 0 0 18px rgba(150,130,0,.06)}
+.ny:hover{box-shadow:0 0 26px rgba(255,220,0,.75),0 0 55px rgba(200,185,0,.3),inset 0 0 28px rgba(180,150,0,.1)}
+.ny .nc-bar{background:linear-gradient(90deg,#e8c000,#7a6000);box-shadow:0 0 10px rgba(230,190,0,.55)}
+.ny .nc-circle{border:2px solid #ccbb00;box-shadow:0 0 12px rgba(200,185,0,.55),inset 0 0 8px rgba(150,130,0,.25);color:#ffe000;text-shadow:0 0 8px #ffe000}
+.ny .nc-sala{color:#887700}
+.ny .nc-nome{color:#ffe000;text-shadow:0 0 8px rgba(255,220,0,.7)}
+.ny .nc-lbl{color:#665e00}
+.ny .nc-val{color:#ffe000;text-shadow:0 0 7px rgba(255,220,0,.55)}
+.ny .nc-div{border-color:rgba(200,185,0,.2)}
+.ny .btn-aberta{border:2px solid #ccbb00;color:#ffe000;box-shadow:0 0 8px rgba(200,185,0,.4);background:rgba(90,80,0,.25)}
+.ny .btn-aberta:hover{background:rgba(150,130,0,.35);box-shadow:0 0 16px rgba(255,220,0,.65)}
+.ny .btn-lotada{border:2px solid rgba(200,185,0,.25);color:rgba(255,220,0,.3);background:rgba(50,45,0,.2);cursor:not-allowed}
+/* Elementos comuns dos cards */
+.nc-bar{height:3px;border-radius:3px;width:100%;margin-bottom:16px}
+.nc-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.nc-circle{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Orbitron',monospace;font-size:14px;font-weight:900;letter-spacing:1px}
+.nc-info{flex:1}
+.nc-sala{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;margin-bottom:2px}
+.nc-nome{font-family:'Orbitron',monospace;font-size:20px;font-weight:700;text-transform:lowercase;letter-spacing:.5px;line-height:1.1}
+.nc-btn-wrap{display:flex;align-items:flex-start}
+.btn-aberta,.btn-lotada{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;padding:7px 11px;border-radius:8px;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:all .15s;text-transform:uppercase}
+.nc-div{border:none;border-top:1px solid;margin:0 0 12px}
+.nc-bottom{display:grid;grid-template-columns:1fr 1px 1fr;gap:0;align-items:center}
+.nc-divline{background:currentColor;opacity:.15;height:36px;width:1px}
+.nc-block{padding:0 12px}
+.nc-block:first-child{padding-left:0}
+.nc-lbl{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;margin-bottom:3px}
+.nc-val{font-family:'Orbitron',monospace;font-size:20px;font-weight:700}
+.nc-val-sm{font-family:'Orbitron',monospace;font-size:16px;font-weight:700}
+/* ============ FIM CARDS NEON ============ */
+
+.sponsor-slot{background:var(--bg2);border:1px dashed rgba(245,166,35,.3);border-radius:10px;padding:0;margin-bottom:16px;cursor:pointer;transition:all .2s;overflow:hidden;position:relative}
+.sponsor-slot:hover{border-color:rgba(245,166,35,.6);background:var(--bg3)}
+.slot-shimmer{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(245,166,35,.04),transparent);animation:shimmer 3s infinite}
+@keyframes shimmer{0%{left:-100%}100%{left:200%}}
+.slot-top{padding:8px 12px;border-bottom:1px dashed rgba(245,166,35,.15);display:flex;align-items:center;justify-content:space-between}
+.slot-name{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--y)}
+.slot-avail{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(245,166,35,.08);color:var(--y);border:1px solid rgba(245,166,35,.2);display:flex;align-items:center;gap:4px}
+.slot-pulse{width:5px;height:5px;border-radius:50%;background:var(--y);animation:pulse 2s infinite}
+.slot-body{padding:10px 12px;display:flex;align-items:center;gap:10px}
+.slot-txt{flex:1;font-size:12px;color:var(--t2);line-height:1.4}
+.saiba-btn{font-family:var(--mono);font-size:10px;padding:6px 12px;border-radius:5px;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);color:var(--y);cursor:pointer;font-weight:700;white-space:nowrap}
+.ls-title{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:2px}
+.side-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.ss{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center}
+.ss-val{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--t1)}
+.ss-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:1px}
+.notif{padding:8px 9px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:all .15s}
+.notif:hover{border-color:var(--border2)}
+.ni-hd{display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.ni-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ni-type{font-family:var(--mono);font-size:8px;letter-spacing:.5px}
+.ni-time{font-family:var(--mono);font-size:8px;color:var(--t4);margin-left:auto}
+.ni-text{font-size:11px;color:var(--t2);line-height:1.4}
+.loading-rooms{text-align:center;padding:40px;font-family:var(--mono);font-size:11px;color:var(--t3)}
+.loading-spin{display:inline-block;width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--g);border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);align-items:flex-start;justify-content:center;padding:20px 16px;z-index:200;overflow-y:auto}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;width:430px;max-width:96vw}
+.mhdr{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.mhdr-title{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--t1)}
+.mhdr-close{width:24px;height:24px;border-radius:4px;background:var(--bg3);border:1px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:12px}
+.mbody{padding:14px 16px;max-height:500px;overflow-y:auto;scrollbar-width:thin}
+.assets-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.asset-chip{font-family:var(--mono);font-size:11px;padding:6px 12px;border-radius:20px;cursor:pointer;transition:all .15s;border:1px solid var(--border2);background:var(--bg3);color:var(--t3);user-select:none}
+.asset-chip:hover{color:var(--t2)}
+.asset-chip.sel-b3{background:rgba(0,229,160,.1);border-color:rgba(0,229,160,.3);color:var(--g)}
+.asset-chip.sel-fx{background:rgba(0,170,255,.1);border-color:rgba(0,170,255,.3);color:var(--b)}
+.asset-chip.sel-cr{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.3);color:var(--p)}
+.slider-row{display:flex;align-items:center;gap:10px}
+.slider-row input[type=range]{flex:1;accent-color:var(--g)}
+.slider-val{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--g);min-width:24px;text-align:right}
+.mftr{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px}
+.btn-cancel{flex:1;padding:9px;background:transparent;border:1px solid var(--border2);border-radius:6px;color:var(--t3);font-family:var(--mono);font-size:11px;cursor:pointer}
+.btn-criar{flex:2;padding:9px;border-radius:6px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border:1px solid;letter-spacing:.5px;transition:all .15s}
+.btn-criar-b3{background:rgba(0,229,160,.1);border-color:rgba(0,229,160,.25);color:var(--g)}
+.btn-criar-fx{background:rgba(0,170,255,.1);border-color:rgba(0,170,255,.25);color:var(--b)}
+.btn-criar-cr{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.25);color:var(--p)}
+.auth-req{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:300}
+.auth-req.open{display:flex}
+.auth-req-box{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:2rem;width:360px;max-width:96vw;text-align:center}
+.ar-icon{font-size:32px;margin-bottom:12px}
+.ar-title{font-size:18px;font-weight:800;margin-bottom:6px}
+.ar-sub{font-family:var(--mono);font-size:11px;color:var(--t3);margin-bottom:1.5rem;line-height:1.5}
+.ar-btns{display:flex;gap:8px}
+.confirm-del{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:300}
+.confirm-del.open{display:flex}
+.cd-box{background:var(--bg2);border:1px solid rgba(255,69,96,.3);border-radius:12px;padding:1.5rem;width:320px;text-align:center}
+.cd-title{font-size:16px;font-weight:800;color:var(--r);margin-bottom:8px}
+.cd-sub{font-family:var(--mono);font-size:11px;color:var(--t2);margin-bottom:1.2rem;line-height:1.5}
+.cd-btns{display:flex;gap:8px}
+#s-room{min-height:100vh}
+.rh{display:flex;align-items:center;justify-content:space-between;padding:0 12px;height:44px;background:var(--bg1);border-bottom:1px solid var(--border);flex-shrink:0}
+.rh-l{display:flex;align-items:center;gap:10px}
+.rh-back{font-family:var(--mono);font-size:10px;color:var(--t3);cursor:pointer;padding:3px 8px;border:1px solid var(--border2);border-radius:4px;transition:all .15s}
+.rh-back:hover{border-color:var(--t2);color:var(--t1)}
+.rh-name{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--t1)}
+.rh-asset{font-family:var(--mono);font-size:12px;font-weight:700;background:var(--bg3);border:1px solid var(--border2);padding:3px 10px;border-radius:14px}
+.rh-r{display:flex;align-items:center;gap:8px}
+.rh-dot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:pulse 2s infinite}
+.role-tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px}
+.rt-host{background:rgba(245,166,35,.1);color:var(--y);border:1px solid rgba(245,166,35,.2)}
+.rt-member{background:rgba(138,146,160,.08);color:var(--t3);border:1px solid var(--border)}
+.room-body{display:flex;flex:1;overflow:hidden;height:calc(100vh - 94px)}
+.chart-col{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.chart-toolbar{display:flex;align-items:center;gap:3px;padding:5px 10px;background:var(--bg1);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
+.tft{font-family:var(--mono);font-size:10px;color:var(--t3);padding:2px 7px;border-radius:3px;cursor:pointer;transition:all .1s;border:1px solid transparent}
+.tft.active{background:rgba(0,229,160,.1);color:var(--g);border-color:rgba(0,229,160,.2)}
+.tft:hover{color:var(--t1)}
+.tft.locked{opacity:.4;cursor:not-allowed}
+.ct-sep{width:1px;height:12px;background:var(--border2);margin:0 2px}
+.tv-wrap{flex:1;position:relative;overflow:hidden}
+.bottom-op{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bg1);border-top:1px solid var(--border);flex-shrink:0}
+.op-lbl{font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:1px}
+.op-b{font-family:var(--mono);font-size:11px;font-weight:700;padding:5px 12px;border-radius:5px;cursor:pointer;border:1px solid;transition:all .15s}
+.op-long{background:rgba(0,229,160,.1);border-color:rgba(0,229,160,.25);color:var(--g)}.op-long:hover{background:rgba(0,229,160,.2)}
+.op-short{background:rgba(255,69,96,.1);border-color:rgba(255,69,96,.25);color:var(--r)}.op-short:hover{background:rgba(255,69,96,.2)}
+.op-flat{background:var(--bg3);border-color:var(--border2);color:var(--t3)}
+.op-spacer{flex:1}
+.room-side{width:250px;background:var(--bg1);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.side-tabs{display:flex;border-bottom:1px solid var(--border)}
+.stab{flex:1;padding:8px;font-family:var(--mono);font-size:10px;text-align:center;cursor:pointer;color:var(--t3);border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.5px}
+.stab.active{color:var(--g);border-bottom-color:var(--g)}
+.chat-msgs{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:5px;scrollbar-width:thin;scrollbar-color:var(--bg4) transparent}
+.cmsg-hd{display:flex;align-items:center;gap:5px;margin-bottom:1px}
+.cmsg-u{font-family:var(--mono);font-size:10px;font-weight:700}
+.cmsg-u.host{color:var(--y)}.cmsg-u.me{color:var(--g)}.cmsg-u.other{color:var(--b)}.cmsg-u.sys{color:var(--t4)}
+.cmsg-t{font-family:var(--mono);font-size:9px;color:var(--t4)}
+.cmsg-body{font-size:11px;color:var(--t1);line-height:1.45;padding-left:2px}
+.cmsg-body.sys{color:var(--t4);font-style:italic}
+.chat-inp-row{padding:6px;border-top:1px solid var(--border);display:flex;gap:5px;flex-shrink:0}
+.chat-inp{flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--t1);font-family:var(--mono);font-size:11px;padding:5px 8px;outline:none}
+.chat-inp:focus{border-color:var(--g)}
+.send-b{width:28px;background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.2);border-radius:5px;color:var(--g);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.send-b:hover{background:rgba(0,229,160,.18)}
+.traders-panel{flex:1;overflow-y:auto;padding:8px}
+.trader-row{display:flex;align-items:center;gap:7px;padding:7px 6px;border-bottom:1px solid var(--border);border-radius:6px;transition:background .15s}
+.trader-row:hover{background:var(--bg3)}
+.tr-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;flex-shrink:0;transition:box-shadow .1s}
+.tr-av.falando{box-shadow:0 0 0 2px var(--g),0 0 8px rgba(0,229,160,.5);animation:fala 1s ease-in-out infinite}
+@keyframes fala{0%,100%{box-shadow:0 0 0 2px var(--g),0 0 6px rgba(0,229,160,.4)}50%{box-shadow:0 0 0 3px var(--g),0 0 14px rgba(0,229,160,.7)}}
+.tr-info{flex:1;min-width:0}
+.tr-name{font-family:var(--mono);font-size:11px;color:var(--t1);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tr-badge{font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:3px;margin-top:2px;display:inline-block}
+.badge-criador{background:rgba(245,166,35,.12);color:var(--y);border:1px solid rgba(245,166,35,.25)}
+.badge-freq{background:rgba(0,170,255,.08);color:var(--b);border:1px solid rgba(0,170,255,.2)}
+.badge-bloqueado{background:rgba(255,69,96,.08);color:var(--r);border:1px solid rgba(255,69,96,.2)}
+.tr-actions{display:flex;gap:3px;flex-shrink:0}
+.tr-act{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid;font-size:11px;transition:all .15s}
+.act-mute{background:rgba(245,166,35,.06);border-color:rgba(245,166,35,.2);color:var(--y)}
+.act-mute:hover{background:rgba(245,166,35,.18)}
+.act-ban{background:rgba(255,69,96,.06);border-color:rgba(255,69,96,.2);color:var(--r)}
+.act-ban:hover{background:rgba(255,69,96,.18)}
+.creator-panel{background:rgba(245,166,35,.04);border-top:1px solid rgba(245,166,35,.15);padding:8px;flex-shrink:0}
+.cp-title{font-family:var(--mono);font-size:9px;color:var(--y);letter-spacing:2px;margin-bottom:6px}
+.cp-btns{display:flex;flex-direction:column;gap:5px}
+.cp-btn{font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:5px;cursor:pointer;border:1px solid;transition:all .15s;text-align:left;font-weight:700}
+.cp-end{background:rgba(245,166,35,.08);border-color:rgba(245,166,35,.25);color:var(--y)}.cp-end:hover{background:rgba(245,166,35,.16)}
+.cp-delete{background:rgba(255,69,96,.08);border-color:rgba(255,69,96,.25);color:var(--r)}.cp-delete:hover{background:rgba(255,69,96,.16)}
+.member-panel{background:rgba(0,170,255,.03);border-top:1px solid rgba(0,170,255,.1);padding:8px;flex-shrink:0}
+.mp-btn{font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:5px;cursor:pointer;border:1px solid rgba(0,170,255,.2);color:var(--b);background:rgba(0,170,255,.06);width:100%;transition:all .15s;font-weight:700}
+.mp-btn:hover{background:rgba(0,170,255,.14)}
+.audio-strip{display:flex;align-items:center;gap:5px;padding:6px 8px;background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0}
+.au-lbl{font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:1px;flex:1}
+.au-btn{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);transition:all .15s}
+.au-btn.on{background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25)}
+#rooms-list{min-height:200px}
+</style>
+</head>
+<body>
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<!-- SPLASH -->
+<div id="s-splash" class="screen on">
+  <div class="splash-corner c-tl"></div>
+  <div class="splash-corner c-br"></div>
+  <div class="splash-eyebrow">B3 · FOREX · CRIPTO</div>
+  <div class="splash-title">TRADE<span>ROOM</span></div>
+  <div class="splash-sub">análise coletiva entre traders reais</div>
+  <div class="splash-btns">
+    <button class="btn-p" onclick="go('s-lobby')">ENTRAR →</button>
+    <button class="btn-g" onclick="go('s-login')">JÁ TENHO CONTA</button>
+  </div>
+  <div class="splash-ticker"><div class="ticker-inner" id="ticker"></div></div>
+</div>
+
+<!-- CADASTRO -->
+<div id="s-cadastro" class="screen">
+  <div class="form-card" id="cad-step1">
+    <div class="fc-back" onclick="go('s-splash')">← VOLTAR</div>
+    <div class="steps"><div class="step-bar active"></div><div class="step-bar"></div></div>
+    <div class="fc-title">Criar conta</div>
+    <div class="fc-sub">Seus dados ficam seguros.</div>
+    <div class="field"><label>NOME COMPLETO</label><input type="text" id="c-nome" placeholder="João Silva" oninput="onNome(this)"></div>
+    <div class="field"><label>EMAIL</label><input type="email" id="c-email" placeholder="joao@email.com"></div>
+    <div class="field"><label>TELEFONE</label><input type="tel" id="c-tel" placeholder="(11) 99999-9999" oninput="maskTel(this)" maxlength="15"></div>
+    <div class="id-block">
+      <div class="ib-label">SEU ID NAS SALAS</div>
+      <div class="ib-row"><span class="ib-hash">#</span><span class="ib-val" id="id-preview">trader_jo4x</span><span class="ib-regen" onclick="regenId()">↻ OUTRO</span></div>
+      <div class="ib-note">Como todos te verão. Único e permanente.</div>
+    </div>
+    <button class="btn-p" style="width:100%" onclick="cadNext()">CONTINUAR →</button>
+  </div>
+  <div class="form-card" id="cad-step2" style="display:none">
+    <div class="fc-back" onclick="document.getElementById('cad-step1').style.display='';document.getElementById('cad-step2').style.display='none'">← VOLTAR</div>
+    <div class="steps"><div class="step-bar done"></div><div class="step-bar active"></div></div>
+    <div class="fc-title">Crie sua senha</div>
+    <div class="field"><label>SENHA</label><div class="pwd-wrap"><input type="password" id="c-pwd1" placeholder="Mínimo 6 caracteres" oninput="checkStrength(this)" autocomplete="new-password"><span class="pwd-toggle" onclick="togglePwd('c-pwd1',this)">MOSTRAR</span></div><div class="strength-bar"><div class="sb" id="str0"></div><div class="sb" id="str1"></div><div class="sb" id="str2"></div><div class="sb" id="str3"></div></div></div>
+    <div class="field"><label>CONFIRMAR SENHA</label><input type="password" id="c-pwd2" placeholder="Repita a senha" autocomplete="new-password"></div>
+    <button class="btn-p" style="width:100%;margin-top:8px" id="btn-cad-fin" onclick="cadFinalizar()">CRIAR CONTA →</button>
+  </div>
+  <div class="form-card" id="cad-step3" style="display:none;text-align:center">
+    <div class="success-ico">✓</div>
+    <div class="fc-title" style="text-align:center">Conta criada!</div>
+    <div class="warn-note">Anote sua senha agora.</div>
+    <div class="cred-box">
+      <div class="cred-row"><span class="cred-lbl">ID</span><span class="cred-val green" id="final-id"></span></div>
+      <div class="cred-row"><span class="cred-lbl">EMAIL</span><span class="cred-val" id="final-email"></span></div>
+    </div>
+    <button class="btn-p" style="width:100%" onclick="go('s-lobby')">ENTRAR NO LOBBY →</button>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="s-login" class="screen">
+  <div class="form-card">
+    <div class="fc-back" onclick="go('s-splash')">← VOLTAR</div>
+    <div class="fc-title">Entrar</div>
+    <div class="fc-sub" style="margin-bottom:1.5rem">Use seu email e senha.</div>
+    <div class="field"><label>EMAIL</label><input type="email" id="l-email" placeholder="seu@email.com"></div>
+    <div class="field"><label>SENHA</label><div class="pwd-wrap"><input type="password" id="l-pwd" placeholder="Sua senha"><span class="pwd-toggle" onclick="togglePwd('l-pwd',this)">MOSTRAR</span></div></div>
+    <button class="btn-p" style="width:100%;margin-top:8px" id="btn-login" onclick="doLogin()">ENTRAR →</button>
+    <div class="divider"><div class="dl"></div><div class="dt">ou</div><div class="dl"></div></div>
+    <button class="btn-g" style="width:100%" onclick="go('s-cadastro')">CRIAR CONTA</button>
+  </div>
+</div>
+
+<!-- LOBBY -->
+<div id="s-lobby" class="screen">
+  <div class="topnav">
+    <div class="tn-logo" onclick="go('s-lobby')">TRADE<span>ROOM</span></div>
+    <div class="profile-chip" onclick="toast('Perfil em breve!','t-b')">
+      <div class="pc-av" id="lobby-av">TR</div>
+      <span class="pc-id" id="lobby-uid">visitante</span>
+    </div>
+  </div>
+  <div class="market-tabs">
+    <div class="mtab ab3" id="mtab-b3" onclick="switchMkt('B3',this)"><div class="mtab-dot" style="background:#00aaff"></div>B3<span class="mtab-n nb3" id="cnt-b3">0</span></div>
+    <div class="mtab" id="mtab-fx" onclick="switchMkt('Forex',this)"><div class="mtab-dot" style="background:#ff2040"></div>FOREX<span class="mtab-n nfx" id="cnt-fx">0</span></div>
+    <div class="mtab" id="mtab-cr" onclick="switchMkt('Cripto',this)"><div class="mtab-dot" style="background:#ffe000"></div>CRIPTO<span class="mtab-n ncr" id="cnt-cr">0</span></div>
+  </div>
+  <div class="lobby-body">
+    <div class="lobby-main">
+      <div class="search-row">
+        <input class="search-inp" id="search-inp" placeholder="Buscar sala..." oninput="filterRooms(this.value)">
+        <button class="new-btn nb3-btn" id="new-btn" onclick="openModal()">+ NOVA SALA</button>
+      </div>
+      <div class="sec-label">SALA PATROCINADA</div>
+      <div class="sponsor-slot">
+        <div class="slot-shimmer"></div>
+        <div class="slot-top"><div><div class="slot-name">SALA PATROCINADA</div><div style="font-family:var(--mono);font-size:9px;color:var(--t3)">Espaço disponível para sua corretora</div></div><div class="slot-avail"><div class="slot-pulse"></div>DISPONÍVEL</div></div>
+        <div class="slot-body"><div class="slot-txt">Alcance traders ativos da B3 com sua marca no centro do pregão.</div><button class="saiba-btn">SAIBA MAIS →</button></div>
+      </div>
+      <div id="rooms-list"><div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div></div>
+    </div>
+    <div class="lobby-side">
+      <div class="ls-title">AO VIVO</div>
+      <div class="side-stat-grid">
+        <div class="ss"><div class="ss-val" id="live-count">—</div><div class="ss-lbl">traders</div></div>
+        <div class="ss"><div class="ss-val" id="live-rooms">—</div><div class="ss-lbl">salas</div></div>
+        <div class="ss"><div class="ss-val" style="color:var(--g)">B3</div><div class="ss-lbl">+ ativo</div></div>
+        <div class="ss"><div class="ss-val" style="color:var(--b)">24h</div><div class="ss-lbl">forex</div></div>
+      </div>
+      <div class="ls-title">NOTIFICAÇÕES</div>
+      <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--g)"></div><span class="ni-type" style="color:var(--g)">B3</span><span class="ni-time">agora</span></div><div class="ni-text">Salas abertas para o pregão de hoje.</div></div>
+      <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--b)"></div><span class="ni-type" style="color:var(--b)">FOREX</span><span class="ni-time">08:30</span></div><div class="ni-text">London Session aberta.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CRIAR SALA -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="mhdr"><div class="mhdr-title" id="m-title">CRIAR SALA — B3</div><div class="mhdr-close" onclick="closeModal()">✕</div></div>
+    <div class="mbody">
+      <div class="field"><label>NOME DA SALA</label><input type="text" id="m-name" placeholder="Ex: VENCEDORES, OS FODÕES..."></div>
+      <div class="field"><label>MERCADO</label>
+        <select id="m-mercado" onchange="updateModalMkt(this.value)" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--t1);font-family:var(--mono);font-size:13px;padding:9px 12px;outline:none">
+          <option value="B3">B3</option><option value="Forex">Forex</option><option value="Cripto">Cripto</option>
+        </select>
+      </div>
+      <div class="field"><label>ATIVOS</label><div class="assets-wrap" id="m-assets"></div></div>
+      <div class="field"><label>LIMITE DE TRADERS</label><div class="slider-row"><input type="range" min="2" max="10" value="10" id="m-limit" oninput="document.getElementById('m-lv').textContent=this.value"><span class="slider-val" id="m-lv">10</span></div></div>
+    </div>
+    <div class="mftr"><button class="btn-cancel" onclick="closeModal()">CANCELAR</button><button class="btn-criar btn-criar-b3" id="m-criar-btn" onclick="criarSala()">▶ CRIAR SALA</button></div>
+  </div>
+</div>
+
+<!-- AUTH REQUIRED -->
+<div class="auth-req" id="auth-req">
+  <div class="auth-req-box">
+    <div class="ar-icon">🔐</div>
+    <div class="ar-title">Login necessário</div>
+    <div class="ar-sub">Para entrar em uma sala você precisa ter uma conta. É rápido e gratuito!</div>
+    <div class="ar-btns">
+      <button class="btn-g" style="flex:1" onclick="document.getElementById('auth-req').classList.remove('open')">CANCELAR</button>
+      <button class="btn-p" style="flex:2;padding:12px" onclick="document.getElementById('auth-req').classList.remove('open');go('s-login')">ENTRAR / CADASTRAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="confirm-del" id="confirm-del">
+  <div class="cd-box">
+    <div class="cd-title">⚠️ Excluir sala?</div>
+    <div class="cd-sub">Esta ação é permanente. A sala e todo o histórico serão removidos.</div>
+    <div class="cd-btns">
+      <button class="btn-g" style="flex:1" onclick="document.getElementById('confirm-del').classList.remove('open')">CANCELAR</button>
+      <button style="flex:2;padding:9px;background:rgba(255,69,96,.1);border:1px solid rgba(255,69,96,.3);border-radius:6px;color:var(--r);font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer" onclick="confirmarExcluirSala()">SIM, EXCLUIR</button>
+    </div>
+  </div>
+</div>
+
+<!-- SALA -->
+<div id="s-room" class="screen">
+  <div class="rh">
+    <div class="rh-l">
+      <div class="rh-back" onclick="sairDaSalaEVoltar()">← LOBBY</div>
+      <div class="rh-name" id="room-name-tag">SALA</div>
+    </div>
+    <div class="rh-asset" id="room-asset-tag">WIN</div>
+    <div class="rh-r">
+      <div class="rh-dot"></div>
+      <div class="role-tag rt-member" id="room-role-tag">MEMBRO</div>
+    </div>
+  </div>
+  <div class="room-body">
+    <div class="chart-col">
+      <div class="chart-toolbar">
+        <span style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:1px">GRÁFICO:</span>
+        <div class="tft active" onclick="setSymbol('BMFBOVESPA:WIN1!',this)">WIN</div>
+        <div class="tft" onclick="setSymbol('BMFBOVESPA:WDO1!',this)">WDO</div>
+        <div class="ct-sep"></div>
+        <div class="tft" onclick="setSymbol('BINANCE:BTCUSDT',this)">BTC</div>
+        <div class="tft" onclick="setSymbol('BINANCE:ETHUSDT',this)">ETH</div>
+        <div class="ct-sep"></div>
+        <div class="tft" onclick="setSymbol('FX:EURUSD',this)">EUR/USD</div>
+        <div class="tft" onclick="setSymbol('FX:GBPUSD',this)">GBP/USD</div>
+        <div class="ct-sep"></div>
+        <div class="tft" onclick="setSymbol('OANDA:XAUUSD',this)">GOLD</div>
+      </div>
+      <div class="tv-wrap" id="tv-wrap"></div>
+      <div class="bottom-op">
+        <span class="op-lbl">MARCAR:</span>
+        <button class="op-b op-long" onclick="toast('✅ COMPRADO','t-g')">▲ COMPRADO</button>
+        <button class="op-b op-short" onclick="toast('🔴 VENDIDO','t-r')">▼ VENDIDO</button>
+        <button class="op-b op-flat" onclick="toast('⬜ NEUTRO','t-y')">■ NEUTRO</button>
+        <div class="op-spacer"></div>
+      </div>
+    </div>
+    <div class="room-side">
+      <div class="side-tabs">
+        <div class="stab active" onclick="swSide('chat',this)">CHAT</div>
+        <div class="stab" onclick="swSide('traders',this)">TRADERS</div>
+      </div>
+      <div id="side-chat" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+        <div class="chat-msgs" id="chat-msgs"></div>
+        <div class="chat-inp-row">
+          <input class="chat-inp" id="chat-inp" placeholder="mensagem..." onkeydown="if(event.key==='Enter')sendMsg()">
+          <div class="send-b" onclick="sendMsg()">↑</div>
+        </div>
+      </div>
+      <div id="side-traders" style="display:none;flex:1;overflow-y:auto">
+        <div class="traders-panel"><div id="traders-list"></div></div>
+      </div>
+      <div class="creator-panel" id="creator-panel" style="display:none">
+        <div class="cp-title">👑 PAINEL DO CRIADOR</div>
+        <div class="cp-btns">
+          <button class="cp-btn cp-end" id="btn-encerrar" onclick="encerrarPregao()">⏹ ENCERRAR PREGÃO</button>
+          <button class="cp-btn cp-delete" onclick="document.getElementById('confirm-del').classList.add('open')">🗑 EXCLUIR SALA</button>
+        </div>
+      </div>
+      <div class="member-panel" id="member-panel" style="display:none">
+        <button class="mp-btn" onclick="sairDaSala()">↩ SAIR DA SALA</button>
+      </div>
+      <div class="audio-strip">
+        <span class="au-lbl">ÁUDIO</span>
+        <div class="au-btn on" id="btn-mic" onclick="toggleMic()" title="Desligar microfone">🎙</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="s-admin" style="display:none;flex-direction:column;min-height:100vh;padding:24px;background:var(--bg0)">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+    <div style="font-family:var(--mono);font-size:16px;font-weight:700;color:var(--g)">PAINEL ADMIN</div>
+    <button onclick="go('s-lobby')" style="font-family:var(--mono);font-size:11px;padding:6px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--t2);cursor:pointer">SAIR</button>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:16px;overflow-y:auto;max-height:80vh">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--g);letter-spacing:2px;margin-bottom:12px">USUARIOS</div>
+      <div id="admin-usuarios">Carregando...</div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:16px;overflow-y:auto;max-height:80vh">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--b);letter-spacing:2px;margin-bottom:12px">SALAS</div>
+      <div id="admin-salas">Carregando...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="admin-login" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);align-items:center;justify-content:center;z-index:999">
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:2rem;width:300px;text-align:center">
+    <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--g);margin-bottom:16px">ACESSO RESTRITO</div>
+    <input type="password" id="admin-pwd" placeholder="Senha admin" onkeydown="if(event.key==='Enter')verificarAdmin()" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--t1);font-family:var(--mono);font-size:13px;padding:9px 12px;outline:none;margin-bottom:12px">
+    <button onclick="verificarAdmin()" style="width:100%;padding:10px;background:var(--g);border:none;border-radius:6px;color:#080a0c;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer">ENTRAR</button>
+    <div onclick="document.getElementById('admin-login').style.display='none'" style="font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:10px;cursor:pointer">CANCELAR</div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://btqgizadenxvgnybjifx.supabase.co'
+const SUPABASE_KEY = 'sb_publishable_lpcSO7-IQJL0g2pF3UgQLw_AneC6pXw'
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+const FAKE_ID = '00000000-0000-0000-0000-000000000099'
+
+let currentUser = { trader_id: 'visitante', loggedIn: false }
+let currentMkt = 'B3'
+let allRooms = []
+let selectedAssets = []
+let currentSymbol = 'BMFBOVESPA:WIN1!'
+let tvWidget = null
+let currentRoom = null
+let currentIsCriador = false
+let realtimeChannel = null
+
+// ==================== ADMIN ====================
+var ADMIN_SENHA = 'TR@dm1n2025!'
+var adminSeq = []
+var ADMIN_CODE = ['a','d','m','i','n']
+
+document.addEventListener('keydown', function(e) {
+  adminSeq.push(e.key.toLowerCase())
+  if (adminSeq.length > 5) adminSeq.shift()
+  if (adminSeq.join('') === ADMIN_CODE.join('')) {
+    document.getElementById('admin-login').style.display = 'flex'
+    document.getElementById('admin-pwd').focus()
+  }
+})
+
+function verificarAdmin() {
+  var pwd = document.getElementById('admin-pwd').value
+  if (pwd === ADMIN_SENHA) {
+    document.getElementById('admin-login').style.display = 'none'
+    document.getElementById('admin-pwd').value = ''
+    abrirAdmin()
+  } else {
+    toast('Senha incorreta!', 't-r')
+  }
+}
+
+async function abrirAdmin() {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('on'); s.style.display = '' })
+  document.getElementById('s-admin').style.display = 'flex'
+  var resU = await sb.from('usuarios').select('*').order('criado_em', { ascending: false })
+  var usuarios = resU.data || []
+  document.getElementById('admin-usuarios').innerHTML = usuarios.length === 0
+    ? '<p style="font-family:var(--mono);font-size:11px;color:var(--t3)">Nenhum usuario.</p>'
+    : usuarios.map(function(u) {
+        return '<div style="padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t1)">' + (u.trader_id||'sem id') + '</div><div style="font-family:var(--mono);font-size:10px;color:var(--t3)">' + (u.email||'') + '</div></div>'
+      }).join('')
+  var resS = await sb.from('salas').select('*').order('criado_em', { ascending: false })
+  var salas = resS.data || []
+  document.getElementById('admin-salas').innerHTML = salas.length === 0
+    ? '<p style="font-family:var(--mono);font-size:11px;color:var(--t3)">Nenhuma sala.</p>'
+    : salas.map(function(s) {
+        var sid = s.id
+        return '<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px"><div style="flex:1"><div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t1)">' + s.nome + '</div><div style="font-family:var(--mono);font-size:10px;color:var(--t3)">' + s.mercado + ' - ' + (s.ativa?'ativa':'inativa') + '</div></div><button onclick="adminExcluirSala(\'' + sid + '\')" style="font-family:var(--mono);font-size:9px;padding:3px 8px;background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);border-radius:4px;color:var(--r);cursor:pointer">Excluir</button></div>'
+      }).join('')
+}
+
+async function adminExcluirSala(salaId) {
+  if (!confirm('Excluir esta sala permanentemente?')) return
+  const { data: sessoes } = await sb.from('sessoes').select('id').eq('sala_id', salaId)
+  if (sessoes?.length) {
+    await sb.from('mensagens').delete().in('sessao_id', sessoes.map(s => s.id))
+  }
+  await sb.from('sessoes').delete().eq('sala_id', salaId)
+  await sb.from('sala_membros').delete().eq('sala_id', salaId)
+  await sb.from('salas').delete().eq('id', salaId)
+  toast('Sala excluida!', 't-g')
+  abrirAdmin()
+}
+
+// ==================== ÁUDIO WebRTC ====================
+const ICE_SERVERS = {
+  iceServers: [
+    { urls: 'stun:stun.relay.metered.ca:80' },
+    { urls: 'turn:global.relay.metered.ca:80', username: '605115898a24d77bdad85390', credential: 'r6InRWBs//eDXHzi' },
+    { urls: 'turn:global.relay.metered.ca:80?transport=tcp', username: '605115898a24d77bdad85390', credential: 'r6InRWBs//eDXHzi' },
+    { urls: 'turn:global.relay.metered.ca:443', username: '605115898a24d77bdad85390', credential: 'r6InRWBs//eDXHzi' },
+    { urls: 'turns:global.relay.metered.ca:443?transport=tcp', username: '605115898a24d77bdad85390', credential: 'r6InRWBs//eDXHzi' }
+  ]
+}
+
+let localStream = null
+let micAtivo = true
+let peerConnections = {}
+let audioChannel = null
+
+async function iniciarAudio(salaId) {
+  try {
+    localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+    micAtivo = true
+    atualizarBotaoMic()
+    iniciarDetectorLocal()
+    audioChannel = sb.channel('audio-' + salaId, { config: { broadcast: { self: false } } })
+    audioChannel
+      .on('broadcast', { event: 'offer' }, async ({ payload }) => { if (payload.to !== currentUser.id) return; await handleOffer(payload) })
+      .on('broadcast', { event: 'answer' }, async ({ payload }) => { if (payload.to !== currentUser.id) return; const pc = peerConnections[payload.from]; if (pc) await pc.setRemoteDescription(new RTCSessionDescription(payload.answer)) })
+      .on('broadcast', { event: 'ice' }, async ({ payload }) => { if (payload.to !== currentUser.id) return; const pc = peerConnections[payload.from]; if (pc && payload.candidate) await pc.addIceCandidate(new RTCIceCandidate(payload.candidate)) })
+      .on('broadcast', { event: 'novo_usuario' }, async ({ payload }) => { if (payload.userId === currentUser.id) return; await criarOffer(payload.userId) })
+      .subscribe(async (status) => { if (status === 'SUBSCRIBED') { await audioChannel.send({ type: 'broadcast', event: 'novo_usuario', payload: { userId: currentUser.id } }) } })
+  } catch (err) { console.warn('Microfone nao disponivel:', err); toast('Microfone nao encontrado ou bloqueado.', 't-y') }
+}
+
+async function criarOffer(targetId) {
+  const pc = criarPeerConnection(targetId)
+  const offer = await pc.createOffer()
+  await pc.setLocalDescription(offer)
+  await audioChannel.send({ type: 'broadcast', event: 'offer', payload: { from: currentUser.id, to: targetId, offer } })
+}
+
+async function handleOffer({ from, offer }) {
+  const pc = criarPeerConnection(from)
+  await pc.setRemoteDescription(new RTCSessionDescription(offer))
+  const answer = await pc.createAnswer()
+  await pc.setLocalDescription(answer)
+  await audioChannel.send({ type: 'broadcast', event: 'answer', payload: { from: currentUser.id, to: from, answer } })
+}
+
+function criarPeerConnection(targetId) {
+  if (peerConnections[targetId]) peerConnections[targetId].close()
+  const pc = new RTCPeerConnection(ICE_SERVERS)
+  peerConnections[targetId] = pc
+  if (localStream) localStream.getTracks().forEach(track => pc.addTrack(track, localStream))
+  pc.ontrack = (event) => {
+    let audioEl = document.getElementById('audio-' + targetId)
+    if (!audioEl) { audioEl = document.createElement('audio'); audioEl.id = 'audio-' + targetId; audioEl.autoplay = true; document.body.appendChild(audioEl) }
+    audioEl.srcObject = event.streams[0]
+    adicionarDetectorRemoto(targetId, event.streams[0])
+  }
+  pc.onicecandidate = async (event) => { if (event.candidate) { await audioChannel.send({ type: 'broadcast', event: 'ice', payload: { from: currentUser.id, to: targetId, candidate: event.candidate } }) } }
+  return pc
+}
+
+function pararAudio() {
+  if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null }
+  Object.values(peerConnections).forEach(pc => pc.close())
+  peerConnections = {}
+  if (audioChannel) { sb.removeChannel(audioChannel); audioChannel = null }
+  document.querySelectorAll('[id^="audio-"]').forEach(el => el.remove())
+}
+
+function toggleMic() {
+  if (!localStream) return
+  micAtivo = !micAtivo
+  localStream.getAudioTracks().forEach(t => { t.enabled = micAtivo })
+  atualizarBotaoMic()
+  toast(micAtivo ? '🎙 Microfone ligado' : '🔇 Microfone desligado', micAtivo ? 't-g' : 't-y')
+}
+
+// ==================== DETECTOR DE VOZ ====================
+let audioContextLocal = null
+let analisadores = {}
+
+function iniciarDetectorLocal() {
+  if (!localStream) return
+  audioContextLocal = new (window.AudioContext || window.webkitAudioContext)()
+  const source = audioContextLocal.createMediaStreamSource(localStream)
+  const analyser = audioContextLocal.createAnalyser()
+  analyser.fftSize = 512
+  source.connect(analyser)
+  analisadores['local'] = { analyser, userId: currentUser.id }
+  verificarVoz()
+}
+
+function adicionarDetectorRemoto(userId, stream) {
+  if (!audioContextLocal) audioContextLocal = new (window.AudioContext || window.webkitAudioContext)()
+  const source = audioContextLocal.createMediaStreamSource(stream)
+  const analyser = audioContextLocal.createAnalyser()
+  analyser.fftSize = 512
+  source.connect(analyser)
+  analisadores[userId] = { analyser, userId }
+}
+
+function verificarVoz() {
+  const data = new Uint8Array(128)
+  const THRESHOLD = 20
+  setInterval(() => {
+    Object.entries(analisadores).forEach(([key, { analyser, userId }]) => {
+      analyser.getByteFrequencyData(data)
+      const volume = data.reduce((a, b) => a + b, 0) / data.length
+      const falando = volume > THRESHOLD
+      const avId = key === 'local' ? 'av-me' : 'av-' + userId
+      const av = document.getElementById(avId)
+      if (av) { if (falando) av.classList.add('falando'); else av.classList.remove('falando') }
+    })
+  }, 150)
+}
+
+function atualizarBotaoMic() {
+  const btn = document.getElementById('btn-mic')
+  if (!btn) return
+  btn.textContent = micAtivo ? '🎙' : '🔇'
+  btn.className = micAtivo ? 'au-btn on' : 'au-btn'
+  btn.title = micAtivo ? 'Desligar microfone' : 'Ligar microfone'
+}
+
+// ==================== REALTIME ====================
+function iniciarRealtime(salaId) {
+  if (realtimeChannel) { sb.removeChannel(realtimeChannel); realtimeChannel = null }
+  realtimeChannel = sb.channel('sala-' + salaId)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'sala_membros', filter: 'sala_id=eq.' + salaId }, async (payload) => {
+      await renderTradersList(currentIsCriador)
+      if (payload.eventType === 'INSERT' && payload.new?.usuario_id !== currentUser.id) {
+        const { data: u } = await sb.from('usuarios').select('trader_id').eq('id', payload.new.usuario_id).single()
+        addChatMsg('SISTEMA', 'sys', '🟢 ' + (u?.trader_id || 'alguem') + ' entrou na sala.')
+      }
+      if (payload.eventType === 'DELETE') { addChatMsg('SISTEMA', 'sys', '🔴 Um trader saiu da sala.') }
+    })
+    .subscribe()
+}
+
+function pararRealtime() {
+  if (realtimeChannel) { sb.removeChannel(realtimeChannel); realtimeChannel = null }
+  pararAudio()
+  pararPollingChat()
+}
+
+// ==================== AUTH ====================
+async function doLogin() {
+  const email = document.getElementById('l-email').value.trim()
+  const pwd = document.getElementById('l-pwd').value
+  if (!email || !pwd) { toast('Preencha email e senha','t-r'); return }
+  const btn = document.getElementById('btn-login')
+  btn.textContent = 'ENTRANDO...'; btn.disabled = true
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pwd })
+  btn.textContent = 'ENTRAR →'; btn.disabled = false
+  if (error) { toast(error.message || 'Erro ao entrar','t-r'); return }
+  await loadUserProfile(data.user)
+  go('s-lobby')
+  toast('Bem-vindo, ' + currentUser.trader_id + '!','t-g')
+}
+
+async function cadFinalizar() {
+  const p1 = document.getElementById('c-pwd1').value
+  const p2 = document.getElementById('c-pwd2').value
+  const email = document.getElementById('c-email').value.trim()
+  const nome = document.getElementById('c-nome').value.trim()
+  if (!p1 || p1.length < 6) { toast('Senha deve ter ao menos 6 caracteres (digitados: ' + p1.length + ')', 't-r'); return }
+  if (p1 !== p2) { toast('Senhas nao conferem', 't-r'); return }
+  const btn = document.getElementById('btn-cad-fin'); btn.textContent = 'CRIANDO...'; btn.disabled = true
+  const { data, error } = await sb.auth.signUp({ email, password: p1, options: { data: { nome, trader_id: currentId } } })
+  btn.textContent = 'CRIAR CONTA →'; btn.disabled = false
+  if (error) { toast('Erro: ' + (error.message || 'Tente novamente'), 't-r'); return }
+  if (!data.user) { toast('Verifique seu email para confirmar o cadastro!', 't-b'); return }
+  await sb.from('usuarios').insert({ id: data.user.id, email, trader_id: currentId })
+  document.getElementById('final-id').textContent = '#' + currentId
+  document.getElementById('final-email').textContent = email
+  document.getElementById('cad-step2').style.display = 'none'
+  document.getElementById('cad-step3').style.display = ''
+  currentUser = { id: data.user.id, trader_id: currentId, nome, loggedIn: true }
+  updateUserUI()
+}
+
+async function loadUserProfile(user) {
+  const { data } = await sb.from('usuarios').select('*').eq('id', user.id).single()
+  if (data) { currentUser = { id: user.id, trader_id: data.trader_id || user.email.split('@')[0], nome: data.nome, loggedIn: true } }
+  else { currentUser = { id: user.id, trader_id: user.email.split('@')[0], loggedIn: true } }
+  updateUserUI()
+}
+
+sb.auth.getSession().then(({ data }) => { if (data.session?.user) loadUserProfile(data.session.user) })
+
+// ==================== NAV ====================
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'))
+  const el = document.getElementById(id)
+  if (!el) return
+  el.classList.add('on')
+  if (id === 's-lobby') { pararRealtime(); loadRooms() }
+  if (id === 's-room') initTradingView()
+  window.scrollTo(0, 0)
+}
+
+function updateUserUI() {
+  const av = (currentUser.trader_id || 'TR').substring(0,2).toUpperCase()
+  document.getElementById('lobby-av').textContent = av
+  document.getElementById('lobby-uid').textContent = currentUser.trader_id || 'visitante'
+}
+
+// ==================== ROOMS ====================
+async function loadRooms() {
+  const el = document.getElementById('rooms-list')
+  el.innerHTML = '<div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div>'
+  const { data, error } = await sb.from('salas').select('*').eq('ativa', true).order('criado_em', { ascending: false })
+  if (error) { el.innerHTML = '<div class="loading-rooms" style="color:var(--r)">Erro ao carregar salas.</div>'; return }
+  allRooms = data || []
+  renderRooms('')
+  updateCounts()
+}
+
+function updateCounts() {
+  document.getElementById('cnt-b3').textContent = allRooms.filter(r => r.mercado === 'B3').length
+  document.getElementById('cnt-fx').textContent = allRooms.filter(r => r.mercado === 'Forex').length
+  document.getElementById('cnt-cr').textContent = allRooms.filter(r => r.mercado === 'Cripto').length
+  document.getElementById('live-rooms').textContent = allRooms.length
+  document.getElementById('live-count').textContent = (allRooms.length * 3 + 847).toLocaleString('pt-BR')
+}
+
+function renderRooms(filter) {
+  if (filter === undefined) filter = ''
+  var el = document.getElementById('rooms-list')
+  var filtered = allRooms.filter(function(r) {
+    return r.mercado === currentMkt && (!filter || r.nome.toLowerCase().includes(filter.toLowerCase()))
+  })
+
+  // Salas reais primeiro, fakes por último
+  filtered.sort(function(a, b) {
+    var aFake = a.criador_id === FAKE_ID ? 1 : 0
+    var bFake = b.criador_id === FAKE_ID ? 1 : 0
+    return aFake - bFake
+  })
+
+  if (!filtered.length) { el.innerHTML = '<div class="loading-rooms">Nenhuma sala encontrada.</div>'; return }
+
+  var clsMap = { B3:'nb', Forex:'nr', Cripto:'ny' }
+  var cls = clsMap[currentMkt] || 'nb'
+
+  var html = '<div class="sec-label">SALAS ABERTAS &mdash; ' + filtered.length + ' SALAS</div>'
+  html += '<div class="neon-grid">'
+
+  filtered.forEach(function(r) {
+    var ativos = r.ativos && r.ativos.length > 0 ? r.ativos : { B3:['WIN'], Forex:['EUR/USD'], Cripto:['BTC'] }[currentMkt]
+    var ativo = ativos.length > 1 ? ativos.join(' / ') : (ativos[0] || currentMkt)
+    var limite = r.limite || 10
+    var ocupacao = r.ocupacao || 0
+    var lotada = ocupacao >= limite || r.criador_id === FAKE_ID
+    var occ = String(ocupacao).padStart(2,'0') + '/' + String(limite).padStart(2,'0')
+    var roomJson = JSON.stringify({ id:r.id, nome:r.nome, mercado:r.mercado, ativos:ativos, criador_id:r.criador_id }).replace(/"/g,'&quot;')
+
+    var btnHtml = lotada
+      ? '<div class="btn-lotada">👥 LOTADA</div>'
+      : '<div class="btn-aberta" onclick="event.stopPropagation();enterRoom(' + roomJson + ')">🔓 ABERTA</div>'
+
+    html += '<div class="nc ' + cls + '" ' + (lotada ? 'style="cursor:not-allowed;opacity:.75"' : 'onclick="enterRoom(' + roomJson + ')"') + '>'
+      + '<div class="nc-bar ' + cls + '"></div>'
+      + '<div class="nc-top">'
+        + '<div class="nc-circle ' + cls + '">TR</div>'
+        + '<div class="nc-info">'
+          + '<div class="nc-sala">Sala</div>'
+          + '<div class="nc-nome">' + r.nome.toLowerCase() + '</div>'
+        + '</div>'
+        + '<div class="nc-btn-wrap">' + btnHtml + '</div>'
+      + '</div>'
+      + '<hr class="nc-div ' + cls + '">'
+      + '<div class="nc-bottom">'
+        + '<div class="nc-block">'
+          + '<div class="nc-lbl">Ocupantes</div>'
+          + '<div class="nc-val">' + occ + '</div>'
+        + '</div>'
+        + '<div class="nc-divline"></div>'
+        + '<div class="nc-block">'
+          + '<div class="nc-lbl">' + (ativos.length > 1 ? 'Ativos' : 'Ativo') + '</div>'
+          + '<div class="nc-val-sm">' + ativo + '</div>'
+        + '</div>'
+      + '</div>'
+    + '</div>'
+  })
+
+  html += '</div>'
+  el.innerHTML = html
+}
+
+function filterRooms(v) { renderRooms(v) }
+function switchMkt(mkt, el) {
+  currentMkt = mkt
+  document.querySelectorAll('.mtab').forEach(t => { t.className = 'mtab' })
+  el.classList.add({ B3:'ab3', Forex:'afx', Cripto:'acr' }[mkt])
+  document.getElementById('new-btn').className = 'new-btn ' + { B3:'nb3-btn', Forex:'nfx-btn', Cripto:'ncr-btn' }[mkt]
+  renderRooms(document.getElementById('search-inp').value)
+}
+
+// ==================== ENTRAR SALA ====================
+async function enterRoom(data) {
+  const _occ = data.ocupacao || 0; const _lim = data.limite || 10;
+  if (data.criador_id === FAKE_ID || _occ >= _lim) { toast("Sala lotada! Tente outra.", "t-r"); return }
+  if (!currentUser.loggedIn) { document.getElementById('auth-req').classList.add('open'); return }
+  currentRoom = data
+  currentIsCriador = !!(data.criador_id && currentUser.id && data.criador_id === currentUser.id)
+  document.getElementById('room-name-tag').textContent = data.nome
+  document.getElementById('room-asset-tag').textContent = data.ativos && data.ativos[0] ? data.ativos[0] : data.mercado
+  currentSymbol = getSymbolForRoom(data.mercado, data.ativos || [])
+  document.getElementById('creator-panel').style.display = currentIsCriador ? 'block' : 'none'
+  document.getElementById('member-panel').style.display = currentIsCriador ? 'none' : 'block'
+  const roleTag = document.getElementById('room-role-tag')
+  roleTag.textContent = currentIsCriador ? '👑 CRIADOR' : 'FREQUENTADOR'
+  roleTag.className = currentIsCriador ? 'role-tag rt-host' : 'role-tag rt-member'
+  go('s-room')
+  document.getElementById('chat-msgs').innerHTML = ''
+  addChatMsg('SISTEMA','sys', currentUser.trader_id + (currentIsCriador ? ' [CRIADOR]' : ' [FREQUENTADOR]') + ' entrou em ' + data.nome + '. Bom pregao!')
+  if (!currentIsCriador && currentUser.id) {
+    const { data: existing } = await sb.from('sala_membros').select('membro_id').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
+    if (!existing) { await sb.from('sala_membros').insert({ sala_id: currentRoom.id, usuario_id: currentUser.id, banido: false, bloqueado: false }) }
+    const { data: membroAtual } = await sb.from('sala_membros').select('banido').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
+    if (membroAtual && membroAtual.banido) { toast('Voce foi banido desta sala!','t-r'); go('s-lobby'); return }
+  }
+  iniciarRealtime(currentRoom.id)
+  iniciarAudio(currentRoom.id)
+  atualizarToolbar(data.ativos || [], data.mercado)
+  document.querySelectorAll('.tft').forEach(b => { if (!currentIsCriador) b.classList.add('locked'); else b.classList.remove('locked') })
+  await renderTradersList(currentIsCriador)
+  await carregarHistoricoChat()
+  iniciarRealtimeChat(currentRoom.id)
+}
+
+// ==================== SAIR ====================
+async function sairDaSala() {
+  if (currentRoom && currentUser.id) { await sb.from('sala_membros').delete().eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id) }
+  pararRealtime()
+  toast('Voce saiu da sala.','t-b')
+  go('s-lobby')
+}
+
+async function sairDaSalaEVoltar() {
+  if (!currentIsCriador && currentRoom && currentUser.id) { await sb.from('sala_membros').delete().eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id) }
+  pararRealtime()
+  go('s-lobby')
+}
+
+// ==================== TRADERS LIST ====================
+async function renderTradersList(isCriador) {
+  const el = document.getElementById('traders-list')
+  if (!el) return
+  const { data: membros } = await sb.from('sala_membros').select('membro_id, usuario_id, bloqueado, banido').eq('sala_id', currentRoom ? currentRoom.id : '').eq('banido', false)
+  const lista = membros || []
+  const userIds = lista.map(m => m.usuario_id)
+  let tradersMap = {}
+  if (userIds.length > 0) {
+    const { data: usuarios } = await sb.from('usuarios').select('id, trader_id').in('id', userIds)
+    if (usuarios) usuarios.forEach(u => { tradersMap[u.id] = u.trader_id })
+  }
+  let criadorTraderId = currentIsCriador ? currentUser.trader_id : null
+  if (!currentIsCriador && currentRoom && currentRoom.criador_id) {
+    const { data: cri } = await sb.from('usuarios').select('trader_id').eq('id', currentRoom.criador_id).single()
+    criadorTraderId = cri ? cri.trader_id : 'criador'
+  }
+  let html = '<div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;margin-bottom:8px;padding:0 2px">PARTICIPANTES (' + (lista.length + 1) + ')</div>'
+  html += '<div class="trader-row"><div class="tr-av" id="' + (currentIsCriador ? 'av-me' : 'av-criador') + '" style="background:rgba(245,166,35,.15);color:var(--y)">' + (criadorTraderId || 'CR').substring(0,2).toUpperCase() + '</div><div class="tr-info"><div class="tr-name">' + (criadorTraderId || 'criador') + '</div><span class="tr-badge badge-criador">CRIADOR</span></div></div>'
+  lista.forEach(m => {
+    const tid = tradersMap[m.usuario_id] || 'anon'
+    const isMe = m.usuario_id === currentUser.id
+    const badge = m.bloqueado ? '<span class="tr-badge badge-bloqueado">BLOQUEADO</span>' : '<span class="tr-badge badge-freq">' + (isMe ? 'VOCE' : 'FREQUENTADOR') + '</span>'
+    const acoes = isCriador && !isMe ? '<div class="tr-actions"><div class="tr-act act-mute" title="Silenciar" onclick="bloquear(\'' + m.membro_id + '\',\'' + tid + '\',' + (!m.bloqueado) + ')">' + (m.bloqueado ? '🔊' : '🔇') + '</div><div class="tr-act act-ban" title="Banir" onclick="banir(\'' + m.membro_id + '\',\'' + tid + '\')">⛔</div></div>' : ''
+    html += '<div class="trader-row"><div class="tr-av" id="' + (isMe ? 'av-me' : 'av-' + m.usuario_id) + '" style="background:rgba(0,170,255,.1);color:var(--b)">' + tid.substring(0,2).toUpperCase() + '</div><div class="tr-info"><div class="tr-name">' + tid + '</div>' + badge + '</div>' + acoes + '</div>'
+  })
+  el.innerHTML = html
+}
+
+// ==================== ACOES DO CRIADOR ====================
+async function bloquear(membroId, traderId, silenciar) {
+  await sb.from('sala_membros').update({ bloqueado: silenciar }).eq('membro_id', membroId)
+  toast(silenciar ? traderId + ' silenciado!' : traderId + ' desbloqueado!', silenciar ? 't-y' : 't-g')
+  addChatMsg('SISTEMA','sys', silenciar ? '🔇 ' + traderId + ' foi silenciado.' : '🔊 ' + traderId + ' foi desbloqueado.')
+}
+
+async function banir(membroId, traderId) {
+  await sb.from('sala_membros').update({ banido: true }).eq('membro_id', membroId)
+  toast(traderId + ' banido!','t-r')
+  addChatMsg('SISTEMA','sys','⛔ ' + traderId + ' foi banido da sala.')
+}
+
+async function confirmarExcluirSala() {
+  document.getElementById('confirm-del').classList.remove('open')
+  if (!currentRoom) return
+  const salaId = currentRoom.id
+  const { data: sessoes } = await sb.from('sessoes').select('id').eq('sala_id', salaId)
+  if (sessoes?.length) {
+    await sb.from('mensagens').delete().in('sessao_id', sessoes.map(s => s.id))
+  }
+  await sb.from('sessoes').delete().eq('sala_id', salaId)
+  await sb.from('sala_membros').delete().eq('sala_id', salaId)
+  await sb.from('salas').delete().eq('id', salaId)
+  toast('Sala excluida!','t-g')
+  pararRealtime()
+  currentRoom = null
+  go('s-lobby')
+}
+
+async function encerrarPregao() {
+  const btn = document.getElementById('btn-encerrar')
+  const enc = btn.dataset.encerrado === 'true'
+  if (!enc) {
+    btn.textContent = '▶ REABRIR PREGAO'; btn.dataset.encerrado = 'true'
+    btn.style.cssText = 'background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25);color:var(--g)'
+    toast('Pregao encerrado!','t-y')
+    addChatMsg('SISTEMA','sys','Criador encerrou o pregao. Sala continua aberta.')
+  } else {
+    btn.textContent = '⏹ ENCERRAR PREGAO'; btn.dataset.encerrado = 'false'
+    btn.style.cssText = ''
+    toast('Pregao reaberto!','t-g')
+    addChatMsg('SISTEMA','sys','Criador reabriu o pregao!')
+  }
+}
+
+function atualizarToolbar(ativos, mercado) {
+  var mapa = { 'WIN':'BMFBOVESPA:WIN1!','WDO':'BMFBOVESPA:WDO1!','BTC':'BINANCE:BTCUSDT','ETH':'BINANCE:ETHUSDT','SOL':'BINANCE:SOLUSDT','EUR/USD':'FX:EURUSD','GBP/USD':'FX:GBPUSD','USD/JPY':'FX:USDJPY','XAU/USD':'OANDA:XAUUSD','WTI':'NYMEX:CL1!','IBOV':'BMFBOVESPA:IBOV','BNB':'BINANCE:BNBUSDT','XRP':'BINANCE:XRPUSDT','USD/BRL':'FX:USDBRL' }
+  var toolbar = document.querySelector('.chart-toolbar')
+  if (!toolbar) return
+  var lista = ativos && ativos.length > 0 ? ativos : mercado === 'B3' ? ['WIN','WDO'] : mercado === 'Forex' ? ['EUR/USD','GBP/USD'] : ['BTC','ETH']
+  var html = '<span style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:1px">GRAFICO:</span>'
+  lista.forEach(function(ativo, i) {
+    var symbol = mapa[ativo] || 'BMFBOVESPA:WIN1!'
+    var cls = i === 0 ? 'tft active' : 'tft'
+    if (i > 0) html += '<div class="ct-sep"></div>'
+    html += '<div class="' + cls + '" onclick="setSymbol(\'' + symbol + '\',this)">' + ativo + '</div>'
+  })
+  toolbar.innerHTML = html
+}
+
+function getSymbolForRoom(mercado, ativos) {
+  const mapa = { 'WIN':'BMFBOVESPA:WIN1!','WDO':'BMFBOVESPA:WDO1!','BTC':'BINANCE:BTCUSDT','ETH':'BINANCE:ETHUSDT','SOL':'BINANCE:SOLUSDT','EUR/USD':'FX:EURUSD','GBP/USD':'FX:GBPUSD','USD/JPY':'FX:USDJPY','XAU/USD':'OANDA:XAUUSD','WTI':'NYMEX:CL1!' }
+  if (ativos && ativos.length > 0 && mapa[ativos[0]]) return mapa[ativos[0]]
+  return mercado === 'Cripto' ? 'BINANCE:BTCUSDT' : mercado === 'Forex' ? 'FX:EURUSD' : 'BMFBOVESPA:WIN1!'
+}
+
+// ==================== TRADINGVIEW ====================
+function initTradingView() {
+  const wrap = document.getElementById('tv-wrap'); wrap.innerHTML = ''
+  const container = document.createElement('div'); container.id = 'tv-chart-container'; container.style.cssText = 'width:100%;height:100%'
+  wrap.appendChild(container)
+  const script = document.createElement('script'); script.src = 'https://s3.tradingview.com/tv.js'
+  script.onload = function() {
+    tvWidget = new TradingView.widget({ container_id:'tv-chart-container', symbol:currentSymbol, interval:'5', timezone:'America/Sao_Paulo', theme:'dark', style:'1', locale:'br', toolbar_bg:'#0d1014', enable_publishing:false, save_image:false, backgroundColor:'#080a0c', gridColor:'rgba(26,31,40,0.5)', width:'100%', height:'100%' })
+  }
+  document.head.appendChild(script)
+}
+
+function setSymbol(symbol, el) {
+  if (!currentIsCriador) { toast('So o criador pode mudar o grafico', 't-y'); return }
+  document.querySelectorAll('.tft').forEach(b => b.classList.remove('active')); el.classList.add('active')
+  currentSymbol = symbol
+  if (tvWidget) { try { tvWidget.chart().setSymbol(symbol) } catch(e) { initTradingView() } } else { initTradingView() }
+}
+
+// ==================== CRIAR SALA ====================
+const ASSETS_BY_MKT = { B3:['WIN','WDO','WINM26','WDOK26','IBOV'], Forex:['EUR/USD','GBP/USD','USD/JPY','XAU/USD','WTI','USD/BRL'], Cripto:['BTC','ETH','SOL','BNB','XRP'] }
+
+function openModal() {
+  selectedAssets = []; document.getElementById('m-name').value = ''
+  document.getElementById('m-mercado').value = currentMkt; updateModalMkt(currentMkt)
+  document.getElementById('modal-bg').classList.add('open')
+}
+function updateModalMkt(mkt) {
+  document.getElementById('m-title').textContent = { B3:'CRIAR SALA — B3', Forex:'CRIAR SALA — FOREX', Cripto:'CRIAR SALA — CRIPTO' }[mkt]
+  document.getElementById('m-criar-btn').className = 'btn-criar ' + { B3:'btn-criar-b3', Forex:'btn-criar-fx', Cripto:'btn-criar-cr' }[mkt]
+  const sc = { B3:'sel-b3', Forex:'sel-fx', Cripto:'sel-cr' }[mkt]; selectedAssets = []
+  document.getElementById('m-assets').innerHTML = (ASSETS_BY_MKT[mkt]||[]).map(a => '<div class="asset-chip" id="chip-' + a.replace('/','_') + '" onclick="toggleAsset(\'' + a + '\',\'' + sc + '\')">' + a + '</div>').join('')
+}
+function toggleAsset(a, cls) {
+  const chip = document.getElementById('chip-'+a.replace('/','_'))
+  if (selectedAssets.includes(a)) { selectedAssets = selectedAssets.filter(x=>x!==a); chip.className='asset-chip' }
+  else { if (selectedAssets.length >= 2) { toast('Máximo 2 ativos por sala', 't-y'); return }; selectedAssets.push(a); chip.className='asset-chip '+cls }
+}
+async function criarSala() {
+  const nome = document.getElementById('m-name').value.trim()
+  const mercado = document.getElementById('m-mercado').value
+  const limite = parseInt(document.getElementById('m-limit').value)
+  if (!nome) { toast('De um nome a sala','t-r'); return }
+  const btn = document.getElementById('m-criar-btn'); btn.textContent = 'CRIANDO...'; btn.disabled = true
+  const { data, error } = await sb.from('salas').insert([{ nome, mercado, ativos:selectedAssets, limite, ativa:true, criador_id:currentUser.id||null }]).select()
+  btn.textContent = '▶ CRIAR SALA'; btn.disabled = false
+  if (error) { toast('Erro: '+(error.message||''),'t-r'); return }
+  closeModal(); toast('"'+nome+'" criada!','t-g'); await loadRooms()
+  if (data && data[0]) setTimeout(function() { enterRoom({ id:data[0].id, nome, mercado, ativos:selectedAssets, criador_id:currentUser.id }) }, 500)
+}
+function closeModal() { document.getElementById('modal-bg').classList.remove('open') }
+
+// ==================== CHAT ====================
+function addChatMsg(u, cls, body) {
+  const el = document.getElementById('chat-msgs'); if(!el)return
+  const now = new Date(); const t = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0')
+  const d = document.createElement('div')
+  d.innerHTML = '<div class="cmsg-hd"><span class="cmsg-u ' + cls + '">' + u + '</span><span class="cmsg-t">' + t + '</span></div><div class="cmsg-body ' + (cls==='sys'?'sys':'') + '">' + body + '</div>'
+  el.appendChild(d); el.scrollTop = el.scrollHeight
+}
+async function sendMsg() {
+  const inp = document.getElementById('chat-inp')
+  const txt = inp.value.trim()
+  if (!txt) return
+  if (!currentIsCriador && currentRoom && currentRoom.id && currentUser && currentUser.id) {
+    const { data: membro } = await sb.from('sala_membros').select('bloqueado').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
+    if (membro && membro.bloqueado) { toast('Voce esta silenciado 🔇', 't-r'); inp.value = ''; return }
+  }
+  await sb.from('mensagens').insert({ sala_id: currentRoom.id, usuario_id: currentUser.id, conteudo: txt })
+  addChatMsg(currentUser.trader_id || 'Voce', 'me', txt)
+  inp.value = ''
+}
+function swSide(tab, el) {
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active')); el.classList.add('active')
+  document.getElementById('side-chat').style.display = tab==='chat'?'flex':'none'
+  document.getElementById('side-traders').style.display = tab==='traders'?'flex':'none'
+}
+
+async function carregarHistoricoChat() {
+  const { data: msgs } = await sb.from('mensagens').select('conteudo, enviado_em, usuario_id').eq('sala_id', currentRoom.id).order('enviado_em', { ascending: true }).limit(50)
+  if (!msgs || msgs.length === 0) return
+  const userIds = [...new Set(msgs.map(m => m.usuario_id))]
+  let tradersMap = {}
+  const { data: usuarios } = await sb.from('usuarios').select('id, trader_id').in('id', userIds)
+  if (usuarios) usuarios.forEach(u => { tradersMap[u.id] = u.trader_id })
+  const chatEl = document.getElementById('chat-msgs')
+  if (chatEl) chatEl.innerHTML = ''
+  msgs.forEach(m => {
+    const tid = tradersMap[m.usuario_id] || 'anon'
+    const isMe = m.usuario_id === currentUser.id
+    addChatMsg(tid, isMe ? 'me' : 'other', m.conteudo)
+  })
+}
+
+var chatPollingInterval = null
+var ultimoTimestampChat = null
+
+async function iniciarRealtimeChat(salaId) {
+  if (chatPollingInterval) clearInterval(chatPollingInterval)
+  ultimoTimestampChat = new Date().toISOString()
+  chatPollingInterval = setInterval(async function() {
+    var res = await sb.from('mensagens').select('id, conteudo, usuario_id, enviado_em').eq('sala_id', salaId).gt('enviado_em', ultimoTimestampChat).order('enviado_em', { ascending: true }).limit(20)
+    var msgs = res.data || []
+    if (msgs.length === 0) return
+    var userIds = [...new Set(msgs.map(function(m) { return m.usuario_id }))]
+    var tradersMap = {}
+    var resU = await sb.from('usuarios').select('id, trader_id').in('id', userIds)
+    if (resU.data) resU.data.forEach(function(u) { tradersMap[u.id] = u.trader_id })
+    msgs.forEach(function(m) {
+      if (m.usuario_id === currentUser.id) return
+      var tid = tradersMap[m.usuario_id] || 'anon'
+      addChatMsg(tid, 'other', m.conteudo)
+      ultimoTimestampChat = m.enviado_em
+    })
+  }, 3000)
+}
+
+function pararPollingChat() {
+  if (chatPollingInterval) { clearInterval(chatPollingInterval); chatPollingInterval = null }
+  ultimoTimestampChat = null
+}
+
+// ==================== HELPERS ====================
+const ADJS=['scalp','flux','day','turbo','dark','sharp','rapid','micro']
+const SUFX=['_rx','_z9','_k4x','_404','_77','_xp','_hit','_fx']
+let currentId='trader_jo4x'
+function regenId() { currentId=ADJS[Math.floor(Math.random()*ADJS.length)]+SUFX[Math.floor(Math.random()*SUFX.length)]; document.getElementById('id-preview').textContent=currentId }
+function onNome(el) { const v=el.value.trim(); if(v.length>=2){const b=v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(' ')[0].replace(/[^a-z]/g,'').substring(0,8);currentId=b+SUFX[Math.floor(Math.random()*SUFX.length)];document.getElementById('id-preview').textContent=currentId} }
+function maskTel(el) { let v=el.value.replace(/\D/g,'').substring(0,11);if(v.length<=2)v=v.replace(/^(\d{0,2})/,'($1');else if(v.length<=7)v=v.replace(/^(\d{2})(\d{0,5})/,'($1) $2');else v=v.replace(/^(\d{2})(\d{5})(\d{0,4})/,'($1) $2-$3');el.value=v }
+function togglePwd(id,btn){const el=document.getElementById(id);const show=el.type==='password';el.type=show?'text':'password';btn.textContent=show?'OCULTAR':'MOSTRAR'}
+function checkStrength(el){const v=el.value;const score=[v.length>=8,/[A-Z]|[a-z]/.test(v),/\d/.test(v),/[^A-Za-z0-9]/.test(v)].filter(Boolean).length;const cols=['#ff4560','#f5a623','#0af','#00e5a0'];for(let i=0;i<4;i++)document.getElementById('str'+i).style.background=i<score?cols[score-1]:'var(--border2)'}
+function cadNext(){const nome=document.getElementById('c-nome').value.trim();const email=document.getElementById('c-email').value.trim();if(nome.length<2){toast('Informe seu nome','t-r');return}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Email invalido','t-r');return}document.getElementById('cad-step1').style.display='none';document.getElementById('cad-step2').style.display=''}
+
+// ==================== TICKER ====================
+const TICKS=[{n:'WIN',v:'192.075',c:'+0,87%',up:true},{n:'WDO',v:'4.999',c:'-0,32%',up:false},{n:'EUR/USD',v:'1.0892',c:'+0,14%',up:true},{n:'XAU/USD',v:'3.320',c:'+0,22%',up:true},{n:'BTC/USD',v:'94.450',c:'+1,8%',up:true},{n:'GBP/USD',v:'1.2748',c:'-0,08%',up:false},{n:'IBOV',v:'128.450',c:'+0,44%',up:true},{n:'ETH/USD',v:'1.720',c:'+2,1%',up:true}]
+const ticker=document.getElementById('ticker');let th='';for(let i=0;i<3;i++)TICKS.forEach(t=>{th+='<span class="tick-i"><span class="t-name">'+t.n+'</span><span class="t-val">'+t.v+'</span><span class="'+(t.up?'t-up':'t-dn')+'">'+t.c+'</span></span>'});ticker.innerHTML=th
+
+function toast(msg,cls){if(!cls)cls='t-g';const wrap=document.getElementById('toast-wrap');const el=document.createElement('div');el.className='toast '+cls;el.textContent=msg;wrap.appendChild(el);setTimeout(function(){el.remove()},2600)}
+
+updateUserUI()
+</script>
+</body>
+</html>
