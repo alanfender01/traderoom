@@ -774,7 +774,7 @@ function atualizarBotaoMic() {
 // ==================== REALTIME ====================
 function iniciarRealtime(salaId) {
   if (realtimeChannel) { sb.removeChannel(realtimeChannel); realtimeChannel = null }
-  realtimeChannel = sb.channel('sala-' + salaId)
+  realtimeChannel = sb.channel('sala-' + salaId, { config: { broadcast: { self: false } } })
     .on('postgres_changes', { event: '*', schema: 'public', table: 'sala_membros', filter: 'sala_id=eq.' + salaId }, async (payload) => {
       await renderTradersList(currentIsCriador)
       if (payload.eventType === 'INSERT' && payload.new?.usuario_id !== currentUser.id) {
@@ -1168,7 +1168,7 @@ async function sendMsg() {
     const { data: membro } = await sb.from('sala_membros').select('bloqueado').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
     if (membro && membro.bloqueado) { toast('Voce esta silenciado 🔇', 't-r'); inp.value = ''; return }
   }
-  await sb.from('mensagens').insert({ sala_id: currentRoom.id, usuario_id: currentUser.id, conteudo: txt })
+  await sb.from('mensagens').insert({ sala_id: currentRoom.id, usuario_id: currentUser.id, conteudo: txt, enviado_em: new Date().toISOString() })
   addChatMsg(currentUser.trader_id || 'Voce', 'me', txt)
   inp.value = ''
 }
@@ -1209,7 +1209,7 @@ async function iniciarRealtimeChat(salaId) {
     var resU = await sb.from('usuarios').select('id, trader_id').in('id', userIds)
     if (resU.data) resU.data.forEach(function(u) { tradersMap[u.id] = u.trader_id })
     msgs.forEach(function(m) {
-      ultimoTimestampChat = m.enviado_em
+      if (m.enviado_em) ultimoTimestampChat = m.enviado_em
       if (m.usuario_id === currentUser.id) return
       var tid = tradersMap[m.usuario_id] || 'anon'
       addChatMsg(tid, 'other', m.conteudo)
