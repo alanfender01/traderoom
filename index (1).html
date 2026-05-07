@@ -650,7 +650,7 @@ function verificarAdmin() {
 async function abrirAdmin() {
   document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('on'); s.style.display = '' })
   document.getElementById('s-admin').style.display = 'flex'
-  var resU = await sb.from('usuarios').select('*').order('criado_em', { ascending: false })
+  var resU = await sb.rpc('get_all_usuarios')
   var usuarios = resU.data || []
   document.getElementById('admin-usuarios').innerHTML = usuarios.length === 0
     ? '<p style="font-family:var(--mono);font-size:11px;color:var(--t3)">Nenhum usuario.</p>'
