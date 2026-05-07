@@ -261,7 +261,28 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .tft:hover{color:var(--t1)}
 .tft.locked{opacity:.4;cursor:not-allowed}
 .ct-sep{width:1px;height:12px;background:var(--border2);margin:0 2px}
-.tv-wrap{flex:1;position:relative;overflow:hidden}
+#tv-outer{flex:1;position:relative;overflow:hidden}
+.tv-wrap{width:100%;height:100%}
+#signal-banner{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;display:none;align-items:center;justify-content:center;z-index:10;background:rgba(8,10,12,.15)}
+#signal-banner.sig-on{display:flex}
+#signal-box{padding:22px 44px;border-radius:14px;border:2px solid;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:200px;backdrop-filter:blur(12px)}
+#signal-tipo{font-family:var(--mono);font-size:28px;font-weight:700;letter-spacing:4px}
+#signal-bar-track{width:100%;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+#signal-bar-fill{height:100%;border-radius:2px;width:100%}
+#signal-countdown{font-family:var(--mono);font-size:10px;color:var(--t4);letter-spacing:1px}
+#signal-banner.sig-long #signal-box{background:rgba(0,229,160,.1);border-color:rgba(0,229,160,.45)}
+#signal-banner.sig-long #signal-tipo{color:var(--g);text-shadow:0 0 20px rgba(0,229,160,.5)}
+#signal-banner.sig-long #signal-bar-fill{background:var(--g)}
+#signal-banner.sig-short #signal-box{background:rgba(255,69,96,.1);border-color:rgba(255,69,96,.45)}
+#signal-banner.sig-short #signal-tipo{color:var(--r);text-shadow:0 0 20px rgba(255,69,96,.5)}
+#signal-banner.sig-short #signal-bar-fill{background:var(--r)}
+#signal-banner.sig-flat #signal-box{background:rgba(245,166,35,.08);border-color:rgba(245,166,35,.35)}
+#signal-banner.sig-flat #signal-tipo{color:var(--y);text-shadow:0 0 20px rgba(245,166,35,.4)}
+#signal-banner.sig-flat #signal-bar-fill{background:var(--y)}
+.op-b:disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
+.nc-enc-strip{background:rgba(245,166,35,.07);border-top:1px solid rgba(245,166,35,.18);padding:5px 12px;font-family:var(--mono);font-size:9px;color:var(--y);letter-spacing:1px;text-align:center;border-radius:0 0 10px 10px}
+#pregao-status-bar{display:none;background:rgba(245,166,35,.07);border-bottom:1px solid rgba(245,166,35,.18);padding:5px 16px;font-family:var(--mono);font-size:10px;color:var(--y);letter-spacing:1px;text-align:center;flex-shrink:0}
+#pregao-status-bar.enc-on{display:block}
 .bottom-op{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bg1);border-top:1px solid var(--border);flex-shrink:0}
 .op-lbl{font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:1px}
 .op-b{font-family:var(--mono);font-size:11px;font-weight:700;padding:5px 12px;border-radius:5px;cursor:pointer;border:1px solid;transition:all .15s}
@@ -486,6 +507,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="role-tag rt-member" id="room-role-tag">MEMBRO</div>
     </div>
   </div>
+  <div id="pregao-status-bar">⏹ PREGÃO ENCERRADO — aguardando reabertura pelo criador</div>
   <div class="room-body">
     <div class="chart-col">
       <div class="chart-toolbar">
@@ -501,12 +523,21 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <div class="ct-sep"></div>
         <div class="tft" onclick="setSymbol('OANDA:XAUUSD',this)">GOLD</div>
       </div>
-      <div class="tv-wrap" id="tv-wrap"></div>
+      <div id="tv-outer">
+        <div class="tv-wrap" id="tv-wrap"></div>
+        <div id="signal-banner">
+          <div id="signal-box">
+            <div id="signal-tipo"></div>
+            <div id="signal-bar-track"><div id="signal-bar-fill"></div></div>
+            <div id="signal-countdown">30s</div>
+          </div>
+        </div>
+      </div>
       <div class="bottom-op">
-        <span class="op-lbl">MARCAR:</span>
-        <button class="op-b op-long" onclick="toast('✅ COMPRADO','t-g')">▲ COMPRADO</button>
-        <button class="op-b op-short" onclick="toast('🔴 VENDIDO','t-r')">▼ VENDIDO</button>
-        <button class="op-b op-flat" onclick="toast('⬜ NEUTRO','t-y')">■ NEUTRO</button>
+        <span class="op-lbl" id="op-label">MARCAR:</span>
+        <button class="op-b op-long" id="btn-long" onclick="enviarSinal('COMPRADO')">▲ COMPRADO</button>
+        <button class="op-b op-short" id="btn-short" onclick="enviarSinal('VENDIDO')">▼ VENDIDO</button>
+        <button class="op-b op-flat" id="btn-flat" onclick="enviarSinal('NEUTRO')">■ NEUTRO</button>
         <div class="op-spacer"></div>
       </div>
     </div>
@@ -587,6 +618,9 @@ let tvWidget = null
 let currentRoom = null
 let currentIsCriador = false
 let realtimeChannel = null
+let lobbyChannel = null
+let signalTimer = null
+let signalInterval = null
 
 // ==================== ADMIN ====================
 var ADMIN_SENHA = 'TR@dm1n2025!'
@@ -793,6 +827,13 @@ function iniciarRealtime(salaId) {
       })
       if (tvWidget) { try { tvWidget.chart().setSymbol(payload.symbol) } catch(e) { initTradingView() } } else { initTradingView() }
     })
+    .on('broadcast', { event: 'signal' }, ({ payload }) => {
+      mostrarSinal(payload.tipo)
+    })
+    .on('broadcast', { event: 'pregao_status' }, ({ payload }) => {
+      currentRoom.pregao_encerrado = payload.encerrado
+      aplicarStatusPregao(payload.encerrado)
+    })
     .subscribe()
 }
 
@@ -800,6 +841,58 @@ function pararRealtime() {
   if (realtimeChannel) { sb.removeChannel(realtimeChannel); realtimeChannel = null }
   pararAudio()
   pararPollingChat()
+}
+
+function iniciarLobbyRealtime() {
+  if (lobbyChannel) { sb.removeChannel(lobbyChannel); lobbyChannel = null }
+  lobbyChannel = sb.channel('lobby-salas')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'salas' }, (payload) => {
+      const r = payload.new
+      const idx = allRooms.findIndex(x => x.id === r.id)
+      if (idx !== -1) { allRooms[idx].ocupacao = r.ocupacao; allRooms[idx].pregao_encerrado = r.pregao_encerrado }
+      atualizarLobbyCard(r.id, { ocupacao: r.ocupacao, limite: r.limite || 10, pregao_encerrado: r.pregao_encerrado })
+    })
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'salas' }, () => { loadRooms() })
+    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'salas' }, (payload) => {
+      allRooms = allRooms.filter(x => x.id !== payload.old.id)
+      renderRooms(document.getElementById('search-inp').value)
+      updateCounts()
+    })
+    .subscribe()
+}
+
+function pararLobbyRealtime() {
+  if (lobbyChannel) { sb.removeChannel(lobbyChannel); lobbyChannel = null }
+}
+
+function atualizarLobbyCard(roomId, updates) {
+  const card = document.querySelector('[data-room-id="' + roomId + '"]')
+  if (!card) return
+  if ('ocupacao' in updates) {
+    const ocupacao = updates.ocupacao
+    const limite = updates.limite || 10
+    const occEl = card.querySelector('.nc-val')
+    if (occEl) occEl.textContent = String(ocupacao).padStart(2,'0') + '/' + String(limite).padStart(2,'0')
+    const room = allRooms.find(x => x.id === roomId)
+    if (room && room.criador_id !== FAKE_ID) {
+      const lotada = ocupacao >= limite
+      const btnWrap = card.querySelector('.nc-btn-wrap')
+      if (btnWrap) {
+        if (lotada) {
+          btnWrap.innerHTML = '<div class="btn-lotada">👥 LOTADA</div>'
+          card.style.cursor = 'not-allowed'; card.style.opacity = '.75'; card.onclick = null
+        } else {
+          const roomJson = JSON.stringify({ id: room.id, nome: room.nome, mercado: room.mercado, ativos: room.ativos, criador_id: room.criador_id }).replace(/"/g, '&quot;')
+          btnWrap.innerHTML = '<div class="btn-aberta" onclick="event.stopPropagation();enterRoom(' + roomJson + ')">🔓 ABERTA</div>'
+          card.style.cursor = ''; card.style.opacity = ''; card.setAttribute('onclick', 'enterRoom(' + roomJson + ')')
+        }
+      }
+    }
+  }
+  if ('pregao_encerrado' in updates) {
+    const strip = card.querySelector('.nc-enc-strip')
+    if (strip) strip.style.display = updates.pregao_encerrado ? '' : 'none'
+  }
 }
 
 // ==================== AUTH ====================
@@ -853,8 +946,8 @@ function go(id) {
   const el = document.getElementById(id)
   if (!el) return
   el.classList.add('on')
-  if (id === 's-lobby') { pararRealtime(); loadRooms() }
-  if (id === 's-room') initTradingView()
+  if (id === 's-lobby') { pararRealtime(); loadRooms(); iniciarLobbyRealtime() }
+  if (id === 's-room') { pararLobbyRealtime(); initTradingView() }
   window.scrollTo(0, 0)
 }
 
@@ -918,7 +1011,7 @@ function renderRooms(filter) {
       ? '<div class="btn-lotada">👥 LOTADA</div>'
       : '<div class="btn-aberta" onclick="event.stopPropagation();enterRoom(' + roomJson + ')">🔓 ABERTA</div>'
 
-    html += '<div class="nc ' + cls + '" ' + (lotada ? 'style="cursor:not-allowed;opacity:.75"' : 'onclick="enterRoom(' + roomJson + ')"') + '>'
+    html += '<div class="nc ' + cls + '" data-room-id="' + r.id + '" ' + (lotada ? 'style="cursor:not-allowed;opacity:.75"' : 'onclick="enterRoom(' + roomJson + ')"') + '>'
       + '<div class="nc-bar ' + cls + '"></div>'
       + '<div class="nc-top">'
         + '<div class="nc-circle ' + cls + '">TR</div>'
@@ -940,6 +1033,7 @@ function renderRooms(filter) {
           + '<div class="nc-val-sm">' + ativo + '</div>'
         + '</div>'
       + '</div>'
+      + '<div class="nc-enc-strip"' + (r.pregao_encerrado ? '' : ' style="display:none"') + '>⏹ PREGÃO ENCERRADO</div>'
     + '</div>'
   })
 
@@ -968,6 +1062,25 @@ async function enterRoom(data) {
   currentSymbol = getSymbolForRoom(data.mercado, data.ativos || [])
   document.getElementById('creator-panel').style.display = currentIsCriador ? 'block' : 'none'
   document.getElementById('member-panel').style.display = currentIsCriador ? 'none' : 'block'
+  const opBtns = document.querySelectorAll('.op-b')
+  const opLabel = document.getElementById('op-label')
+  opBtns.forEach(b => { b.disabled = !currentIsCriador })
+  if (opLabel) opLabel.textContent = currentIsCriador ? 'MARCAR:' : 'POSIÇÃO:'
+  const encerrado = !!(data.pregao_encerrado)
+  currentRoom.pregao_encerrado = encerrado
+  aplicarStatusPregao(encerrado)
+  if (currentIsCriador) {
+    const btnEnc = document.getElementById('btn-encerrar')
+    if (btnEnc) {
+      if (encerrado) {
+        btnEnc.textContent = '▶ REABRIR PREGAO'; btnEnc.dataset.encerrado = 'true'
+        btnEnc.style.cssText = 'background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25);color:var(--g)'
+      } else {
+        btnEnc.textContent = '⏹ ENCERRAR PREGAO'; btnEnc.dataset.encerrado = 'false'
+        btnEnc.style.cssText = ''
+      }
+    }
+  }
   const roleTag = document.getElementById('room-role-tag')
   roleTag.textContent = currentIsCriador ? '👑 CRIADOR' : 'FREQUENTADOR'
   roleTag.className = currentIsCriador ? 'role-tag rt-host' : 'role-tag rt-member'
@@ -980,6 +1093,10 @@ async function enterRoom(data) {
     const { data: membroAtual } = await sb.from('sala_membros').select('banido').eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id).single()
     if (membroAtual && membroAtual.banido) { toast('Voce foi banido desta sala!','t-r'); go('s-lobby'); return }
   }
+  if (currentUser.id) {
+    const { count } = await sb.from('sala_membros').select('*', { count: 'exact', head: true }).eq('sala_id', currentRoom.id).eq('banido', false)
+    await sb.from('salas').update({ ocupacao: (count || 0) + 1 }).eq('id', currentRoom.id)
+  }
   iniciarRealtime(currentRoom.id)
   iniciarAudio(currentRoom.id)
   atualizarToolbar(data.ativos || [], data.mercado)
@@ -991,14 +1108,24 @@ async function enterRoom(data) {
 
 // ==================== SAIR ====================
 async function sairDaSala() {
-  if (currentRoom && currentUser.id) { await sb.from('sala_membros').delete().eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id) }
+  if (currentRoom && currentUser.id) {
+    await sb.from('sala_membros').delete().eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id)
+    if (!currentIsCriador) {
+      const { count } = await sb.from('sala_membros').select('*', { count: 'exact', head: true }).eq('sala_id', currentRoom.id).eq('banido', false)
+      await sb.from('salas').update({ ocupacao: (count || 0) + 1 }).eq('id', currentRoom.id)
+    }
+  }
   pararRealtime()
   toast('Voce saiu da sala.','t-b')
   go('s-lobby')
 }
 
 async function sairDaSalaEVoltar() {
-  if (!currentIsCriador && currentRoom && currentUser.id) { await sb.from('sala_membros').delete().eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id) }
+  if (!currentIsCriador && currentRoom && currentUser.id) {
+    await sb.from('sala_membros').delete().eq('sala_id', currentRoom.id).eq('usuario_id', currentUser.id)
+    const { count } = await sb.from('sala_membros').select('*', { count: 'exact', head: true }).eq('sala_id', currentRoom.id).eq('banido', false)
+    await sb.from('salas').update({ ocupacao: (count || 0) + 1 }).eq('id', currentRoom.id)
+  }
   pararRealtime()
   go('s-lobby')
 }
@@ -1063,23 +1190,34 @@ async function confirmarExcluirSala() {
 }
 
 async function encerrarPregao() {
+  if (!currentRoom) return
   const btn = document.getElementById('btn-encerrar')
-  const enc = btn.dataset.encerrado === 'true'
-  if (!enc) {
+  const novoEstado = btn.dataset.encerrado !== 'true'
+  await sb.from('salas').update({ pregao_encerrado: novoEstado }).eq('id', currentRoom.id)
+  currentRoom.pregao_encerrado = novoEstado
+  if (realtimeChannel) realtimeChannel.send({ type: 'broadcast', event: 'pregao_status', payload: { encerrado: novoEstado } })
+  aplicarStatusPregao(novoEstado)
+  if (novoEstado) {
     btn.textContent = '▶ REABRIR PREGAO'; btn.dataset.encerrado = 'true'
     btn.style.cssText = 'background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25);color:var(--g)'
     toast('Pregao encerrado!','t-y')
-    addChatMsg('SISTEMA','sys','Criador encerrou o pregao. Sala continua aberta.')
+    addChatMsg('SISTEMA','sys','⏹ Criador encerrou o pregao. Sala continua aberta.')
   } else {
     btn.textContent = '⏹ ENCERRAR PREGAO'; btn.dataset.encerrado = 'false'
     btn.style.cssText = ''
     toast('Pregao reaberto!','t-g')
-    addChatMsg('SISTEMA','sys','Criador reabriu o pregao!')
+    addChatMsg('SISTEMA','sys','▶ Criador reabriu o pregao!')
   }
 }
 
+function aplicarStatusPregao(encerrado) {
+  const bar = document.getElementById('pregao-status-bar')
+  if (!bar) return
+  if (encerrado) bar.classList.add('enc-on'); else bar.classList.remove('enc-on')
+}
+
 function atualizarToolbar(ativos, mercado) {
-  var mapa = { 'WIN':'BMFBOVESPA:WIN1!','WDO':'BMFBOVESPA:WDO1!','BTC':'BINANCE:BTCUSDT','ETH':'BINANCE:ETHUSDT','SOL':'BINANCE:SOLUSDT','EUR/USD':'FX:EURUSD','GBP/USD':'FX:GBPUSD','USD/JPY':'FX:USDJPY','XAU/USD':'OANDA:XAUUSD','WTI':'NYMEX:CL1!','IBOV':'BMFBOVESPA:IBOV','BNB':'BINANCE:BNBUSDT','XRP':'BINANCE:XRPUSDT','USD/BRL':'FX:USDBRL' }
+  var mapa = { 'WIN':'BMFBOVESPA:WIN1!','WDO':'BMFBOVESPA:WDO1!','BTC/USDT':'BINANCE:BTCUSDT','ETH/USDT':'BINANCE:ETHUSDT','SOL/USDT':'BINANCE:SOLUSDT','BNB/USDT':'BINANCE:BNBUSDT','XRP/USDT':'BINANCE:XRPUSDT','DOGE/USDT':'BINANCE:DOGEUSDT','ADA/USDT':'BINANCE:ADAUSDT','AVAX/USDT':'BINANCE:AVAXUSDT','LINK/USDT':'BINANCE:LINKUSDT','DOT/USDT':'BINANCE:DOTUSDT','EUR/USD':'FX:EURUSD','GBP/USD':'FX:GBPUSD','USD/JPY':'FX:USDJPY','USD/CHF':'FX:USDCHF','AUD/USD':'FX:AUDUSD','USD/CAD':'FX:USDCAD','NZD/USD':'FX:NZDUSD','XAU/USD':'OANDA:XAUUSD','WTI':'NYMEX:CL1!','GBP/JPY':'FX:GBPJPY','IBOV':'BMFBOVESPA:IBOV' }
   var toolbar = document.querySelector('.chart-toolbar')
   if (!toolbar) return
   var lista = ativos && ativos.length > 0 ? ativos : mercado === 'B3' ? ['WIN','WDO'] : mercado === 'Forex' ? ['EUR/USD','GBP/USD'] : ['BTC','ETH']
@@ -1094,7 +1232,7 @@ function atualizarToolbar(ativos, mercado) {
 }
 
 function getSymbolForRoom(mercado, ativos) {
-  const mapa = { 'WIN':'BMFBOVESPA:WIN1!','WDO':'BMFBOVESPA:WDO1!','BTC':'BINANCE:BTCUSDT','ETH':'BINANCE:ETHUSDT','SOL':'BINANCE:SOLUSDT','EUR/USD':'FX:EURUSD','GBP/USD':'FX:GBPUSD','USD/JPY':'FX:USDJPY','XAU/USD':'OANDA:XAUUSD','WTI':'NYMEX:CL1!' }
+  const mapa = { 'WIN':'BMFBOVESPA:WIN1!','WDO':'BMFBOVESPA:WDO1!','BTC/USDT':'BINANCE:BTCUSDT','ETH/USDT':'BINANCE:ETHUSDT','SOL/USDT':'BINANCE:SOLUSDT','BNB/USDT':'BINANCE:BNBUSDT','XRP/USDT':'BINANCE:XRPUSDT','DOGE/USDT':'BINANCE:DOGEUSDT','ADA/USDT':'BINANCE:ADAUSDT','AVAX/USDT':'BINANCE:AVAXUSDT','LINK/USDT':'BINANCE:LINKUSDT','DOT/USDT':'BINANCE:DOTUSDT','EUR/USD':'FX:EURUSD','GBP/USD':'FX:GBPUSD','USD/JPY':'FX:USDJPY','USD/CHF':'FX:USDCHF','AUD/USD':'FX:AUDUSD','USD/CAD':'FX:USDCAD','NZD/USD':'FX:NZDUSD','XAU/USD':'OANDA:XAUUSD','WTI':'NYMEX:CL1!','GBP/JPY':'FX:GBPJPY' }
   if (ativos && ativos.length > 0 && mapa[ativos[0]]) return mapa[ativos[0]]
   return mercado === 'Cripto' ? 'BINANCE:BTCUSDT' : mercado === 'Forex' ? 'FX:EURUSD' : 'BMFBOVESPA:WIN1!'
 }
@@ -1119,8 +1257,49 @@ function setSymbol(symbol, el) {
   if (realtimeChannel) realtimeChannel.send({ type: 'broadcast', event: 'symbol_change', payload: { symbol } })
 }
 
+// ==================== SINAIS ====================
+function enviarSinal(tipo) {
+  if (!currentIsCriador) return
+  if (realtimeChannel) realtimeChannel.send({ type: 'broadcast', event: 'signal', payload: { tipo } })
+  mostrarSinal(tipo)
+}
+
+function mostrarSinal(tipo) {
+  if (signalTimer) { clearTimeout(signalTimer); signalTimer = null }
+  if (signalInterval) { clearInterval(signalInterval); signalInterval = null }
+  const banner = document.getElementById('signal-banner')
+  const tipoEl = document.getElementById('signal-tipo')
+  const fill = document.getElementById('signal-bar-fill')
+  const countdown = document.getElementById('signal-countdown')
+  if (!banner) return
+  const mapa = {
+    COMPRADO: { cls: 'sig-long', texto: '▲ COMPRADO' },
+    VENDIDO:  { cls: 'sig-short', texto: '▼ VENDIDO' },
+    NEUTRO:   { cls: 'sig-flat',  texto: '■ NEUTRO' }
+  }
+  const cfg = mapa[tipo] || mapa.NEUTRO
+  banner.className = 'sig-on ' + cfg.cls
+  tipoEl.textContent = cfg.texto
+  fill.style.transition = 'none'
+  fill.style.width = '100%'
+  countdown.textContent = '30s'
+  fill.getBoundingClientRect()
+  fill.style.transition = 'width 30s linear'
+  fill.style.width = '0%'
+  var rem = 30
+  signalInterval = setInterval(function() {
+    rem--
+    if (countdown) countdown.textContent = rem + 's'
+    if (rem <= 0) { clearInterval(signalInterval); signalInterval = null }
+  }, 1000)
+  signalTimer = setTimeout(function() {
+    banner.className = ''
+    signalTimer = null
+  }, 30000)
+}
+
 // ==================== CRIAR SALA ====================
-const ASSETS_BY_MKT = { B3:['WIN','WDO','WINM26','WDOK26','IBOV'], Forex:['EUR/USD','GBP/USD','USD/JPY','XAU/USD','WTI','USD/BRL'], Cripto:['BTC','ETH','SOL','BNB','XRP'] }
+const ASSETS_BY_MKT = { B3:['WIN','WDO'], Forex:['EUR/USD','GBP/USD','USD/JPY','USD/CHF','AUD/USD','USD/CAD','NZD/USD','XAU/USD','WTI','GBP/JPY'], Cripto:['BTC/USDT','ETH/USDT','SOL/USDT','BNB/USDT','XRP/USDT','DOGE/USDT','ADA/USDT','AVAX/USDT','LINK/USDT','DOT/USDT'] }
 
 function openModal() {
   selectedAssets = []; document.getElementById('m-name').value = ''
