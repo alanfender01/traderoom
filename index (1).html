@@ -280,6 +280,12 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 #signal-banner.sig-flat #signal-tipo{color:var(--y);text-shadow:0 0 20px rgba(245,166,35,.4)}
 #signal-banner.sig-flat #signal-bar-fill{background:var(--y)}
 .op-b:disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
+#screen-video{position:absolute;top:0;left:0;width:100%;height:100%;background:#000;display:none;z-index:5;object-fit:contain}
+#screen-video.screen-on{display:block}
+#screen-badge{position:absolute;top:8px;right:8px;z-index:20;background:rgba(255,69,96,.12);border:1px solid rgba(255,69,96,.3);border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:9px;color:var(--r);letter-spacing:1px;pointer-events:none;display:none}
+.op-screen{background:rgba(0,170,255,.08);border-color:rgba(0,170,255,.22);color:var(--b)}
+.op-screen:hover{background:rgba(0,170,255,.18)}
+.op-screen.sharing{background:rgba(255,69,96,.08);border-color:rgba(255,69,96,.22);color:var(--r)}
 .nc-enc-strip{background:rgba(245,166,35,.07);border-top:1px solid rgba(245,166,35,.18);padding:5px 12px;font-family:var(--mono);font-size:9px;color:var(--y);letter-spacing:1px;text-align:center;border-radius:0 0 10px 10px}
 #pregao-status-bar{display:none;background:rgba(245,166,35,.07);border-bottom:1px solid rgba(245,166,35,.18);padding:5px 16px;font-family:var(--mono);font-size:10px;color:var(--y);letter-spacing:1px;text-align:center;flex-shrink:0}
 #pregao-status-bar.enc-on{display:block}
@@ -525,6 +531,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       </div>
       <div id="tv-outer">
         <div class="tv-wrap" id="tv-wrap"></div>
+        <video id="screen-video" autoplay playsinline muted></video>
+        <div id="screen-badge">⬤ AO VIVO</div>
         <div id="signal-banner">
           <div id="signal-box">
             <div id="signal-tipo"></div>
@@ -539,6 +547,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <button class="op-b op-short" id="btn-short" onclick="enviarSinal('VENDIDO')">▼ VENDIDO</button>
         <button class="op-b op-flat" id="btn-flat" onclick="enviarSinal('NEUTRO')">■ NEUTRO</button>
         <div class="op-spacer"></div>
+        <button class="op-b op-screen" id="btn-screen" onclick="compartilharTela()" style="display:none">🖥 TELA</button>
       </div>
     </div>
     <div class="room-side">
@@ -695,6 +704,9 @@ let localStream = null
 let micAtivo = true
 let peerConnections = {}
 let audioChannel = null
+let screenStream = null
+let screenPCs = {}
+let screenChannel = null
 
 async function iniciarAudio(salaId) {
   try {
@@ -748,6 +760,105 @@ function pararAudio() {
   peerConnections = {}
   if (audioChannel) { sb.removeChannel(audioChannel); audioChannel = null }
   document.querySelectorAll('[id^="audio-"]').forEach(el => el.remove())
+  if (screenStream) { if (screenChannel) screenChannel.send({ type:'broadcast', event:'screen_stop', payload:{} }); screenStream.getTracks().forEach(t => t.stop()); screenStream = null }
+  Object.values(screenPCs).forEach(pc => pc.close()); screenPCs = {}
+  if (screenChannel) { sb.removeChannel(screenChannel); screenChannel = null }
+  mostrarVideoTela(false)
+}
+
+// ==================== SCREEN SHARING ====================
+function iniciarScreenChannel(salaId) {
+  if (screenChannel) { sb.removeChannel(screenChannel); screenChannel = null }
+  screenChannel = sb.channel('screen-' + salaId, { config: { broadcast: { self: false } } })
+    .on('broadcast', { event: 'screen_offer' }, async ({ payload }) => {
+      if (payload.to !== currentUser.id) return
+      await handleScreenOffer(payload)
+    })
+    .on('broadcast', { event: 'screen_answer' }, async ({ payload }) => {
+      if (payload.to !== currentUser.id) return
+      const pc = screenPCs[payload.from]
+      if (pc) await pc.setRemoteDescription(new RTCSessionDescription(payload.answer))
+    })
+    .on('broadcast', { event: 'screen_ice' }, async ({ payload }) => {
+      if (payload.to !== currentUser.id) return
+      const pc = screenPCs[payload.from]
+      if (pc && payload.candidate) await pc.addIceCandidate(new RTCIceCandidate(payload.candidate))
+    })
+    .on('broadcast', { event: 'screen_novo_usuario' }, async ({ payload }) => {
+      if (!currentIsCriador || !screenStream || payload.userId === currentUser.id) return
+      await criarScreenOffer(payload.userId)
+    })
+    .on('broadcast', { event: 'screen_stop' }, () => { mostrarVideoTela(false) })
+    .subscribe(async (status) => {
+      if (status === 'SUBSCRIBED') {
+        await screenChannel.send({ type: 'broadcast', event: 'screen_novo_usuario', payload: { userId: currentUser.id } })
+      }
+    })
+}
+
+async function compartilharTela() {
+  if (!currentIsCriador) return
+  if (screenStream) { pararCompartilhamento(); return }
+  try {
+    screenStream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 30 }, audio: false })
+    screenStream.getVideoTracks()[0].onended = () => pararCompartilhamento()
+    const { data: membros } = await sb.from('sala_membros').select('usuario_id').eq('sala_id', currentRoom.id).eq('banido', false)
+    if (membros) for (const m of membros) await criarScreenOffer(m.usuario_id)
+    const btn = document.getElementById('btn-screen')
+    if (btn) { btn.textContent = '⏹ PARAR TELA'; btn.classList.add('sharing') }
+    const badge = document.getElementById('screen-badge')
+    if (badge) badge.style.display = ''
+    toast('Compartilhando tela!', 't-b')
+    addChatMsg('SISTEMA', 'sys', '🖥️ Criador iniciou o compartilhamento de tela.')
+  } catch (err) {
+    if (err.name !== 'NotAllowedError') toast('Erro ao compartilhar tela.', 't-r')
+  }
+}
+
+function pararCompartilhamento() {
+  if (screenStream) { screenStream.getTracks().forEach(t => t.stop()); screenStream = null }
+  if (screenChannel) screenChannel.send({ type: 'broadcast', event: 'screen_stop', payload: {} })
+  Object.values(screenPCs).forEach(pc => pc.close()); screenPCs = {}
+  const btn = document.getElementById('btn-screen')
+  if (btn) { btn.textContent = '🖥 TELA'; btn.classList.remove('sharing') }
+  const badge = document.getElementById('screen-badge')
+  if (badge) badge.style.display = 'none'
+  toast('Compartilhamento encerrado.', 't-y')
+  addChatMsg('SISTEMA', 'sys', '🖥️ Criador encerrou o compartilhamento de tela.')
+}
+
+async function criarScreenOffer(targetId) {
+  const pc = criarScreenPC(targetId)
+  const offer = await pc.createOffer()
+  await pc.setLocalDescription(offer)
+  await screenChannel.send({ type: 'broadcast', event: 'screen_offer', payload: { from: currentUser.id, to: targetId, offer } })
+}
+
+async function handleScreenOffer({ from, offer }) {
+  const pc = criarScreenPC(from)
+  await pc.setRemoteDescription(new RTCSessionDescription(offer))
+  const answer = await pc.createAnswer()
+  await pc.setLocalDescription(answer)
+  await screenChannel.send({ type: 'broadcast', event: 'screen_answer', payload: { from: currentUser.id, to: from, answer } })
+}
+
+function criarScreenPC(targetId) {
+  if (screenPCs[targetId]) screenPCs[targetId].close()
+  const pc = new RTCPeerConnection(ICE_SERVERS)
+  screenPCs[targetId] = pc
+  if (screenStream) screenStream.getTracks().forEach(track => pc.addTrack(track, screenStream))
+  pc.ontrack = (event) => { mostrarVideoTela(true, event.streams[0]) }
+  pc.onicecandidate = async (event) => {
+    if (event.candidate) await screenChannel.send({ type: 'broadcast', event: 'screen_ice', payload: { from: currentUser.id, to: targetId, candidate: event.candidate } })
+  }
+  return pc
+}
+
+function mostrarVideoTela(ativo, stream) {
+  const video = document.getElementById('screen-video')
+  if (!video) return
+  if (ativo && stream) { video.srcObject = stream; video.classList.add('screen-on') }
+  else { video.classList.remove('screen-on'); video.srcObject = null }
 }
 
 function toggleMic() {
@@ -1097,8 +1208,12 @@ async function enterRoom(data) {
     const { count } = await sb.from('sala_membros').select('*', { count: 'exact', head: true }).eq('sala_id', currentRoom.id).eq('banido', false)
     await sb.from('salas').update({ ocupacao: (count || 0) + 1 }).eq('id', currentRoom.id)
   }
+  const btnScreen = document.getElementById('btn-screen')
+  if (btnScreen) { btnScreen.style.display = (currentIsCriador && data.mercado === 'B3') ? '' : 'none'; btnScreen.classList.remove('sharing'); btnScreen.textContent = '🖥 TELA' }
+  mostrarVideoTela(false)
   iniciarRealtime(currentRoom.id)
   iniciarAudio(currentRoom.id)
+  iniciarScreenChannel(currentRoom.id)
   atualizarToolbar(data.ativos || [], data.mercado)
   document.querySelectorAll('.tft').forEach(b => { if (!currentIsCriador) b.classList.add('locked'); else b.classList.remove('locked') })
   await renderTradersList(currentIsCriador)
