@@ -547,7 +547,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <button class="op-b op-short" id="btn-short" onclick="enviarSinal('VENDIDO')">▼ VENDIDO</button>
         <button class="op-b op-flat" id="btn-flat" onclick="enviarSinal('NEUTRO')">■ NEUTRO</button>
         <div class="op-spacer"></div>
-        <button class="op-b op-screen" id="btn-screen" onclick="compartilharTela()" style="display:none">🖥 TELA</button>
       </div>
     </div>
     <div class="room-side">
@@ -569,6 +568,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <div class="cp-title">👑 PAINEL DO CRIADOR</div>
         <div class="cp-btns">
           <button class="cp-btn cp-end" id="btn-encerrar" onclick="encerrarPregao()">⏹ ENCERRAR PREGÃO</button>
+          <button class="cp-btn" id="btn-screen" onclick="compartilharTela()" style="display:none;background:rgba(0,170,255,.08);border-color:rgba(0,170,255,.25);color:var(--b)">🖥 COMPARTILHAR TELA</button>
           <button class="cp-btn cp-delete" onclick="document.getElementById('confirm-del').classList.add('open')">🗑 EXCLUIR SALA</button>
         </div>
       </div>
@@ -805,7 +805,7 @@ async function compartilharTela() {
     const { data: membros } = await sb.from('sala_membros').select('usuario_id').eq('sala_id', currentRoom.id).eq('banido', false)
     if (membros) for (const m of membros) await criarScreenOffer(m.usuario_id)
     const btn = document.getElementById('btn-screen')
-    if (btn) { btn.textContent = '⏹ PARAR TELA'; btn.classList.add('sharing') }
+    if (btn) { btn.textContent = '⏹ PARAR COMPARTILHAMENTO'; btn.style.cssText = 'display:block;background:rgba(255,69,96,.08);border-color:rgba(255,69,96,.25);color:var(--r)' }
     const badge = document.getElementById('screen-badge')
     if (badge) badge.style.display = ''
     toast('Compartilhando tela!', 't-b')
@@ -820,7 +820,7 @@ function pararCompartilhamento() {
   if (screenChannel) screenChannel.send({ type: 'broadcast', event: 'screen_stop', payload: {} })
   Object.values(screenPCs).forEach(pc => pc.close()); screenPCs = {}
   const btn = document.getElementById('btn-screen')
-  if (btn) { btn.textContent = '🖥 TELA'; btn.classList.remove('sharing') }
+  if (btn) { btn.textContent = '🖥 COMPARTILHAR TELA'; btn.style.cssText = 'display:block;background:rgba(0,170,255,.08);border-color:rgba(0,170,255,.25);color:var(--b)' }
   const badge = document.getElementById('screen-badge')
   if (badge) badge.style.display = 'none'
   toast('Compartilhamento encerrado.', 't-y')
@@ -1178,7 +1178,7 @@ async function enterRoom(data) {
   opBtns.forEach(b => { b.disabled = !currentIsCriador })
   if (opLabel) opLabel.textContent = currentIsCriador ? 'MARCAR:' : 'POSIÇÃO:'
   const btnScreen = document.getElementById('btn-screen')
-  if (btnScreen) { btnScreen.style.display = (currentIsCriador && data.mercado === 'B3') ? 'inline-flex' : 'none'; btnScreen.classList.remove('sharing'); btnScreen.textContent = '🖥 TELA' }
+  if (btnScreen) { btnScreen.style.display = (currentIsCriador && (data.mercado || '').toUpperCase() === 'B3') ? 'block' : 'none'; btnScreen.textContent = '🖥 COMPARTILHAR TELA' }
   const encerrado = !!(data.pregao_encerrado)
   currentRoom.pregao_encerrado = encerrado
   aplicarStatusPregao(encerrado)
