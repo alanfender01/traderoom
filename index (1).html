@@ -1177,6 +1177,8 @@ async function enterRoom(data) {
   const opLabel = document.getElementById('op-label')
   opBtns.forEach(b => { b.disabled = !currentIsCriador })
   if (opLabel) opLabel.textContent = currentIsCriador ? 'MARCAR:' : 'POSIÇÃO:'
+  const btnScreen = document.getElementById('btn-screen')
+  if (btnScreen) { btnScreen.style.display = (currentIsCriador && data.mercado === 'B3') ? 'inline-flex' : 'none'; btnScreen.classList.remove('sharing'); btnScreen.textContent = '🖥 TELA' }
   const encerrado = !!(data.pregao_encerrado)
   currentRoom.pregao_encerrado = encerrado
   aplicarStatusPregao(encerrado)
@@ -1208,8 +1210,6 @@ async function enterRoom(data) {
     const { count } = await sb.from('sala_membros').select('*', { count: 'exact', head: true }).eq('sala_id', currentRoom.id).eq('banido', false)
     await sb.from('salas').update({ ocupacao: (count || 0) + 1 }).eq('id', currentRoom.id)
   }
-  const btnScreen = document.getElementById('btn-screen')
-  if (btnScreen) { btnScreen.style.display = (currentIsCriador && data.mercado === 'B3') ? '' : 'none'; btnScreen.classList.remove('sharing'); btnScreen.textContent = '🖥 TELA' }
   mostrarVideoTela(false)
   iniciarRealtime(currentRoom.id)
   iniciarAudio(currentRoom.id)
