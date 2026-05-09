@@ -2613,7 +2613,7 @@ async function submitComment() {
     trader_id: currentUser.trader_id,
     conteudo: txt
   })
-  if (ins.error) { toast('Erro ao comentar','t-r'); return }
+  if (ins.error) { toast('Erro: ' + (ins.error.message || ins.error.code || 'tente novamente'), 't-r'); return }
   var post = feedPosts.find(function(p){ return p.id === feedCommentsPostId })
   if (post) {
     post.comentarios_count = (post.comentarios_count || 0) + 1
