@@ -283,6 +283,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .role-tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px}
 .rt-host{background:rgba(245,166,35,.1);color:var(--y);border:1px solid rgba(245,166,35,.2)}
 .rt-member{background:rgba(138,146,160,.08);color:var(--t3);border:1px solid var(--border)}
+.rh-mob-exit{display:none}
 .room-body{display:flex;flex:1;overflow:hidden;height:calc(100vh - 94px)}
 .chart-col{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
 .chart-toolbar{display:flex;align-items:center;gap:3px;padding:5px 10px;background:var(--bg1);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
@@ -449,15 +450,34 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   #s-room .chat-inp-row{padding:5px 6px}
   #s-room .chat-inp{font-size:11px;padding:6px 8px}
 
-  /* ─── Painel criador: linha horizontal ──────────── */
-  #s-room .creator-panel{padding:5px 8px}
-  #s-room .cp-title{display:none}
-  #s-room .cp-btns{flex-direction:row;gap:4px}
-  #s-room .cp-btn{flex:1;font-size:9px;padding:6px 2px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* ─── Botão Sair no header (FREQUENTADOR) ──────── */
+  #s-room .rh-mob-exit{
+    display:flex;align-items:center;
+    font-family:var(--mono);font-size:9px;color:var(--t3);
+    border:1px solid var(--border2);border-radius:4px;
+    padding:3px 8px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    white-space:nowrap;flex-shrink:0
+  }
+  #s-room .rh-mob-exit:active{background:var(--bg3);color:var(--t1)}
 
-  /* ─── Painel membro ─────────────────────────────── */
-  #s-room .member-panel{padding:5px 8px}
-  #s-room .mp-btn{padding:8px;font-size:10px}
+  /* ─── Painel membro: escondido no mobile ─────── */
+  #s-room .member-panel{display:none!important}
+
+  /* ─── Painel criador: 3 botões em linha ─────────── */
+  #s-room .creator-panel{
+    padding:5px 8px;
+    background:rgba(245,166,35,.03);
+    border-top:1px solid rgba(245,166,35,.12)
+  }
+  #s-room .cp-title{display:none}
+  #s-room .cp-btns{flex-direction:row;gap:5px}
+  #s-room .cp-btn{
+    flex:1;font-size:9px;font-weight:700;
+    padding:7px 3px;text-align:center;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    border-radius:6px
+  }
 
   /* ─── Strip de áudio ────────────────────────────── */
   #s-room .audio-strip{
@@ -814,6 +834,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="rh-r">
       <div class="rh-dot"></div>
       <div class="role-tag rt-member" id="room-role-tag">MEMBRO</div>
+      <div class="rh-mob-exit" id="rh-mob-exit" onclick="sairDaSala()">↩ SAIR</div>
     </div>
   </div>
   <div id="pregao-status-bar">⏹ PREGÃO ENCERRADO — aguardando reabertura pelo criador</div>
@@ -1931,6 +1952,8 @@ async function enterRoom(data) {
   currentSymbol = getSymbolForRoom(data.mercado, data.ativos || [])
   document.getElementById('creator-panel').style.display = currentIsCriador ? 'block' : 'none'
   document.getElementById('member-panel').style.display = currentIsCriador ? 'none' : 'block'
+  var mobExit = document.getElementById('rh-mob-exit')
+  if (mobExit) mobExit.style.display = currentIsCriador ? 'none' : ''
   const opBtns = document.querySelectorAll('.op-b')
   const opLabel = document.getElementById('op-label')
   opBtns.forEach(b => { b.disabled = !currentIsCriador })
