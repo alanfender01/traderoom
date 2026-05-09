@@ -2215,7 +2215,7 @@ function checkStrength(el){const v=el.value;const score=[v.length>=8,/[A-Z]|[a-z
 function cadNext(){const nome=document.getElementById('c-nome').value.trim();const email=document.getElementById('c-email').value.trim();if(nome.length<2){toast('Informe seu nome','t-r');return}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Email invalido','t-r');return}document.getElementById('cad-step1').style.display='none';document.getElementById('cad-step2').style.display=''}
 
 // ==================== SPLASH ====================
-function splashEnter(){if(currentUser&&currentUser.loggedIn){go('s-lobby')}else{document.getElementById('auth-req').classList.add('open')}}
+function splashEnter(){ go('s-lobby') }
 function setLang(l){document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
 ;(function(){
   const canvas=document.getElementById('sp-neural');if(!canvas)return;
