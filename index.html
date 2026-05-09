@@ -498,6 +498,23 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .mob-pane{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column}
 .mob-pane.on{display:flex}
 
+/* feed real */
+.mob-post-img{width:100%;border-radius:8px;margin-bottom:10px;object-fit:cover;max-height:220px}
+.mob-act-liked{color:var(--g)!important}
+.mob-act-liked .feed-lheart{filter:none}
+.mob-feed-empty{padding:48px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4);line-height:1.8}
+.mob-feed-load{padding:24px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--t4)}
+/* comments sheet */
+.mob-comment{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.mob-comment:last-child{border-bottom:none}
+.mob-comment-body{flex:1;min-width:0}
+.mob-comment-user{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--t2);margin-bottom:3px}
+.mob-comment-time{font-weight:400;color:var(--t4);margin-left:6px}
+.mob-comment-text{font-size:12px;color:var(--t1);line-height:1.45}
+/* compose image preview */
+.mob-compose-preview{width:100%;border-radius:8px;margin-top:8px;object-fit:cover;max-height:160px;display:block}
+.mob-compose-remove{font-family:var(--mono);font-size:9px;color:var(--r);cursor:pointer;margin-top:4px;display:inline-block}
+
 /* stories */
 .mob-stories-row{display:flex;gap:13px;padding:13px 16px 11px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid var(--border);flex-shrink:0}
 .mob-stories-row::-webkit-scrollbar{display:none}
@@ -946,7 +963,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="mob-tlogo">TRADE<span>ROOM</span></div>
       <div class="mob-tbar-r">
         <div class="mob-icon-btn">🔔</div>
-        <div class="mob-icon-btn" onclick="mobTabGo('salas')">＋</div>
+        <div class="mob-icon-btn" onclick="openCompose()" title="Novo post">✏</div>
       </div>
     </div>
 
@@ -985,106 +1002,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <!-- Feed -->
     <div class="mob-feed">
 
-      <div class="mob-post">
-        <div class="mob-post-hd">
-          <div class="mob-post-av mav-g">TM</div>
-          <div class="mob-post-meta">
-            <div class="mob-post-user">@t.marques <span class="mob-live-tag">AO VIVO</span></div>
-            <div class="mob-post-time">2 min · B3 Scalping Pro</div>
-          </div>
-          <div class="mob-post-more">···</div>
-        </div>
-        <div class="mob-signal msig-l">
-          <div><div class="mob-sig-dir">▲ COMPRADO</div><div class="mob-sig-asset">WIN — IBOVESPA FUTURO</div></div>
-          <svg width="54" height="26" viewBox="0 0 54 26"><polyline points="2,22 12,18 22,19 32,13 42,9 52,4" fill="none" stroke="#00e5a0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="mob-post-text">Rompendo topo da madrugada com volume. Setup de continuação. Stop abaixo de 134.600.</div>
-        <div class="mob-post-acts">
-          <div class="mob-act">👍&nbsp;24</div>
-          <div class="mob-act">💬&nbsp;8</div>
-          <div class="mob-act">↗&nbsp;3</div>
-        </div>
-      </div>
-
-      <div class="mob-post">
-        <div class="mob-post-hd">
-          <div class="mob-post-av mav-b">KV</div>
-          <div class="mob-post-meta">
-            <div class="mob-post-user">@k.ventura</div>
-            <div class="mob-post-time">18 min · EUR/USD Day Trade</div>
-          </div>
-          <div class="mob-post-more">···</div>
-        </div>
-        <div class="mob-post-text">Dollar index fraquejando nos dados de CPI abaixo do esperado. EUR/USD com potencial de rompimento de 1.0870. Aguardando confirmação na vela de 15min antes de entrar.</div>
-        <div class="mob-post-acts">
-          <div class="mob-act">👍&nbsp;41</div>
-          <div class="mob-act">💬&nbsp;15</div>
-          <div class="mob-act">↗&nbsp;9</div>
-        </div>
-      </div>
-
-      <div class="mob-post">
-        <div class="mob-post-hd">
-          <div class="mob-post-av mav-r">RS</div>
-          <div class="mob-post-meta">
-            <div class="mob-post-user">@r.santos <span class="mob-live-tag">AO VIVO</span></div>
-            <div class="mob-post-time">34 min · BTC/USDT Análise</div>
-          </div>
-          <div class="mob-post-more">···</div>
-        </div>
-        <div class="mob-signal msig-s">
-          <div><div class="mob-sig-dir">▼ VENDIDO</div><div class="mob-sig-asset">BTC/USD — CRIPTO</div></div>
-          <svg width="54" height="26" viewBox="0 0 54 26"><polyline points="2,4 12,7 22,10 32,14 42,18 52,22" fill="none" stroke="#ff4560" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="mob-post-text">BTC rejeitou resistência em 98k pela 3ª vez. RSI sobrecomprado no daily. Setup de venda com alvo em 94.200.</div>
-        <div class="mob-post-acts">
-          <div class="mob-act">👍&nbsp;37</div>
-          <div class="mob-act">💬&nbsp;21</div>
-          <div class="mob-act">↗&nbsp;7</div>
-        </div>
-      </div>
-
-      <div class="mob-post">
-        <div class="mob-post-hd">
-          <div class="mob-post-av mav-y">AL</div>
-          <div class="mob-post-meta">
-            <div class="mob-post-user">@a.lima</div>
-            <div class="mob-post-time">1h · Análise Macro</div>
-          </div>
-          <div class="mob-post-more">···</div>
-        </div>
-        <div class="mob-signal msig-f">
-          <div><div class="mob-sig-dir">■ NEUTRO</div><div class="mob-sig-asset">WIN — AGUARDANDO</div></div>
-          <svg width="54" height="26" viewBox="0 0 54 26"><polyline points="2,14 12,12 22,14 32,11 42,13 52,12" fill="none" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="mob-post-text">IPCA acima do esperado. Selic deve subir mais 50bps. WIN pode testar suporte de 133.800 antes de retomar alta.</div>
-        <div class="mob-post-acts">
-          <div class="mob-act">👍&nbsp;19</div>
-          <div class="mob-act">💬&nbsp;6</div>
-          <div class="mob-act">↗&nbsp;2</div>
-        </div>
-      </div>
-
-      <div class="mob-post">
-        <div class="mob-post-hd">
-          <div class="mob-post-av mav-p">JC</div>
-          <div class="mob-post-meta">
-            <div class="mob-post-user">@j.costa <span class="mob-live-tag">AO VIVO</span></div>
-            <div class="mob-post-time">1h 20min · B3 Scalping</div>
-          </div>
-          <div class="mob-post-more">···</div>
-        </div>
-        <div class="mob-signal msig-l">
-          <div><div class="mob-sig-dir">▲ COMPRADO</div><div class="mob-sig-asset">WDO — DÓLAR FUTURO</div></div>
-          <svg width="54" height="26" viewBox="0 0 54 26"><polyline points="2,21 12,18 22,16 32,13 42,10 52,7" fill="none" stroke="#00e5a0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="mob-post-text">Dólar com fluxo de saída de emergentes. Entrada em WDO long no rompimento de 5.3200 com volume.</div>
-        <div class="mob-post-acts">
-          <div class="mob-act">👍&nbsp;29</div>
-          <div class="mob-act">💬&nbsp;11</div>
-          <div class="mob-act">↗&nbsp;5</div>
-        </div>
-      </div>
+      <div id="mob-feed-list"><div class="mob-feed-load">Carregando feed...</div></div>
 
       <!-- Poll 1 -->
       <div class="mob-poll" id="mob-poll-1">
@@ -1358,6 +1276,48 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="mob-tab" id="mtab-perfil" onclick="mobTab('perfil',this)">
       <div class="mob-tab-ico">◎</div>
       <div class="mob-tab-lbl">Perfil</div>
+    </div>
+  </div>
+
+  <!-- Bottom Sheet: Compose -->
+  <div class="mob-overlay" id="mob-compose" onclick="if(event.target===this)closeCompose()">
+    <div class="mob-sheet">
+      <div class="mob-sheet-handle"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div class="mob-sheet-title" style="margin:0;font-size:16px">Novo Post</div>
+        <span onclick="closeCompose()" style="font-size:20px;color:var(--t3);cursor:pointer;line-height:1">✕</span>
+      </div>
+      <textarea id="compose-txt" maxlength="500" placeholder="O que está acontecendo no mercado? Análise, setup, macro…"
+        oninput="document.getElementById('compose-counter').textContent=this.value.length+'/500'"
+        style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--t1);font-family:inherit;font-size:13px;padding:10px 12px;outline:none;resize:none;height:110px;box-sizing:border-box;line-height:1.5"></textarea>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+        <span id="compose-counter" style="font-family:var(--mono);font-size:10px;color:var(--t4)">0/500</span>
+        <label style="cursor:pointer;display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--t3)">
+          📷 IMAGEM
+          <input type="file" id="compose-img" accept="image/*" style="display:none" onchange="previewComposeImg(this)">
+        </label>
+      </div>
+      <img id="compose-preview" class="mob-compose-preview" style="display:none" alt="">
+      <span id="compose-remove-img" class="mob-compose-remove" style="display:none" onclick="removeComposeImg()">✕ Remover imagem</span>
+      <button id="compose-submit" class="mob-btn-main" style="margin-top:14px" onclick="submitPost()">POSTAR →</button>
+    </div>
+  </div>
+
+  <!-- Bottom Sheet: Comments -->
+  <div class="mob-overlay" id="mob-comments" onclick="if(event.target===this)closeComments()">
+    <div class="mob-sheet" style="max-height:78vh;display:flex;flex-direction:column;padding-bottom:max(12px,env(safe-area-inset-bottom,12px))">
+      <div class="mob-sheet-handle"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0">
+        <div class="mob-sheet-title" style="margin:0;font-size:16px">Comentários</div>
+        <span onclick="closeComments()" style="font-size:20px;color:var(--t3);cursor:pointer;line-height:1">✕</span>
+      </div>
+      <div id="mob-comments-list" style="flex:1;overflow-y:auto;margin-bottom:10px;padding-right:2px"></div>
+      <div style="display:flex;gap:6px;flex-shrink:0;border-top:1px solid var(--border);padding-top:10px">
+        <input id="comment-inp" class="chat-inp" placeholder="Adicionar comentário…"
+          onkeydown="if(event.key==='Enter')submitComment()"
+          style="flex:1;font-size:12px;padding:8px 10px">
+        <div class="send-b" onclick="submitComment()" style="width:34px;height:34px">↑</div>
+      </div>
     </div>
   </div>
 
@@ -2356,12 +2316,15 @@ updateUserUI()
 // ==================== MOBILE APP ====================
 var mobCurFilter = 'all'
 
+var feedLoaded = false
+
 function mobTab(name, btn) {
   document.querySelectorAll('.mob-pane').forEach(function(p){ p.classList.remove('on') })
   document.querySelectorAll('.mob-tab').forEach(function(t){ t.classList.remove('active') })
   var pane = document.getElementById('mob-' + name)
   if (pane) pane.classList.add('on')
   if (btn) btn.classList.add('active')
+  if (name === 'home' && !feedLoaded) { feedLoaded = true; loadFeed() }
   if (name === 'salas') {
     if (!allRooms.length) {
       loadRooms().then(function(){ mobRenderRooms() })
@@ -2437,6 +2400,242 @@ function mobRenderRooms() {
       '</div>' +
     '</div>'
   }).join('')
+}
+
+// ==================== FEED REAL ====================
+var feedPosts = []
+var feedMyLikes = new Set()
+var feedCommentsPostId = null
+var feedRealtimeSub = null
+var feedAvatarColors = ['mav-g','mav-b','mav-r','mav-y','mav-p']
+
+function feedHashStr(str) {
+  var h = 0
+  for (var i = 0; i < (str||'').length; i++) h = (Math.imul(h, 31) + str.charCodeAt(i)) | 0
+  return Math.abs(h)
+}
+function feedEscape(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+function feedTimeAgo(ts) {
+  var diff = (Date.now() - new Date(ts)) / 1000
+  if (diff < 60) return 'agora'
+  if (diff < 3600) return Math.floor(diff/60) + 'min'
+  if (diff < 86400) return Math.floor(diff/3600) + 'h'
+  return Math.floor(diff/86400) + 'd'
+}
+function feedAvColor(traderId) {
+  return feedAvatarColors[feedHashStr(traderId) % feedAvatarColors.length]
+}
+
+async function loadFeed() {
+  var list = document.getElementById('mob-feed-list')
+  if (list) list.innerHTML = '<div class="mob-feed-load">Carregando feed...</div>'
+  var res = await sb.from('posts').select('*').order('criado_em', { ascending: false }).limit(40)
+  feedPosts = res.data || []
+  if (currentUser.loggedIn && feedPosts.length) {
+    var ids = feedPosts.map(function(p){ return p.id })
+    var lres = await sb.from('post_curtidas').select('post_id').eq('usuario_id', currentUser.id).in('post_id', ids)
+    feedMyLikes = new Set((lres.data || []).map(function(l){ return l.post_id }))
+  } else {
+    feedMyLikes = new Set()
+  }
+  renderFeed()
+  subscribeToFeed()
+}
+
+function renderFeed() {
+  var list = document.getElementById('mob-feed-list')
+  if (!list) return
+  if (!feedPosts.length) {
+    list.innerHTML = '<div class="mob-feed-empty">Nenhum post ainda.<br>Seja o primeiro a compartilhar uma análise! ✏</div>'
+    return
+  }
+  list.innerHTML = feedPosts.map(function(p){ return renderFeedPost(p) }).join('')
+}
+
+function renderFeedPost(p) {
+  var liked = feedMyLikes.has(p.id)
+  var av = (p.trader_id || 'TR').substring(0,2).toUpperCase()
+  var col = feedAvColor(p.trader_id || '')
+  var img = p.imagem_url ? '<img class="mob-post-img" src="' + feedEscape(p.imagem_url) + '" alt="gráfico" loading="lazy">' : ''
+  return '<div class="mob-post" data-pid="' + p.id + '">' +
+    '<div class="mob-post-hd">' +
+      '<div class="mob-post-av ' + col + '">' + av + '</div>' +
+      '<div class="mob-post-meta">' +
+        '<div class="mob-post-user">@' + feedEscape(p.trader_id) + '</div>' +
+        '<div class="mob-post-time">' + feedTimeAgo(p.criado_em) + '</div>' +
+      '</div>' +
+    '</div>' +
+    img +
+    '<div class="mob-post-text">' + feedEscape(p.conteudo) + '</div>' +
+    '<div class="mob-post-acts">' +
+      '<div class="mob-act' + (liked ? ' mob-act-liked' : '') + '" onclick="feedCurtir(\'' + p.id + '\',this)">' +
+        (liked ? '❤️' : '🤍') + '&nbsp;<span class="flike-n">' + (p.curtidas || 0) + '</span>' +
+      '</div>' +
+      '<div class="mob-act" onclick="openComments(\'' + p.id + '\')">' +
+        '💬&nbsp;<span class="fcmt-n">' + (p.comentarios_count || 0) + '</span>' +
+      '</div>' +
+      '<div class="mob-act">↗</div>' +
+    '</div>' +
+  '</div>'
+}
+
+async function feedCurtir(postId, el) {
+  if (!currentUser.loggedIn) { openMobLogin(); return }
+  var post = feedPosts.find(function(p){ return p.id === postId })
+  if (!post) return
+  var liked = feedMyLikes.has(postId)
+  if (liked) {
+    feedMyLikes.delete(postId)
+    post.curtidas = Math.max(0, (post.curtidas || 1) - 1)
+    await sb.from('post_curtidas').delete().eq('post_id', postId).eq('usuario_id', currentUser.id)
+    await sb.from('posts').update({ curtidas: post.curtidas }).eq('id', postId)
+  } else {
+    var ins = await sb.from('post_curtidas').insert({ post_id: postId, usuario_id: currentUser.id })
+    if (ins.error) return
+    feedMyLikes.add(postId)
+    post.curtidas = (post.curtidas || 0) + 1
+    await sb.from('posts').update({ curtidas: post.curtidas }).eq('id', postId)
+  }
+  if (el) {
+    var now = feedMyLikes.has(postId)
+    el.className = 'mob-act' + (now ? ' mob-act-liked' : '')
+    el.innerHTML = (now ? '❤️' : '🤍') + '&nbsp;<span class="flike-n">' + post.curtidas + '</span>'
+  }
+}
+
+function openCompose() {
+  if (!currentUser.loggedIn) { openMobLogin(); return }
+  document.getElementById('mob-compose').classList.add('on')
+  var ta = document.getElementById('compose-txt')
+  ta.value = ''
+  document.getElementById('compose-counter').textContent = '0/500'
+  document.getElementById('compose-preview').style.display = 'none'
+  document.getElementById('compose-remove-img').style.display = 'none'
+  document.getElementById('compose-img').value = ''
+  var btn = document.getElementById('compose-submit')
+  btn.textContent = 'POSTAR →'; btn.disabled = false
+  setTimeout(function(){ ta.focus() }, 300)
+}
+function closeCompose() {
+  document.getElementById('mob-compose').classList.remove('on')
+}
+function previewComposeImg(inp) {
+  if (!inp.files || !inp.files[0]) return
+  var reader = new FileReader()
+  reader.onload = function(e) {
+    var prev = document.getElementById('compose-preview')
+    prev.src = e.target.result
+    prev.style.display = 'block'
+    document.getElementById('compose-remove-img').style.display = 'inline-block'
+  }
+  reader.readAsDataURL(inp.files[0])
+}
+function removeComposeImg() {
+  document.getElementById('compose-img').value = ''
+  document.getElementById('compose-preview').style.display = 'none'
+  document.getElementById('compose-remove-img').style.display = 'none'
+}
+
+async function submitPost() {
+  var txt = document.getElementById('compose-txt').value.trim()
+  if (!txt) { toast('Escreva algo antes de postar','t-r'); return }
+  var btn = document.getElementById('compose-submit')
+  btn.textContent = 'POSTANDO...'; btn.disabled = true
+  var imgUrl = null
+  var fileInput = document.getElementById('compose-img')
+  if (fileInput && fileInput.files && fileInput.files[0]) {
+    var file = fileInput.files[0]
+    var ext = file.name.split('.').pop().toLowerCase()
+    var path = currentUser.id + '/' + Date.now() + '.' + ext
+    var up = await sb.storage.from('post-images').upload(path, file, { upsert: true })
+    if (!up.error) {
+      imgUrl = sb.storage.from('post-images').getPublicUrl(path).data.publicUrl
+    }
+  }
+  var ins = await sb.from('posts').insert({
+    usuario_id: currentUser.id,
+    trader_id: currentUser.trader_id,
+    conteudo: txt,
+    imagem_url: imgUrl,
+    curtidas: 0,
+    comentarios_count: 0
+  }).select().single()
+  btn.textContent = 'POSTAR →'; btn.disabled = false
+  if (ins.error) { toast('Erro ao postar','t-r'); return }
+  closeCompose()
+  toast('Post publicado!','t-g')
+  feedPosts.unshift(ins.data)
+  renderFeed()
+}
+
+async function openComments(postId) {
+  feedCommentsPostId = postId
+  document.getElementById('mob-comments').classList.add('on')
+  document.getElementById('mob-comments-list').innerHTML = '<div class="mob-feed-load">Carregando...</div>'
+  document.getElementById('comment-inp').value = ''
+  await loadComments(postId)
+}
+function closeComments() {
+  document.getElementById('mob-comments').classList.remove('on')
+  feedCommentsPostId = null
+}
+async function loadComments(postId) {
+  var res = await sb.from('comentarios').select('*').eq('post_id', postId).order('criado_em', { ascending: true }).limit(60)
+  var list = document.getElementById('mob-comments-list')
+  var cmts = res.data || []
+  if (!cmts.length) {
+    list.innerHTML = '<div class="mob-feed-load">Nenhum comentário ainda.</div>'
+    return
+  }
+  list.innerHTML = cmts.map(function(c) {
+    var av = (c.trader_id||'TR').substring(0,2).toUpperCase()
+    var col = feedAvColor(c.trader_id||'')
+    return '<div class="mob-comment">' +
+      '<div class="mob-post-av ' + col + '" style="width:28px;height:28px;font-size:9px;flex-shrink:0">' + av + '</div>' +
+      '<div class="mob-comment-body">' +
+        '<div class="mob-comment-user">@' + feedEscape(c.trader_id) +
+          '<span class="mob-comment-time">' + feedTimeAgo(c.criado_em) + '</span></div>' +
+        '<div class="mob-comment-text">' + feedEscape(c.conteudo) + '</div>' +
+      '</div></div>'
+  }).join('')
+  list.scrollTop = list.scrollHeight
+}
+async function submitComment() {
+  if (!currentUser.loggedIn) { openMobLogin(); return }
+  if (!feedCommentsPostId) return
+  var inp = document.getElementById('comment-inp')
+  var txt = inp.value.trim()
+  if (!txt) return
+  inp.value = ''
+  var ins = await sb.from('comentarios').insert({
+    post_id: feedCommentsPostId,
+    usuario_id: currentUser.id,
+    trader_id: currentUser.trader_id,
+    conteudo: txt
+  })
+  if (ins.error) { toast('Erro ao comentar','t-r'); return }
+  var post = feedPosts.find(function(p){ return p.id === feedCommentsPostId })
+  if (post) {
+    post.comentarios_count = (post.comentarios_count || 0) + 1
+    var el = document.querySelector('[data-pid="' + feedCommentsPostId + '"] .fcmt-n')
+    if (el) el.textContent = post.comentarios_count
+    await sb.from('posts').update({ comentarios_count: post.comentarios_count }).eq('id', feedCommentsPostId)
+  }
+  await loadComments(feedCommentsPostId)
+}
+
+function subscribeToFeed() {
+  if (feedRealtimeSub) { try { sb.removeChannel(feedRealtimeSub) } catch(e){} }
+  feedRealtimeSub = sb.channel('feed-realtime')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, function(payload) {
+      if (!feedPosts.find(function(p){ return p.id === payload.new.id })) {
+        feedPosts.unshift(payload.new)
+        renderFeed()
+      }
+    })
+    .subscribe()
 }
 
 var mobPendingRoomId = null
@@ -2515,13 +2714,18 @@ var _origGo = go
 window.go = function(screenId) {
   if (window.innerWidth <= 768) {
     if (screenId === 's-lobby' || screenId === 's-splash') {
-      _origGo(screenId)                                     // limpa .on dos screens
+      _origGo(screenId)
       document.getElementById('mob-app').classList.remove('mob-hidden')
       mobTab('home', document.getElementById('mtab-home'))
       return
     }
   }
   _origGo(screenId)
+}
+// Carregar feed na abertura do mobile (sem clicar em tab)
+if (window.innerWidth <= 768 && !feedLoaded) {
+  feedLoaded = true
+  loadFeed()
 }
 </script>
 </body>
