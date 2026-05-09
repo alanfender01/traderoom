@@ -505,9 +505,32 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .mob-tabbar{display:flex;height:58px;padding-bottom:env(safe-area-inset-bottom,0);background:rgba(8,10,12,.97);border-top:1px solid var(--border);flex-shrink:0}
 .mob-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--t4);transition:color .15s;padding:6px 0;position:relative;-webkit-tap-highlight-color:transparent}
 .mob-tab.active{color:var(--g)}
-.mob-tab.active::before{content:'';position:absolute;top:0;left:22%;right:22%;height:2px;background:var(--g);border-radius:0 0 2px 2px}
-.mob-tab-ico{font-size:19px;line-height:1.1}
-.mob-tab-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.3px}
+.mob-tab.active::before{content:'';position:absolute;top:0;left:18%;right:18%;height:2px;background:var(--g);border-radius:0 0 2px 2px}
+.mob-tab-ico{font-size:17px;line-height:1.1}
+.mob-tab-lbl{font-family:var(--mono);font-size:8px;letter-spacing:.3px}
+/* poll cards */
+.mob-poll{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
+.mob-poll-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.mob-poll-badge{font-family:var(--mono);font-size:8px;letter-spacing:1.5px;padding:3px 8px;border-radius:4px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);color:#a78bfa}
+.mob-poll-time{font-family:var(--mono);font-size:9px;color:var(--t4)}
+.mob-poll-q{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:14px;color:var(--t1)}
+.mob-poll-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.mob-poll-btn{padding:10px;border:1px solid var(--border2);border-radius:8px;background:transparent;color:var(--t2);font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.mob-poll-btn.yes{border-color:rgba(0,229,160,.3);color:var(--g)}
+.mob-poll-btn.yes:hover,.mob-poll-btn.yes.voted{background:rgba(0,229,160,.12);border-color:var(--g)}
+.mob-poll-btn.no{border-color:rgba(255,69,96,.3);color:var(--r)}
+.mob-poll-btn.no:hover,.mob-poll-btn.no.voted{background:rgba(255,69,96,.12);border-color:var(--r)}
+.mob-poll-bars{display:flex;flex-direction:column;gap:6px}
+.mob-poll-bar-row{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px}
+.mob-poll-bar-lbl{width:28px;color:var(--t3)}
+.mob-poll-bar-track{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.mob-poll-bar-fill{height:100%;border-radius:3px;transition:width .4s ease}
+.mob-poll-bar-fill.pfill-yes{background:var(--g)}
+.mob-poll-bar-fill.pfill-no{background:var(--r)}
+.mob-poll-bar-pct{width:32px;text-align:right;color:var(--t3)}
+.mob-poll-votes{font-family:var(--mono);font-size:9px;color:var(--t4);margin-top:8px}
+/* preditivo pane */
+#mob-preditivo .mob-poll-badge{background:rgba(0,229,255,.08);border-color:rgba(0,229,255,.2);color:#00e5ff}
 </style>
 </head>
 <body>
@@ -971,6 +994,58 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         </div>
       </div>
 
+      <!-- Poll 1 -->
+      <div class="mob-poll" id="mob-poll-1">
+        <div class="mob-poll-header">
+          <div class="mob-poll-badge">PREDITIVO</div>
+          <div class="mob-poll-time">Encerra em 4h 30min</div>
+        </div>
+        <div class="mob-poll-q">O IBOVESPA vai fechar ACIMA de 135.000 pontos hoje?</div>
+        <div class="mob-poll-btns">
+          <button class="mob-poll-btn yes" onclick="mobVote('mob-poll-1','yes',67)">✓ SIM</button>
+          <button class="mob-poll-btn no"  onclick="mobVote('mob-poll-1','no',67)">✗ NÃO</button>
+        </div>
+        <div class="mob-poll-bars">
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">SIM</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:67%"></div></div>
+            <div class="mob-poll-bar-pct">67%</div>
+          </div>
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">NÃO</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:33%"></div></div>
+            <div class="mob-poll-bar-pct">33%</div>
+          </div>
+        </div>
+        <div class="mob-poll-votes">312 votos · Resultado às 18:00</div>
+      </div>
+
+      <!-- Poll 2 -->
+      <div class="mob-poll" id="mob-poll-2">
+        <div class="mob-poll-header">
+          <div class="mob-poll-badge">PREDITIVO</div>
+          <div class="mob-poll-time">Encerra em 2h 15min</div>
+        </div>
+        <div class="mob-poll-q">O dólar (USD/BRL) vai superar R$ 5,40 esta semana?</div>
+        <div class="mob-poll-btns">
+          <button class="mob-poll-btn yes" onclick="mobVote('mob-poll-2','yes',41)">✓ SIM</button>
+          <button class="mob-poll-btn no"  onclick="mobVote('mob-poll-2','no',41)">✗ NÃO</button>
+        </div>
+        <div class="mob-poll-bars">
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">SIM</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:41%"></div></div>
+            <div class="mob-poll-bar-pct">41%</div>
+          </div>
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">NÃO</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:59%"></div></div>
+            <div class="mob-poll-bar-pct">59%</div>
+          </div>
+        </div>
+        <div class="mob-poll-votes">189 votos · Resultado sexta-feira</div>
+      </div>
+
     </div>
   </div>
 
@@ -1038,6 +1113,117 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
   </div>
 
+  <!-- ─── PREDITIVO ─── -->
+  <div class="mob-pane" id="mob-preditivo">
+    <div class="mob-topbar">
+      <div class="mob-tlogo">PREDITIVO <span>ENQUETES</span></div>
+    </div>
+    <div style="padding:8px 16px 6px;font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;border-bottom:1px solid var(--border);flex-shrink:0">MERCADO PREDITIVO · VOTE E ACOMPANHE</div>
+    <div style="padding:16px;overflow-y:auto;flex:1">
+
+      <div class="mob-poll" id="mob-ppoll-1">
+        <div class="mob-poll-header">
+          <div class="mob-poll-badge">AO VIVO</div>
+          <div class="mob-poll-time">Encerra em 4h 30min</div>
+        </div>
+        <div class="mob-poll-q">O IBOVESPA vai fechar ACIMA de 135.000 pontos hoje?</div>
+        <div class="mob-poll-btns">
+          <button class="mob-poll-btn yes" onclick="mobVote('mob-ppoll-1','yes',67)">✓ SIM</button>
+          <button class="mob-poll-btn no"  onclick="mobVote('mob-ppoll-1','no',67)">✗ NÃO</button>
+        </div>
+        <div class="mob-poll-bars">
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">SIM</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:67%"></div></div>
+            <div class="mob-poll-bar-pct">67%</div>
+          </div>
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">NÃO</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:33%"></div></div>
+            <div class="mob-poll-bar-pct">33%</div>
+          </div>
+        </div>
+        <div class="mob-poll-votes">312 votos · Resultado às 18:00</div>
+      </div>
+
+      <div class="mob-poll" id="mob-ppoll-2">
+        <div class="mob-poll-header">
+          <div class="mob-poll-badge">AO VIVO</div>
+          <div class="mob-poll-time">Encerra em 2h 15min</div>
+        </div>
+        <div class="mob-poll-q">O dólar (USD/BRL) vai superar R$ 5,40 esta semana?</div>
+        <div class="mob-poll-btns">
+          <button class="mob-poll-btn yes" onclick="mobVote('mob-ppoll-2','yes',41)">✓ SIM</button>
+          <button class="mob-poll-btn no"  onclick="mobVote('mob-ppoll-2','no',41)">✗ NÃO</button>
+        </div>
+        <div class="mob-poll-bars">
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">SIM</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:41%"></div></div>
+            <div class="mob-poll-bar-pct">41%</div>
+          </div>
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">NÃO</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:59%"></div></div>
+            <div class="mob-poll-bar-pct">59%</div>
+          </div>
+        </div>
+        <div class="mob-poll-votes">189 votos · Resultado sexta-feira</div>
+      </div>
+
+      <div class="mob-poll" id="mob-ppoll-3">
+        <div class="mob-poll-header">
+          <div class="mob-poll-badge">NOVO</div>
+          <div class="mob-poll-time">Encerra amanhã</div>
+        </div>
+        <div class="mob-poll-q">O Fed vai cortar os juros na próxima reunião de junho?</div>
+        <div class="mob-poll-btns">
+          <button class="mob-poll-btn yes" onclick="mobVote('mob-ppoll-3','yes',55)">✓ SIM</button>
+          <button class="mob-poll-btn no"  onclick="mobVote('mob-ppoll-3','no',55)">✗ NÃO</button>
+        </div>
+        <div class="mob-poll-bars">
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">SIM</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:55%"></div></div>
+            <div class="mob-poll-bar-pct">55%</div>
+          </div>
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">NÃO</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:45%"></div></div>
+            <div class="mob-poll-bar-pct">45%</div>
+          </div>
+        </div>
+        <div class="mob-poll-votes">87 votos · Em aberto</div>
+      </div>
+
+      <div class="mob-poll" id="mob-ppoll-4">
+        <div class="mob-poll-header">
+          <div class="mob-poll-badge">NOVO</div>
+          <div class="mob-poll-time">Encerra em 3 dias</div>
+        </div>
+        <div class="mob-poll-q">O Bitcoin vai atingir US$ 100.000 antes do fim do mês?</div>
+        <div class="mob-poll-btns">
+          <button class="mob-poll-btn yes" onclick="mobVote('mob-ppoll-4','yes',72)">✓ SIM</button>
+          <button class="mob-poll-btn no"  onclick="mobVote('mob-ppoll-4','no',72)">✗ NÃO</button>
+        </div>
+        <div class="mob-poll-bars">
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">SIM</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:72%"></div></div>
+            <div class="mob-poll-bar-pct">72%</div>
+          </div>
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">NÃO</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:28%"></div></div>
+            <div class="mob-poll-bar-pct">28%</div>
+          </div>
+        </div>
+        <div class="mob-poll-votes">541 votos · Em aberto</div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ─── PERFIL ─── -->
   <div class="mob-pane" id="mob-perfil">
     <div class="mob-topbar">
@@ -1072,6 +1258,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="mob-tab" id="mtab-mercado" onclick="mobTab('mercado',this)">
       <div class="mob-tab-ico">◈</div>
       <div class="mob-tab-lbl">Mercado</div>
+    </div>
+    <div class="mob-tab" id="mtab-preditivo" onclick="mobTab('preditivo',this)">
+      <div class="mob-tab-ico">⬡</div>
+      <div class="mob-tab-lbl">Preditivo</div>
     </div>
     <div class="mob-tab" id="mtab-perfil" onclick="mobTab('perfil',this)">
       <div class="mob-tab-ico">◎</div>
@@ -2069,8 +2259,36 @@ function mobTab(name, btn) {
   var pane = document.getElementById('mob-' + name)
   if (pane) pane.classList.add('on')
   if (btn) btn.classList.add('active')
-  if (name === 'salas') mobRenderRooms()
+  if (name === 'salas') {
+    if (!allRooms.length) {
+      loadRooms().then(function(){ mobRenderRooms() })
+    } else {
+      mobRenderRooms()
+    }
+  }
   if (name === 'perfil') mobUpdatePerfil()
+}
+
+function mobVote(pollId, choice, totalBefore) {
+  var poll = document.getElementById(pollId)
+  if (!poll) return
+  poll.querySelectorAll('.mob-poll-btn').forEach(function(b){ b.disabled = true; b.style.opacity = '.5' })
+  var voted = poll.querySelector('.mob-poll-btn.' + choice)
+  if (voted) { voted.classList.add('voted'); voted.style.opacity = '1' }
+  var newTotal = totalBefore + 1
+  var yPct = choice === 'yes' ? Math.round((totalBefore * 0.67 + 1) / newTotal * 100) : Math.round(totalBefore * 0.67 / newTotal * 100)
+  if (pollId === 'mob-poll-2' || pollId === 'mob-ppoll-2') {
+    yPct = choice === 'yes' ? Math.round((totalBefore * 0.41 + 1) / newTotal * 100) : Math.round(totalBefore * 0.41 / newTotal * 100)
+  }
+  var nPct = 100 - yPct
+  var fills = poll.querySelectorAll('.mob-poll-bar-fill')
+  var pcts  = poll.querySelectorAll('.mob-poll-bar-pct')
+  if (fills[0]) fills[0].style.width = yPct + '%'
+  if (fills[1]) fills[1].style.width = nPct + '%'
+  if (pcts[0])  pcts[0].textContent  = yPct + '%'
+  if (pcts[1])  pcts[1].textContent  = nPct + '%'
+  var vEl = poll.querySelector('.mob-poll-votes')
+  if (vEl) vEl.textContent = (newTotal) + ' votos · obrigado!'
 }
 
 function mobTabGo(name) {
