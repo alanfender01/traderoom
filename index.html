@@ -1722,12 +1722,21 @@ async function cadFinalizar() {
 
 async function loadUserProfile(user) {
   const { data } = await sb.from('usuarios').select('*').eq('id', user.id).single()
-  if (data) { currentUser = { id: user.id, trader_id: data.trader_id || user.email.split('@')[0], nome: data.nome, loggedIn: true } }
-  else { currentUser = { id: user.id, trader_id: user.email.split('@')[0], loggedIn: true } }
+  if (data) { currentUser = { id: user.id, email: user.email, trader_id: data.trader_id || user.email.split('@')[0], nome: data.nome, loggedIn: true } }
+  else { currentUser = { id: user.id, email: user.email, trader_id: user.email.split('@')[0], loggedIn: true } }
   updateUserUI()
+  if (typeof mobUpdatePerfil === 'function') mobUpdatePerfil()
 }
 
-sb.auth.getSession().then(({ data }) => { if (data.session?.user) loadUserProfile(data.session.user) })
+sb.auth.onAuthStateChange(async function(event, session) {
+  if (event === 'INITIAL_SESSION' && session && session.user) {
+    await loadUserProfile(session.user)
+  } else if (event === 'SIGNED_OUT') {
+    currentUser = { trader_id: 'visitante', loggedIn: false }
+    updateUserUI()
+    if (typeof mobUpdatePerfil === 'function') mobUpdatePerfil()
+  }
+})
 
 // ==================== NAV ====================
 function go(id) {
@@ -2377,11 +2386,14 @@ async function doMobLogin() {
   var email = document.getElementById('ml-email').value.trim()
   var pwd   = document.getElementById('ml-pwd').value
   if (!email || !pwd) { toast('Preencha email e senha', 't-r'); return }
+  var btn = document.querySelector('#mob-overlay .mob-btn-main')
+  if (btn) { btn.textContent = 'ENTRANDO...'; btn.disabled = true }
   var res = await sb.auth.signInWithPassword({ email: email, password: pwd })
-  if (res.error) { toast('Email ou senha incorretos', 't-r'); return }
+  if (btn) { btn.textContent = 'ENTRAR →'; btn.disabled = false }
+  if (res.error) { toast(res.error.message || 'Erro ao entrar', 't-r'); return }
+  await loadUserProfile(res.data.user)
   closeMobOverlay()
-  toast('Bem-vindo de volta!', 't-g')
-  mobUpdatePerfil()
+  toast('Bem-vindo, ' + currentUser.trader_id + '!', 't-g')
 }
 
 async function doMobLogout() {
