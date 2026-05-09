@@ -391,8 +391,79 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 #mob-app.mob-hidden{display:none!important}
 @media(max-width:768px){
   #mob-app{display:flex}
-  #s-room.on{position:fixed;inset:0;z-index:300}
   .modal-bg.open,.auth-req.open,.confirm-del.open{z-index:400!important}
+
+  /* ─── Sala: container ──────────────────────────────── */
+  #s-room.on{
+    position:fixed;inset:0;z-index:300;
+    display:flex;flex-direction:column;overflow:hidden;
+    background:var(--bg0)
+  }
+
+  /* ─── Header da sala ──────────────────────────────── */
+  #s-room .rh{height:40px;padding:0 8px;gap:6px}
+  #s-room .rh-name{font-size:11px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #s-room .rh-back{font-size:9px;padding:2px 7px}
+  #s-room .rh-asset{font-size:10px;padding:2px 8px}
+  #s-room .role-tag{font-size:8px;padding:2px 6px}
+  #s-room #pregao-status-bar.enc-on{font-size:9px;padding:3px 8px;letter-spacing:.5px}
+
+  /* ─── Body: coluna em vez de linha ───────────────── */
+  #s-room .room-body{
+    flex-direction:column;
+    height:auto;flex:1;min-height:0;
+    overflow:hidden
+  }
+
+  /* ─── Coluna do gráfico (topo) ───────────────────── */
+  #s-room .chart-col{
+    flex:0 0 46vh;
+    min-width:0;overflow:hidden
+  }
+
+  /* Toolbar: scroll horizontal, sem quebra de linha */
+  #s-room .chart-toolbar{
+    overflow-x:auto;flex-wrap:nowrap;
+    padding:4px 8px;gap:2px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none
+  }
+  #s-room .chart-toolbar::-webkit-scrollbar{display:none}
+  #s-room .ct-sep{display:none}
+  #s-room .tft{font-size:9px;padding:3px 9px;white-space:nowrap;flex-shrink:0}
+
+  /* Botões de posição */
+  #s-room .bottom-op{padding:5px 8px;gap:5px}
+  #s-room .op-lbl{display:none}
+  #s-room .op-b{flex:1;padding:9px 2px;font-size:10px;text-align:center;letter-spacing:0}
+  #s-room .op-spacer{display:none}
+
+  /* ─── Painel lateral: vira painel inferior ───────── */
+  #s-room .room-side{
+    width:100%;border-left:none;border-top:1px solid var(--border);
+    flex:1;min-height:0;overflow:hidden
+  }
+  #s-room .side-tabs .stab{font-size:9px;padding:7px 4px}
+
+  /* Chat: mensagens ocupam o espaço restante */
+  #s-room .chat-inp-row{padding:5px 6px}
+  #s-room .chat-inp{font-size:11px;padding:6px 8px}
+
+  /* ─── Painel criador: linha horizontal ──────────── */
+  #s-room .creator-panel{padding:5px 8px}
+  #s-room .cp-title{display:none}
+  #s-room .cp-btns{flex-direction:row;gap:4px}
+  #s-room .cp-btn{flex:1;font-size:9px;padding:6px 2px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* ─── Painel membro ─────────────────────────────── */
+  #s-room .member-panel{padding:5px 8px}
+  #s-room .mp-btn{padding:8px;font-size:10px}
+
+  /* ─── Strip de áudio ────────────────────────────── */
+  #s-room .audio-strip{
+    padding:5px 10px;
+    padding-bottom:max(5px,env(safe-area-inset-bottom,5px))
+  }
 }
 
 /* top bar */
