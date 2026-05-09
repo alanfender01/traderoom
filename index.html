@@ -693,13 +693,17 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
   </div>
   <div class="sp-ticker">
-    <div class="sp-tick-item"><span class="sp-tick-name">IBOV</span><span class="sp-tick-val">134.820</span><span class="sp-tick-chg up">+1.24%</span></div>
+    <div class="sp-tick-item" id="sp-tick-win"><span class="sp-tick-name">WIN</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
-    <div class="sp-tick-item"><span class="sp-tick-name">EUR/USD</span><span class="sp-tick-val">1.0842</span><span class="sp-tick-chg dn">-0.18%</span></div>
+    <div class="sp-tick-item" id="sp-tick-xau"><span class="sp-tick-name">XAU/USD</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
-    <div class="sp-tick-item"><span class="sp-tick-name">BTC/USD</span><span class="sp-tick-val">97.340</span><span class="sp-tick-chg up">+2.87%</span></div>
+    <div class="sp-tick-item" id="sp-tick-btc"><span class="sp-tick-name">BTC/USDT</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
-    <div class="sp-tick-item"><span class="sp-tick-name">WTI</span><span class="sp-tick-val">78.42</span><span class="sp-tick-chg dn">-0.63%</span></div>
+    <div class="sp-tick-item" id="sp-tick-eth"><span class="sp-tick-name">ETH/USDT</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-sep"></div>
+    <div class="sp-tick-item" id="sp-tick-eur"><span class="sp-tick-name">EUR/USD</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-sep"></div>
+    <div class="sp-tick-item" id="sp-tick-wti"><span class="sp-tick-name">WTI</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
   </div>
 </div>
 
@@ -1085,41 +1089,41 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
     <div style="padding:8px 16px 6px;font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;border-bottom:1px solid var(--border);flex-shrink:0">COTAÇÕES · TEMPO REAL</div>
 
-    <div class="mob-mkt-card">
+    <div class="mob-mkt-card" id="mob-mkt-win">
       <div class="mob-mkt-ico" style="background:rgba(0,150,255,.08);border:1px solid rgba(0,150,255,.14)">🇧🇷</div>
-      <div class="mob-mkt-info"><div class="mob-mkt-name">IBOV</div><div class="mob-mkt-desc">Ibovespa · B3</div></div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">WIN</div><div class="mob-mkt-desc">Mini Índice · B3</div></div>
       <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,22 12,19 22,21 32,15 42,11 52,7 56,5" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <div class="mob-mkt-right"><div class="mob-mkt-price">134.820</div><div class="mob-mkt-chg mup">▲ +1.24%</div></div>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
-    <div class="mob-mkt-card">
-      <div class="mob-mkt-ico" style="background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.14)">💵</div>
-      <div class="mob-mkt-info"><div class="mob-mkt-name">USD/BRL</div><div class="mob-mkt-desc">Dólar · B3/Forex</div></div>
-      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,18 12,16 22,14 32,15 42,12 52,10 56,9" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <div class="mob-mkt-right"><div class="mob-mkt-price">5.3120</div><div class="mob-mkt-chg mup">▲ +0.32%</div></div>
+    <div class="mob-mkt-card" id="mob-mkt-xau">
+      <div class="mob-mkt-ico" style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.14)">🥇</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">XAU/USD</div><div class="mob-mkt-desc">Ouro · Commodities</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,18 12,15 22,16 32,12 42,10 52,8 56,6" fill="none" stroke="#f5a623" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
-    <div class="mob-mkt-card">
+    <div class="mob-mkt-card" id="mob-mkt-btc">
+      <div class="mob-mkt-ico" style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.14)">₿</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">BTC/USDT</div><div class="mob-mkt-desc">Bitcoin · Cripto</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,20 12,17 22,19 32,14 42,10 52,12 56,8" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
+    </div>
+    <div class="mob-mkt-card" id="mob-mkt-eth">
+      <div class="mob-mkt-ico" style="background:rgba(100,120,255,.08);border:1px solid rgba(100,120,255,.14)">⚡</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">ETH/USDT</div><div class="mob-mkt-desc">Ethereum · Cripto</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,22 12,18 22,20 32,14 42,10 52,11 56,8" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
+    </div>
+    <div class="mob-mkt-card" id="mob-mkt-eur">
       <div class="mob-mkt-ico" style="background:rgba(255,30,60,.08);border:1px solid rgba(255,30,60,.14)">💱</div>
       <div class="mob-mkt-info"><div class="mob-mkt-name">EUR/USD</div><div class="mob-mkt-desc">Euro · Forex</div></div>
       <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,6 12,8 22,7 32,11 42,15 52,17 56,20" fill="none" stroke="#ff4560" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <div class="mob-mkt-right"><div class="mob-mkt-price">1.0842</div><div class="mob-mkt-chg mdn">▼ -0.18%</div></div>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
-    <div class="mob-mkt-card">
-      <div class="mob-mkt-ico" style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.14)">₿</div>
-      <div class="mob-mkt-info"><div class="mob-mkt-name">BTC/USD</div><div class="mob-mkt-desc">Bitcoin · Cripto</div></div>
-      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,20 12,17 22,19 32,14 42,10 52,12 56,8" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <div class="mob-mkt-right"><div class="mob-mkt-price">97.340</div><div class="mob-mkt-chg mup">▲ +2.87%</div></div>
-    </div>
-    <div class="mob-mkt-card">
-      <div class="mob-mkt-ico" style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.14)">⚡</div>
-      <div class="mob-mkt-info"><div class="mob-mkt-name">ETH/USD</div><div class="mob-mkt-desc">Ethereum · Cripto</div></div>
-      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,22 12,18 22,20 32,14 42,10 52,11 56,8" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <div class="mob-mkt-right"><div class="mob-mkt-price">3.240</div><div class="mob-mkt-chg mup">▲ +1.92%</div></div>
-    </div>
-    <div class="mob-mkt-card">
+    <div class="mob-mkt-card" id="mob-mkt-wti">
       <div class="mob-mkt-ico" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.14)">🛢</div>
       <div class="mob-mkt-info"><div class="mob-mkt-name">WTI</div><div class="mob-mkt-desc">Petróleo · Commodities</div></div>
       <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,8 12,10 22,9 32,13 42,16 52,14 56,18" fill="none" stroke="#ff4560" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <div class="mob-mkt-right"><div class="mob-mkt-price">78.42</div><div class="mob-mkt-chg mdn">▼ -0.63%</div></div>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
   </div>
 
@@ -2725,6 +2729,89 @@ if (window.innerWidth <= 768 && !feedLoaded) {
   feedLoaded = true
   loadFeed()
 }
+
+// ==================== MARKET DATA ====================
+var mktInterval = null
+
+function mktFmt(price, decimals) {
+  if (decimals === 0) return Math.round(price).toLocaleString('en-US')
+  var s = price.toFixed(decimals)
+  var p = s.split('.')
+  p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return p.join('.')
+}
+
+function updateMktAsset(key, price, chgPct, decimals) {
+  if (typeof decimals === 'undefined') decimals = 2
+  var priceStr = mktFmt(price, decimals)
+  var up = chgPct >= 0
+  var chgStr = (up ? '+' : '') + chgPct.toFixed(2) + '%'
+
+  // Splash ticker
+  var sp = document.getElementById('sp-tick-' + key)
+  if (sp) {
+    sp.querySelector('.sp-tick-val').textContent = priceStr
+    var sc = sp.querySelector('.sp-tick-chg')
+    if (sc) { sc.textContent = chgStr; sc.className = 'sp-tick-chg ' + (up ? 'up' : 'dn') }
+  }
+
+  // Mobile mercado card
+  var mob = document.getElementById('mob-mkt-' + key)
+  if (mob) {
+    var mp = mob.querySelector('.mob-mkt-price')
+    var mc = mob.querySelector('.mob-mkt-chg')
+    if (mp) mp.textContent = priceStr
+    if (mc) {
+      mc.textContent = (up ? '▲ +' : '▼ ') + Math.abs(chgPct).toFixed(2) + '%'
+      mc.className = 'mob-mkt-chg ' + (up ? 'mup' : 'mdn')
+    }
+  }
+}
+
+async function fetchMarketData() {
+  // 1. Binance: BTC/USDT + ETH/USDT (CORS ok, sem chave)
+  try {
+    var br = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=%5B%22BTCUSDT%22%2C%22ETHUSDT%22%5D')
+    if (br.ok) {
+      var bl = await br.json()
+      bl.forEach(function(t) {
+        var p = parseFloat(t.lastPrice), c = parseFloat(t.priceChangePercent)
+        if (t.symbol === 'BTCUSDT') updateMktAsset('btc', p, c, 2)
+        if (t.symbol === 'ETHUSDT') updateMktAsset('eth', p, c, 2)
+      })
+    }
+  } catch(e) {}
+
+  // 2. Yahoo Finance v7: EUR/USD, XAU/USD, WTI, IBOV(WIN)
+  var yfMap = { 'EURUSD=X': ['eur', 4], 'GC=F': ['xau', 2], 'CL=F': ['wti', 2], '%5EBVSP': ['win', 0] }
+  var yfSyms = Object.keys(yfMap).join(',')
+  try {
+    var yr = await fetch(
+      'https://query1.finance.yahoo.com/v7/finance/quote?symbols=' + yfSyms,
+      { headers: { 'Accept': 'application/json' } }
+    )
+    if (yr.ok) {
+      var yd = await yr.json()
+      var quotes = (yd.quoteResponse && yd.quoteResponse.result) || []
+      quotes.forEach(function(q) {
+        var sym = q.symbol === '^BVSP' ? '%5EBVSP' : q.symbol
+        var cfg = yfMap[sym]
+        if (!cfg) return
+        var price = q.regularMarketPrice
+        var chg = q.regularMarketChangePercent || 0
+        if (typeof price === 'number') updateMktAsset(cfg[0], price, chg, cfg[1])
+      })
+    }
+  } catch(e) {}
+}
+
+function startMarketData() {
+  fetchMarketData()
+  if (mktInterval) clearInterval(mktInterval)
+  mktInterval = setInterval(fetchMarketData, 30000)
+}
+
+startMarketData()
 </script>
 </body>
 </html>
