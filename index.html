@@ -374,6 +374,140 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .au-btn{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);transition:all .15s}
 .au-btn.on{background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25)}
 #rooms-list{min-height:200px}
+
+/* ================================================================
+   MOBILE APP  — visível em max-width: 768px
+   ================================================================ */
+
+#mob-app{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:200;
+  flex-direction:column;
+  background:var(--bg0);
+  overflow:hidden;
+}
+#mob-app.mob-hidden{display:none!important}
+@media(max-width:768px){
+  #mob-app{display:flex}
+  #s-room.on{position:fixed;inset:0;z-index:300}
+  .modal-bg.open,.auth-req.open,.confirm-del.open{z-index:400!important}
+}
+
+/* top bar */
+.mob-topbar{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:48px;background:rgba(8,10,12,.97);border-bottom:1px solid var(--border);flex-shrink:0}
+.mob-tlogo{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:900;letter-spacing:2px;color:var(--t1)}
+.mob-tlogo span{color:var(--g)}
+.mob-tbar-r{display:flex;align-items:center;gap:8px}
+.mob-icon-btn{width:32px;height:32px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:var(--t2);transition:all .15s}
+.mob-icon-btn:active{background:var(--bg4)}
+
+/* panes */
+.mob-pane{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column}
+.mob-pane.on{display:flex}
+
+/* stories */
+.mob-stories-row{display:flex;gap:13px;padding:13px 16px 11px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid var(--border);flex-shrink:0}
+.mob-stories-row::-webkit-scrollbar{display:none}
+.mob-story{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mob-story-av{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--bg3);border:2.5px solid var(--border2);position:relative;transition:transform .15s}
+.mob-story-av:active{transform:scale(.93)}
+.mob-story-av.sadd{background:transparent;border:2px dashed rgba(0,229,160,.28);color:var(--g);font-size:22px}
+.mob-story-av.slive{border-color:#ff4560;animation:sring 2s ease-in-out infinite}
+@keyframes sring{0%,100%{box-shadow:0 0 0 1.5px rgba(255,69,96,.2),0 0 10px rgba(255,69,96,.15)}50%{box-shadow:0 0 0 3px rgba(255,69,96,.45),0 0 20px rgba(255,69,96,.4)}}
+.mob-story-dot{position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:50%;background:#ff4560;border:2px solid var(--bg0)}
+.mob-story-name{font-family:var(--mono);font-size:9px;color:var(--t4);max-width:58px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+
+/* feed */
+.mob-feed{display:flex;flex-direction:column}
+.mob-post{padding:14px 16px;border-bottom:1px solid var(--border);transition:background .12s;-webkit-tap-highlight-color:transparent}
+.mob-post:active{background:rgba(255,255,255,.015)}
+.mob-post-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.mob-post-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:700;flex-shrink:0}
+.mav-g{background:rgba(0,229,160,.1);color:var(--g);border:1px solid rgba(0,229,160,.2)}
+.mav-b{background:rgba(0,170,255,.1);color:var(--b);border:1px solid rgba(0,170,255,.2)}
+.mav-r{background:rgba(255,69,96,.1);color:var(--r);border:1px solid rgba(255,69,96,.2)}
+.mav-y{background:rgba(245,166,35,.1);color:var(--y);border:1px solid rgba(245,166,35,.2)}
+.mav-p{background:rgba(167,139,250,.1);color:var(--p);border:1px solid rgba(167,139,250,.2)}
+.mob-post-meta{flex:1;min-width:0}
+.mob-post-user{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.mob-live-tag{font-size:8px;font-weight:700;padding:2px 5px;border-radius:3px;background:rgba(255,69,96,.1);border:1px solid rgba(255,69,96,.28);color:#ff4560;letter-spacing:.5px;flex-shrink:0}
+.mob-post-time{font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:2px}
+.mob-post-more{color:var(--t4);font-size:17px;cursor:pointer;flex-shrink:0;letter-spacing:2px;padding:0 2px}
+.mob-signal{border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.msig-l{background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.18)}
+.msig-s{background:rgba(255,69,96,.06);border:1px solid rgba(255,69,96,.18)}
+.msig-f{background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.15)}
+.mob-sig-dir{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.5px}
+.msig-l .mob-sig-dir{color:var(--g)}
+.msig-s .mob-sig-dir{color:var(--r)}
+.msig-f .mob-sig-dir{color:var(--y)}
+.mob-sig-asset{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:3px}
+.mob-post-text{font-size:13px;color:var(--t2);line-height:1.55;margin-bottom:10px}
+.mob-post-acts{display:flex;align-items:center;gap:20px}
+.mob-act{font-family:var(--mono);font-size:11px;color:var(--t4);cursor:pointer;display:flex;align-items:center;gap:5px;transition:color .15s;padding:3px 0;-webkit-tap-highlight-color:transparent}
+.mob-act:active{color:var(--g)}
+
+/* salas */
+.mob-filter-row{display:flex;gap:6px;padding:10px 16px;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;flex-shrink:0}
+.mob-filter-row::-webkit-scrollbar{display:none}
+.mob-pill{font-family:var(--mono);font-size:10px;font-weight:700;padding:5px 13px;border-radius:20px;border:1px solid var(--border2);color:var(--t4);background:transparent;cursor:pointer;transition:all .15s;white-space:nowrap;letter-spacing:.5px}
+.mpall{background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25);color:var(--g)}
+.mpb3{background:rgba(0,150,255,.08);border-color:rgba(0,150,255,.25);color:#00aaff}
+.mpfx{background:rgba(255,30,60,.08);border-color:rgba(255,30,60,.25);color:#ff2040}
+.mpcr{background:rgba(255,220,0,.08);border-color:rgba(255,220,0,.25);color:#ffe000}
+.mob-room-card{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .12s;-webkit-tap-highlight-color:transparent}
+.mob-room-card:active{background:rgba(255,255,255,.02)}
+.mob-room-badge{font-family:var(--mono);font-size:9px;font-weight:700;padding:3px 7px;border-radius:4px;flex-shrink:0}
+.mob-room-info{flex:1;min-width:0}
+.mob-room-name{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mob-room-host{font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:2px}
+.mob-room-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.mob-room-occ{font-family:var(--mono);font-size:10px;color:var(--t4)}
+.mob-enter-btn{font-family:var(--mono);font-size:10px;font-weight:700;padding:5px 12px;border-radius:5px;border:1px solid;cursor:pointer;white-space:nowrap;transition:all .15s}
+.mob-enter-btn:active{opacity:.7}
+
+/* mercado */
+.mob-mkt-card{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.mob-mkt-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.mob-mkt-info{flex:1}
+.mob-mkt-name{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--t1)}
+.mob-mkt-desc{font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:2px}
+.mob-spark{flex-shrink:0}
+.mob-mkt-right{text-align:right;flex-shrink:0}
+.mob-mkt-price{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--t1)}
+.mob-mkt-chg{font-family:var(--mono);font-size:11px;font-weight:700;margin-top:2px}
+.mob-mkt-chg.mup{color:var(--g)}.mob-mkt-chg.mdn{color:var(--r)}
+
+/* perfil */
+.mob-perfil-hero{padding:28px 20px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.mob-perfil-av{width:74px;height:74px;border-radius:50%;background:rgba(0,229,160,.08);border:2px solid rgba(0,229,160,.22);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:24px;font-weight:700;color:var(--g);margin-bottom:4px}
+.mob-perfil-id{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--t1)}
+.mob-perfil-sub{font-family:var(--mono);font-size:10px;color:var(--t4)}
+.mob-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.mob-stat-cell{background:var(--bg0);padding:16px 8px;text-align:center}
+.mob-stat-val{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--t1)}
+.mob-stat-lbl{font-family:var(--mono);font-size:9px;color:var(--t4);margin-top:3px;letter-spacing:.5px}
+.mob-perfil-btns{padding:16px;display:flex;flex-direction:column;gap:8px}
+.mob-btn-main{width:100%;padding:13px;background:var(--g);border:none;border-radius:8px;color:#080a0c;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.5px}
+.mob-btn-sec{width:100%;padding:13px;background:transparent;border:1px solid var(--border2);border-radius:8px;color:var(--t2);font-family:var(--mono);font-size:13px;cursor:pointer}
+
+/* bottom sheet overlay */
+.mob-overlay{position:absolute;inset:0;background:rgba(0,0,0,.85);display:none;align-items:flex-end;z-index:50}
+.mob-overlay.on{display:flex}
+.mob-sheet{background:var(--bg2);border:1px solid var(--border2);border-radius:18px 18px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0));width:100%;animation:sheet-up .22s ease}
+@keyframes sheet-up{from{transform:translateY(100%)}to{transform:none}}
+.mob-sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 18px}
+.mob-sheet-title{font-size:18px;font-weight:800;margin-bottom:16px}
+
+/* tab bar */
+.mob-tabbar{display:flex;height:58px;padding-bottom:env(safe-area-inset-bottom,0);background:rgba(8,10,12,.97);border-top:1px solid var(--border);flex-shrink:0}
+.mob-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--t4);transition:color .15s;padding:6px 0;position:relative;-webkit-tap-highlight-color:transparent}
+.mob-tab.active{color:var(--g)}
+.mob-tab.active::before{content:'';position:absolute;top:0;left:22%;right:22%;height:2px;background:var(--g);border-radius:0 0 2px 2px}
+.mob-tab-ico{font-size:19px;line-height:1.1}
+.mob-tab-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.3px}
 </style>
 </head>
 <body>
@@ -685,6 +819,285 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div onclick="document.getElementById('admin-login').style.display='none'" style="font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:10px;cursor:pointer">CANCELAR</div>
   </div>
 </div>
+
+<!-- ================================================================
+     MOBILE APP
+     ================================================================ -->
+<div id="mob-app">
+
+  <!-- ─── INÍCIO ─── -->
+  <div class="mob-pane on" id="mob-home">
+    <div class="mob-topbar">
+      <div class="mob-tlogo">TRADE<span>ROOM</span></div>
+      <div class="mob-tbar-r">
+        <div class="mob-icon-btn">🔔</div>
+        <div class="mob-icon-btn" onclick="mobTabGo('salas')">＋</div>
+      </div>
+    </div>
+
+    <!-- Stories -->
+    <div class="mob-stories-row">
+      <div class="mob-story">
+        <div class="mob-story-av sadd">＋</div>
+        <div class="mob-story-name">Criar</div>
+      </div>
+      <div class="mob-story">
+        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#061a0f,#0c2b18)">TM<span class="mob-story-dot"></span></div>
+        <div class="mob-story-name">t.marques</div>
+      </div>
+      <div class="mob-story">
+        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#06101a,#0c1b2e)">KV<span class="mob-story-dot"></span></div>
+        <div class="mob-story-name">k.ventura</div>
+      </div>
+      <div class="mob-story">
+        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#1a060c,#2b0d18)">RS<span class="mob-story-dot"></span></div>
+        <div class="mob-story-name">r.santos</div>
+      </div>
+      <div class="mob-story">
+        <div class="mob-story-av" style="background:linear-gradient(135deg,#100f06,#1a1a0c)">AL</div>
+        <div class="mob-story-name">a.lima</div>
+      </div>
+      <div class="mob-story">
+        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#0e0a1a,#1a102d)">JC<span class="mob-story-dot"></span></div>
+        <div class="mob-story-name">j.costa</div>
+      </div>
+      <div class="mob-story">
+        <div class="mob-story-av" style="background:linear-gradient(135deg,#060f1a,#0a1825)">MS</div>
+        <div class="mob-story-name">m.silva</div>
+      </div>
+    </div>
+
+    <!-- Feed -->
+    <div class="mob-feed">
+
+      <div class="mob-post">
+        <div class="mob-post-hd">
+          <div class="mob-post-av mav-g">TM</div>
+          <div class="mob-post-meta">
+            <div class="mob-post-user">@t.marques <span class="mob-live-tag">AO VIVO</span></div>
+            <div class="mob-post-time">2 min · B3 Scalping Pro</div>
+          </div>
+          <div class="mob-post-more">···</div>
+        </div>
+        <div class="mob-signal msig-l">
+          <div><div class="mob-sig-dir">▲ COMPRADO</div><div class="mob-sig-asset">WIN — IBOVESPA FUTURO</div></div>
+          <svg width="54" height="26" viewBox="0 0 54 26"><polyline points="2,22 12,18 22,19 32,13 42,9 52,4" fill="none" stroke="#00e5a0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="mob-post-text">Rompendo topo da madrugada com volume. Setup de continuação. Stop abaixo de 134.600.</div>
+        <div class="mob-post-acts">
+          <div class="mob-act">👍&nbsp;24</div>
+          <div class="mob-act">💬&nbsp;8</div>
+          <div class="mob-act">↗&nbsp;3</div>
+        </div>
+      </div>
+
+      <div class="mob-post">
+        <div class="mob-post-hd">
+          <div class="mob-post-av mav-b">KV</div>
+          <div class="mob-post-meta">
+            <div class="mob-post-user">@k.ventura</div>
+            <div class="mob-post-time">18 min · EUR/USD Day Trade</div>
+          </div>
+          <div class="mob-post-more">···</div>
+        </div>
+        <div class="mob-post-text">Dollar index fraquejando nos dados de CPI abaixo do esperado. EUR/USD com potencial de rompimento de 1.0870. Aguardando confirmação na vela de 15min antes de entrar.</div>
+        <div class="mob-post-acts">
+          <div class="mob-act">👍&nbsp;41</div>
+          <div class="mob-act">💬&nbsp;15</div>
+          <div class="mob-act">↗&nbsp;9</div>
+        </div>
+      </div>
+
+      <div class="mob-post">
+        <div class="mob-post-hd">
+          <div class="mob-post-av mav-r">RS</div>
+          <div class="mob-post-meta">
+            <div class="mob-post-user">@r.santos <span class="mob-live-tag">AO VIVO</span></div>
+            <div class="mob-post-time">34 min · BTC/USDT Análise</div>
+          </div>
+          <div class="mob-post-more">···</div>
+        </div>
+        <div class="mob-signal msig-s">
+          <div><div class="mob-sig-dir">▼ VENDIDO</div><div class="mob-sig-asset">BTC/USD — CRIPTO</div></div>
+          <svg width="54" height="26" viewBox="0 0 54 26"><polyline points="2,4 12,7 22,10 32,14 42,18 52,22" fill="none" stroke="#ff4560" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="mob-post-text">BTC rejeitou resistência em 98k pela 3ª vez. RSI sobrecomprado no daily. Setup de venda com alvo em 94.200.</div>
+        <div class="mob-post-acts">
+          <div class="mob-act">👍&nbsp;37</div>
+          <div class="mob-act">💬&nbsp;21</div>
+          <div class="mob-act">↗&nbsp;7</div>
+        </div>
+      </div>
+
+      <div class="mob-post">
+        <div class="mob-post-hd">
+          <div class="mob-post-av mav-y">AL</div>
+          <div class="mob-post-meta">
+            <div class="mob-post-user">@a.lima</div>
+            <div class="mob-post-time">1h · Análise Macro</div>
+          </div>
+          <div class="mob-post-more">···</div>
+        </div>
+        <div class="mob-signal msig-f">
+          <div><div class="mob-sig-dir">■ NEUTRO</div><div class="mob-sig-asset">WIN — AGUARDANDO</div></div>
+          <svg width="54" height="26" viewBox="0 0 54 26"><polyline points="2,14 12,12 22,14 32,11 42,13 52,12" fill="none" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="mob-post-text">IPCA acima do esperado. Selic deve subir mais 50bps. WIN pode testar suporte de 133.800 antes de retomar alta.</div>
+        <div class="mob-post-acts">
+          <div class="mob-act">👍&nbsp;19</div>
+          <div class="mob-act">💬&nbsp;6</div>
+          <div class="mob-act">↗&nbsp;2</div>
+        </div>
+      </div>
+
+      <div class="mob-post">
+        <div class="mob-post-hd">
+          <div class="mob-post-av mav-p">JC</div>
+          <div class="mob-post-meta">
+            <div class="mob-post-user">@j.costa <span class="mob-live-tag">AO VIVO</span></div>
+            <div class="mob-post-time">1h 20min · B3 Scalping</div>
+          </div>
+          <div class="mob-post-more">···</div>
+        </div>
+        <div class="mob-signal msig-l">
+          <div><div class="mob-sig-dir">▲ COMPRADO</div><div class="mob-sig-asset">WDO — DÓLAR FUTURO</div></div>
+          <svg width="54" height="26" viewBox="0 0 54 26"><polyline points="2,21 12,18 22,16 32,13 42,10 52,7" fill="none" stroke="#00e5a0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="mob-post-text">Dólar com fluxo de saída de emergentes. Entrada em WDO long no rompimento de 5.3200 com volume.</div>
+        <div class="mob-post-acts">
+          <div class="mob-act">👍&nbsp;29</div>
+          <div class="mob-act">💬&nbsp;11</div>
+          <div class="mob-act">↗&nbsp;5</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── SALAS ─── -->
+  <div class="mob-pane" id="mob-salas">
+    <div class="mob-topbar">
+      <div class="mob-tlogo">SALAS <span>AO VIVO</span></div>
+      <div class="mob-tbar-r">
+        <div class="mob-icon-btn" onclick="openMobLogin()">＋</div>
+      </div>
+    </div>
+    <div class="mob-filter-row">
+      <div class="mob-pill mpall" onclick="mobFilter('all',this)">TODAS</div>
+      <div class="mob-pill" onclick="mobFilter('B3',this)">B3</div>
+      <div class="mob-pill" onclick="mobFilter('Forex',this)">FOREX</div>
+      <div class="mob-pill" onclick="mobFilter('Cripto',this)">CRIPTO</div>
+    </div>
+    <div id="mob-rooms-list">
+      <div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">Carregando salas...</div>
+    </div>
+  </div>
+
+  <!-- ─── MERCADO ─── -->
+  <div class="mob-pane" id="mob-mercado">
+    <div class="mob-topbar">
+      <div class="mob-tlogo">MERCADO</div>
+    </div>
+    <div style="padding:8px 16px 6px;font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;border-bottom:1px solid var(--border);flex-shrink:0">COTAÇÕES · TEMPO REAL</div>
+
+    <div class="mob-mkt-card">
+      <div class="mob-mkt-ico" style="background:rgba(0,150,255,.08);border:1px solid rgba(0,150,255,.14)">🇧🇷</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">IBOV</div><div class="mob-mkt-desc">Ibovespa · B3</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,22 12,19 22,21 32,15 42,11 52,7 56,5" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">134.820</div><div class="mob-mkt-chg mup">▲ +1.24%</div></div>
+    </div>
+    <div class="mob-mkt-card">
+      <div class="mob-mkt-ico" style="background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.14)">💵</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">USD/BRL</div><div class="mob-mkt-desc">Dólar · B3/Forex</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,18 12,16 22,14 32,15 42,12 52,10 56,9" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">5.3120</div><div class="mob-mkt-chg mup">▲ +0.32%</div></div>
+    </div>
+    <div class="mob-mkt-card">
+      <div class="mob-mkt-ico" style="background:rgba(255,30,60,.08);border:1px solid rgba(255,30,60,.14)">💱</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">EUR/USD</div><div class="mob-mkt-desc">Euro · Forex</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,6 12,8 22,7 32,11 42,15 52,17 56,20" fill="none" stroke="#ff4560" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">1.0842</div><div class="mob-mkt-chg mdn">▼ -0.18%</div></div>
+    </div>
+    <div class="mob-mkt-card">
+      <div class="mob-mkt-ico" style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.14)">₿</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">BTC/USD</div><div class="mob-mkt-desc">Bitcoin · Cripto</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,20 12,17 22,19 32,14 42,10 52,12 56,8" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">97.340</div><div class="mob-mkt-chg mup">▲ +2.87%</div></div>
+    </div>
+    <div class="mob-mkt-card">
+      <div class="mob-mkt-ico" style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.14)">⚡</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">ETH/USD</div><div class="mob-mkt-desc">Ethereum · Cripto</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,22 12,18 22,20 32,14 42,10 52,11 56,8" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">3.240</div><div class="mob-mkt-chg mup">▲ +1.92%</div></div>
+    </div>
+    <div class="mob-mkt-card">
+      <div class="mob-mkt-ico" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.14)">🛢</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">WTI</div><div class="mob-mkt-desc">Petróleo · Commodities</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,8 12,10 22,9 32,13 42,16 52,14 56,18" fill="none" stroke="#ff4560" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">78.42</div><div class="mob-mkt-chg mdn">▼ -0.63%</div></div>
+    </div>
+  </div>
+
+  <!-- ─── PERFIL ─── -->
+  <div class="mob-pane" id="mob-perfil">
+    <div class="mob-topbar">
+      <div class="mob-tlogo">PERFIL</div>
+    </div>
+    <div class="mob-perfil-hero">
+      <div class="mob-perfil-av" id="mob-pav">?</div>
+      <div class="mob-perfil-id" id="mob-pid">visitante</div>
+      <div class="mob-perfil-sub" id="mob-psub">Não autenticado</div>
+    </div>
+    <div class="mob-stats-grid">
+      <div class="mob-stat-cell"><div class="mob-stat-val" id="mob-stat-dias">—</div><div class="mob-stat-lbl">DIAS</div></div>
+      <div class="mob-stat-cell"><div class="mob-stat-val" id="mob-stat-salas">—</div><div class="mob-stat-lbl">SALAS</div></div>
+      <div class="mob-stat-cell"><div class="mob-stat-val" id="mob-stat-sinais">—</div><div class="mob-stat-lbl">SINAIS</div></div>
+    </div>
+    <div class="mob-perfil-btns" id="mob-perfil-btns">
+      <button class="mob-btn-main" onclick="openMobLogin()">ENTRAR →</button>
+      <button class="mob-btn-sec" onclick="mobShowDesktop('s-cadastro')">CRIAR CONTA</button>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="mob-tabbar">
+    <div class="mob-tab active" id="mtab-home" onclick="mobTab('home',this)">
+      <div class="mob-tab-ico">⌂</div>
+      <div class="mob-tab-lbl">Início</div>
+    </div>
+    <div class="mob-tab" id="mtab-salas" onclick="mobTab('salas',this)">
+      <div class="mob-tab-ico">▶</div>
+      <div class="mob-tab-lbl">Salas</div>
+    </div>
+    <div class="mob-tab" id="mtab-mercado" onclick="mobTab('mercado',this)">
+      <div class="mob-tab-ico">◈</div>
+      <div class="mob-tab-lbl">Mercado</div>
+    </div>
+    <div class="mob-tab" id="mtab-perfil" onclick="mobTab('perfil',this)">
+      <div class="mob-tab-ico">◎</div>
+      <div class="mob-tab-lbl">Perfil</div>
+    </div>
+  </div>
+
+  <!-- Bottom Sheet: Login -->
+  <div class="mob-overlay" id="mob-overlay" onclick="if(event.target===this)closeMobOverlay()">
+    <div class="mob-sheet">
+      <div class="mob-sheet-handle"></div>
+      <div class="mob-sheet-title">Entrar no TradeRoom</div>
+      <div class="field"><label>EMAIL</label><input type="email" id="ml-email" placeholder="seu@email.com" autocomplete="email"></div>
+      <div class="field"><label>SENHA</label>
+        <div class="pwd-wrap">
+          <input type="password" id="ml-pwd" placeholder="Sua senha" autocomplete="current-password" onkeydown="if(event.key==='Enter')doMobLogin()">
+          <span class="pwd-toggle" onclick="togglePwd('ml-pwd',this)">MOSTRAR</span>
+        </div>
+      </div>
+      <button class="mob-btn-main" style="margin-top:4px" onclick="doMobLogin()">ENTRAR →</button>
+      <div class="divider" style="margin:12px 0"><div class="dl"></div><div class="dt">ou</div><div class="dl"></div></div>
+      <button class="mob-btn-sec" onclick="closeMobOverlay();mobShowDesktop('s-cadastro')">CRIAR CONTA</button>
+    </div>
+  </div>
+
+</div><!-- /#mob-app -->
 
 <script>
 const SUPABASE_URL = 'https://btqgizadenxvgnybjifx.supabase.co'
@@ -1646,6 +2059,139 @@ function setLang(l){document.querySelectorAll('.lang-btn').forEach(b=>b.classLis
 function toast(msg,cls){if(!cls)cls='t-g';const wrap=document.getElementById('toast-wrap');const el=document.createElement('div');el.className='toast '+cls;el.textContent=msg;wrap.appendChild(el);setTimeout(function(){el.remove()},2600)}
 
 updateUserUI()
+
+// ==================== MOBILE APP ====================
+var mobCurFilter = 'all'
+
+function mobTab(name, btn) {
+  document.querySelectorAll('.mob-pane').forEach(function(p){ p.classList.remove('on') })
+  document.querySelectorAll('.mob-tab').forEach(function(t){ t.classList.remove('active') })
+  var pane = document.getElementById('mob-' + name)
+  if (pane) pane.classList.add('on')
+  if (btn) btn.classList.add('active')
+  if (name === 'salas') mobRenderRooms()
+  if (name === 'perfil') mobUpdatePerfil()
+}
+
+function mobTabGo(name) {
+  mobTab(name, document.getElementById('mtab-' + name))
+}
+
+function mobFilter(filter, el) {
+  mobCurFilter = filter
+  document.querySelectorAll('.mob-filter-row .mob-pill').forEach(function(p){
+    p.className = 'mob-pill'
+  })
+  var cls = { all:'mpall', B3:'mpb3', Forex:'mpfx', Cripto:'mpcr' }[filter] || 'mpall'
+  if (el) el.classList.add(cls)
+  mobRenderRooms()
+}
+
+function mobRenderRooms() {
+  var list = document.getElementById('mob-rooms-list')
+  if (!list) return
+  var rooms = mobCurFilter === 'all' ? allRooms : allRooms.filter(function(r){ return r.mercado === mobCurFilter })
+  if (!rooms.length) {
+    list.innerHTML = '<div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">Nenhuma sala disponível no momento.</div>'
+    return
+  }
+  var COL = {
+    B3:    { badge:'background:rgba(0,150,255,.12);border:1px solid rgba(0,150,255,.25);color:#00aaff', btn:'background:rgba(0,150,255,.08);border-color:rgba(0,150,255,.3);color:#00aaff' },
+    Forex: { badge:'background:rgba(255,30,60,.12);border:1px solid rgba(255,30,60,.25);color:#ff2040', btn:'background:rgba(255,30,60,.08);border-color:rgba(255,30,60,.3);color:#ff2040' },
+    Cripto:{ badge:'background:rgba(255,220,0,.12);border:1px solid rgba(255,220,0,.25);color:#ffe000', btn:'background:rgba(255,220,0,.08);border-color:rgba(255,220,0,.3);color:#ffe000' }
+  }
+  list.innerHTML = rooms.map(function(r) {
+    var c = COL[r.mercado] || COL.B3
+    var lotada = r.membros_count >= r.limite
+    var tid = r.trader_id || r.criador_id || 'host'
+    return '<div class="mob-room-card" onclick="mobEntrar(\'' + r.id + '\')">' +
+      '<div class="mob-room-badge" style="' + c.badge + '">' + r.mercado + '</div>' +
+      '<div class="mob-room-info">' +
+        '<div class="mob-room-name">' + r.nome + '</div>' +
+        '<div class="mob-room-host">@' + tid + ' · ' + r.membros_count + '/' + r.limite + '</div>' +
+      '</div>' +
+      '<div class="mob-room-right">' +
+        '<div style="width:6px;height:6px;border-radius:50%;background:' + (lotada?'var(--r)':'var(--g)') + ';box-shadow:0 0 8px ' + (lotada?'var(--r)':'var(--g)') + '"></div>' +
+        '<button class="mob-enter-btn" style="' + c.btn + (lotada?';opacity:.4;cursor:not-allowed':'') + '" ' + (lotada?'disabled':'') + ' onclick="event.stopPropagation();mobEntrar(\'' + r.id + '\')">' + (lotada?'LOTADA':'ENTRAR') + '</button>' +
+      '</div>' +
+    '</div>'
+  }).join('')
+}
+
+function mobEntrar(id) {
+  if (!currentUser.loggedIn) { openMobLogin(); return }
+  var room = allRooms.find(function(r){ return r.id === id })
+  if (!room) return
+  entrarSala(room)
+}
+
+function mobUpdatePerfil() {
+  var av   = document.getElementById('mob-pav')
+  var pid  = document.getElementById('mob-pid')
+  var psub = document.getElementById('mob-psub')
+  var btns = document.getElementById('mob-perfil-btns')
+  if (!av) return
+  if (currentUser.loggedIn) {
+    av.textContent  = (currentUser.trader_id||'TR').substring(0,2).toUpperCase()
+    pid.textContent = '#' + (currentUser.trader_id||'trader')
+    psub.textContent = currentUser.email || ''
+    btns.innerHTML = '<button class="mob-btn-sec" onclick="doMobLogout()">SAIR DA CONTA</button>'
+  } else {
+    av.textContent  = '?'
+    pid.textContent = 'visitante'
+    psub.textContent = 'Não autenticado'
+    btns.innerHTML =
+      '<button class="mob-btn-main" onclick="openMobLogin()">ENTRAR →</button>' +
+      '<button class="mob-btn-sec" onclick="mobShowDesktop(\'s-cadastro\')">CRIAR CONTA</button>'
+  }
+}
+
+function openMobLogin() {
+  document.getElementById('mob-overlay').classList.add('on')
+  var em = document.getElementById('ml-email')
+  if (em) setTimeout(function(){ em.focus() }, 300)
+}
+function closeMobOverlay() {
+  document.getElementById('mob-overlay').classList.remove('on')
+}
+
+async function doMobLogin() {
+  var email = document.getElementById('ml-email').value.trim()
+  var pwd   = document.getElementById('ml-pwd').value
+  if (!email || !pwd) { toast('Preencha email e senha', 't-r'); return }
+  var res = await sb.auth.signInWithPassword({ email: email, password: pwd })
+  if (res.error) { toast('Email ou senha incorretos', 't-r'); return }
+  closeMobOverlay()
+  toast('Bem-vindo de volta!', 't-g')
+  mobUpdatePerfil()
+}
+
+async function doMobLogout() {
+  await sb.auth.signOut()
+  currentUser = { trader_id: 'visitante', loggedIn: false }
+  toast('Sessão encerrada', 't-g')
+  mobUpdatePerfil()
+}
+
+function mobShowDesktop(screenId) {
+  document.getElementById('mob-app').classList.add('mob-hidden')
+  closeMobOverlay()
+  _origGo(screenId)
+}
+
+// Patch go() to intercept s-lobby and s-splash on mobile
+var _origGo = go
+window.go = function(screenId) {
+  if (window.innerWidth <= 768) {
+    if (screenId === 's-lobby' || screenId === 's-splash') {
+      _origGo(screenId)                                     // limpa .on dos screens
+      document.getElementById('mob-app').classList.remove('mob-hidden')
+      mobTab('home', document.getElementById('mtab-home'))
+      return
+    }
+  }
+  _origGo(screenId)
+}
 </script>
 </body>
 </html>
