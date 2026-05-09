@@ -2345,11 +2345,13 @@ function mobRenderRooms() {
   }).join('')
 }
 
+var mobPendingRoomId = null
+
 function mobEntrar(id) {
-  if (!currentUser.loggedIn) { openMobLogin(); return }
+  if (!currentUser.loggedIn) { mobPendingRoomId = id; openMobLogin(); return }
   var room = allRooms.find(function(r){ return r.id === id })
   if (!room) return
-  entrarSala(room)
+  enterRoom(room)
 }
 
 function mobUpdatePerfil() {
@@ -2394,6 +2396,11 @@ async function doMobLogin() {
   await loadUserProfile(res.data.user)
   closeMobOverlay()
   toast('Bem-vindo, ' + currentUser.trader_id + '!', 't-g')
+  if (mobPendingRoomId) {
+    var pid = mobPendingRoomId
+    mobPendingRoomId = null
+    mobEntrar(pid)
+  }
 }
 
 async function doMobLogout() {
