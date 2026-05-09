@@ -2558,12 +2558,10 @@ async function submitPost() {
     usuario_id: currentUser.id,
     trader_id: currentUser.trader_id,
     conteudo: txt,
-    imagem_url: imgUrl,
-    curtidas: 0,
-    comentarios_count: 0
+    imagem_url: imgUrl
   }).select().single()
   btn.textContent = 'POSTAR →'; btn.disabled = false
-  if (ins.error) { toast('Erro ao postar','t-r'); return }
+  if (ins.error) { toast('Erro: ' + (ins.error.message || ins.error.code || 'tente novamente'), 't-r'); return }
   closeCompose()
   toast('Post publicado!','t-g')
   feedPosts.unshift(ins.data)
