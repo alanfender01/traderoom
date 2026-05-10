@@ -692,7 +692,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
   </div>
   <div class="sp-ticker">
-    <div class="sp-tick-item" id="sp-tick-win"><span class="sp-tick-name">WIN</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-item" id="sp-tick-win"><span class="sp-tick-name">IBOV</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
     <div class="sp-tick-item" id="sp-tick-xau"><span class="sp-tick-name">XAU/USD</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
@@ -700,9 +700,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="sp-tick-sep"></div>
     <div class="sp-tick-item" id="sp-tick-eth"><span class="sp-tick-name">ETH/USDT</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
-    <div class="sp-tick-item" id="sp-tick-eur"><span class="sp-tick-name">EUR/USD</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-item" id="sp-tick-eur"><span class="sp-tick-name">USD/BRL</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
-    <div class="sp-tick-item" id="sp-tick-wti"><span class="sp-tick-name">WTI</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-item" id="sp-tick-wti"><span class="sp-tick-name">XAG/USD</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
   </div>
 </div>
 
@@ -1090,7 +1090,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
     <div class="mob-mkt-card" id="mob-mkt-win">
       <div class="mob-mkt-ico" style="background:rgba(0,150,255,.08);border:1px solid rgba(0,150,255,.14)">🇧🇷</div>
-      <div class="mob-mkt-info"><div class="mob-mkt-name">WIN</div><div class="mob-mkt-desc">Mini Índice · B3</div></div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">IBOV</div><div class="mob-mkt-desc">Ibovespa · B3</div></div>
       <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,22 12,19 22,21 32,15 42,11 52,7 56,5" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
       <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
@@ -1113,14 +1113,14 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
     <div class="mob-mkt-card" id="mob-mkt-eur">
-      <div class="mob-mkt-ico" style="background:rgba(255,30,60,.08);border:1px solid rgba(255,30,60,.14)">💱</div>
-      <div class="mob-mkt-info"><div class="mob-mkt-name">EUR/USD</div><div class="mob-mkt-desc">Euro · Forex</div></div>
+      <div class="mob-mkt-ico" style="background:rgba(255,30,60,.08);border:1px solid rgba(255,30,60,.14)">💵</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">USD/BRL</div><div class="mob-mkt-desc">Dólar · Forex</div></div>
       <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,6 12,8 22,7 32,11 42,15 52,17 56,20" fill="none" stroke="#ff4560" stroke-width="1.2" stroke-linecap="round"/></svg>
       <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
     <div class="mob-mkt-card" id="mob-mkt-wti">
-      <div class="mob-mkt-ico" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.14)">🛢</div>
-      <div class="mob-mkt-info"><div class="mob-mkt-name">WTI</div><div class="mob-mkt-desc">Petróleo · Commodities</div></div>
+      <div class="mob-mkt-ico" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.14)">🥈</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">XAG/USD</div><div class="mob-mkt-desc">Prata · Commodities</div></div>
       <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,8 12,10 22,9 32,13 42,16 52,14 56,18" fill="none" stroke="#ff4560" stroke-width="1.2" stroke-linecap="round"/></svg>
       <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
@@ -2731,14 +2731,13 @@ if (window.innerWidth <= 768 && !feedLoaded) {
 
 // ==================== MARKET DATA ====================
 // Fontes por ativo:
-//   BTC/ETH  → Binance (CORS ok, sem chave)
-//   EUR/USD  → Frankfurter / ECB (CORS ok, sem chave)
-//   XAU/USD  → CoinGecko via PAX Gold (1 PAXG = 1 oz ouro, CORS ok)
-//   WTI      → Yahoo Finance v8 chart CL=F (request individual)
-//   WIN/IBOV → Yahoo Finance v8 chart ^BVSP (request individual)
+//   BTC/ETH   → Binance (CORS ok, sem chave)
+//   XAU/USD   → CoinGecko via PAX Gold (1 PAXG = 1 oz ouro, CORS ok)
+//   USD/BRL   → AwesomeAPI (CORS ok, sem chave, pctChange incluso)
+//   XAG/USD   → AwesomeAPI (CORS ok, sem chave, pctChange incluso)
+//   IBOV      → brapi.dev ^BVSP (CORS ok, sem chave)
 
 var mktInterval = null
-var mktEurPrev = null  // armazena taxa anterior para calcular variação EUR/USD
 
 function mktFmt(price, decimals) {
   if (decimals === 0) return Math.round(price).toLocaleString('en-US')
@@ -2773,21 +2772,6 @@ function updateMktAsset(key, price, chgPct, decimals) {
   }
 }
 
-// Yahoo Finance v8 chart — request individual por símbolo (mais confiável que v7 batch)
-async function mktFetchYF(sym, key, dec) {
-  var r = await fetch(
-    'https://query2.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(sym) + '?interval=1d&range=2d',
-    { headers: { 'Accept': 'application/json' } }
-  )
-  if (!r.ok) throw new Error('YF ' + r.status)
-  var d = await r.json()
-  var meta = d.chart.result[0].meta
-  var price = meta.regularMarketPrice
-  var prev  = meta.chartPreviousClose || meta.previousClose || price
-  var chg   = prev ? (price - prev) / prev * 100 : 0
-  updateMktAsset(key, price, chg, dec)
-}
-
 async function fetchMarketData() {
   // 1. BTC/USDT + ETH/USDT — Binance (sem CORS, sem chave, 24h change incluído)
   try {
@@ -2800,18 +2784,7 @@ async function fetchMarketData() {
     })
   } catch(e) {}
 
-  // 2. EUR/USD — Frankfurter (ECB, atualização diária, CORS garantido)
-  //    Variação calculada comparando com o valor da busca anterior na sessão
-  try {
-    var fr = await fetch('https://api.frankfurter.dev/v1/latest?from=EUR&to=USD')
-    var fd = await fr.json()
-    var eurPrice = fd.rates.USD
-    var eurChg = mktEurPrev ? (eurPrice - mktEurPrev) / mktEurPrev * 100 : 0
-    if (!mktEurPrev) mktEurPrev = eurPrice
-    updateMktAsset('eur', eurPrice, eurChg, 4)
-  } catch(e) {}
-
-  // 3. XAU/USD — CoinGecko via PAX Gold (1 PAXG = 1 oz ouro físico, 24h change real)
+  // 2. XAU/USD — CoinGecko via PAX Gold (1 PAXG = 1 oz ouro físico, 24h change real)
   try {
     var gr = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=pax-gold&vs_currencies=usd&include_24hr_change=true')
     var gd = await gr.json()
@@ -2820,10 +2793,32 @@ async function fetchMarketData() {
     updateMktAsset('xau', xauPrice, xauChg, 2)
   } catch(e) {}
 
-  // 4. WTI (CL=F) + WIN/IBOV (^BVSP) — Yahoo Finance v8 chart, requests independentes
-  //    Se CORS bloquear um, o outro não é afetado
-  try { await mktFetchYF('CL=F',  'wti', 2) } catch(e) {}
-  try { await mktFetchYF('^BVSP', 'win', 0) } catch(e) {}
+  // 3. USD/BRL + XAG/USD — AwesomeAPI (CORS-friendly, pctChange incluso)
+  try {
+    var ar = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL,XAG-USD')
+    var ad = await ar.json()
+    if (ad['USDBRL']) {
+      var brlPrice = parseFloat(ad['USDBRL'].bid)
+      var brlChg   = parseFloat(ad['USDBRL'].pctChange) || 0
+      updateMktAsset('eur', brlPrice, brlChg, 4)
+    }
+    if (ad['XAGUSD']) {
+      var xagPrice = parseFloat(ad['XAGUSD'].bid)
+      var xagChg   = parseFloat(ad['XAGUSD'].pctChange) || 0
+      updateMktAsset('wti', xagPrice, xagChg, 2)
+    }
+  } catch(e) {}
+
+  // 4. IBOV — brapi.dev (índice B3, CORS-friendly, sem chave)
+  try {
+    var ibr = await fetch('https://brapi.dev/api/quote/%5EBVSP?fundamental=false&dividends=false')
+    var ibd = await ibr.json()
+    if (ibd.results && ibd.results[0]) {
+      var ibPrice = ibd.results[0].regularMarketPrice
+      var ibChg   = ibd.results[0].regularMarketChangePercent || 0
+      updateMktAsset('win', ibPrice, ibChg, 0)
+    }
+  } catch(e) {}
 }
 
 function startMarketData() {
