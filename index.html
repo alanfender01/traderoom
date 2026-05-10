@@ -50,20 +50,49 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .t-r{background:rgba(255,69,96,.12);border:1px solid rgba(255,69,96,.3);color:var(--r)}
 .t-y{background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:var(--y)}
 .t-b{background:rgba(0,170,255,.12);border:1px solid rgba(0,170,255,.3);color:var(--b)}
-#s-splash{align-items:center;justify-content:center;text-align:center;padding:80px 24px;position:relative;overflow:hidden}
-.splash-corner{position:absolute;width:200px;height:200px;border:1px solid rgba(0,229,160,.06)}
-.c-tl{top:0;left:0;border-right:none;border-bottom:none}
-.c-br{bottom:0;right:0;border-left:none;border-top:none}
-.splash-eyebrow{font-family:var(--mono);font-size:10px;color:var(--g);letter-spacing:4px;margin-bottom:14px;opacity:.7}
-.splash-title{font-family:var(--display);font-size:clamp(48px,8vw,80px);font-weight:800;letter-spacing:-3px;margin-bottom:12px;line-height:1}
-.splash-title span{color:var(--g)}
-.splash-sub{font-family:var(--mono);font-size:12px;color:var(--t3);margin-bottom:2.5rem;letter-spacing:.5px}
-.splash-btns{display:flex;flex-direction:column;gap:10px;width:280px}
-.splash-ticker{position:fixed;bottom:0;left:0;right:0;height:34px;background:var(--bg2);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:10}
-.ticker-inner{display:flex;gap:32px;animation:scroll 25s linear infinite;white-space:nowrap;padding-left:100%}
-@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.tick-i{font-family:var(--mono);font-size:11px;display:flex;gap:8px}
-.t-name{color:var(--t3)}.t-val{color:var(--t1);font-weight:500}.t-up{color:var(--g)}.t-dn{color:var(--r)}
+#s-splash{background:#060810;height:100vh}
+.sp-nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;background:rgba(6,8,16,.97);border-bottom:1px solid rgba(0,229,160,.07);flex-shrink:0;position:relative;z-index:3}
+.sp-logo{font-family:'Orbitron',sans-serif;font-size:17px;font-weight:900;letter-spacing:2px;color:#edf0f4}
+.sp-logo span{color:#00e5a0}
+.sp-nav-right{display:flex;align-items:center;gap:14px}
+.sp-lang{display:flex;gap:2px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:3px}
+.lang-btn{background:none;border:none;color:#6b7a8d;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.5px;padding:4px 9px;border-radius:4px;cursor:pointer;transition:all .15s}
+.lang-btn.active,.lang-btn:hover{background:rgba(0,229,160,.1);color:#00e5a0}
+.sp-enter-btn{background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.28);color:#00e5a0;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;padding:7px 18px;border-radius:6px;cursor:pointer;transition:all .15s}
+.sp-enter-btn:hover{background:rgba(0,229,160,.17);border-color:rgba(0,229,160,.6);box-shadow:0 0 16px rgba(0,229,160,.12)}
+.sp-main{display:flex;flex:1;overflow:hidden;min-height:0;position:relative;z-index:2}
+.sp-hero{display:flex;flex-direction:column;justify-content:center;padding:0 40px 0 52px;width:54%;flex-shrink:0;background:linear-gradient(to right,rgba(6,8,16,.99) 0%,rgba(6,8,16,.93) 55%,rgba(6,8,16,.08) 100%)}
+.sp-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.16);border-radius:20px;padding:5px 14px;font-family:var(--mono);font-size:10px;color:rgba(0,229,160,.8);margin-bottom:24px;width:fit-content}
+.sp-dot-live{width:7px;height:7px;border-radius:50%;background:#00e5a0;box-shadow:0 0 8px #00e5a0;flex-shrink:0;animation:pdot 1.6s ease-in-out infinite}
+@keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.55)}}
+.sp-title{font-family:var(--display);font-size:clamp(22px,2.6vw,36px);font-weight:300;line-height:1.22;letter-spacing:.2px;color:#edf0f4;margin-bottom:12px}
+.sp-title span{color:#00e5a0}
+.sp-subtitle{font-family:var(--mono);font-size:11px;color:#546070;margin-bottom:30px;line-height:1.65;max-width:390px}
+.sp-rooms-lbl{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:#3a4455;margin-bottom:10px}
+.sp-rooms{display:flex;flex-direction:column;gap:7px;max-width:450px}
+.sp-room{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.023);border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:10px 14px;cursor:pointer;transition:all .18s}
+.sp-room:hover{background:rgba(0,229,160,.04);border-color:rgba(0,229,160,.15);transform:translateX(4px)}
+.sp-room-left{display:flex;align-items:center;gap:10px}
+.sp-badge{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:1px;padding:3px 8px;border-radius:4px;flex-shrink:0}
+.sp-b3{background:rgba(0,127,255,.1);border:1px solid rgba(0,127,255,.2);color:#00aaff}
+.sp-fx{background:rgba(255,30,60,.1);border:1px solid rgba(255,30,60,.2);color:#ff2040}
+.sp-cr{background:rgba(255,220,0,.08);border:1px solid rgba(255,220,0,.16);color:#ffe000}
+.sp-room-name{font-family:var(--mono);font-size:11px;font-weight:700;color:#c0c8d8}
+.sp-room-host{font-family:var(--mono);font-size:10px;color:#3a4455;margin-top:2px}
+.sp-room-host strong{color:#546070}
+.sp-occ{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.sp-occ-bar{display:block;width:54px;height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
+.sp-occ-bar span{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#00e5a0,#0af)}
+.sp-occ-txt{font-family:var(--mono);font-size:9px;color:#3a4455}
+.sp-canvas-wrap{position:absolute;inset:0;z-index:0;pointer-events:none}
+#sp-neural{width:100%;height:100%}
+.sp-ticker{display:flex;align-items:center;height:38px;background:rgba(0,0,0,.65);border-top:1px solid rgba(255,255,255,.05);flex-shrink:0;padding:0 28px;position:relative;z-index:3}
+.sp-tick-item{display:flex;align-items:center;gap:8px;flex:1;justify-content:center}
+.sp-tick-sep{width:1px;height:16px;background:rgba(255,255,255,.05);flex-shrink:0}
+.sp-tick-name{font-family:var(--mono);font-size:9px;color:#3a4455;letter-spacing:1px}
+.sp-tick-val{font-family:var(--mono);font-size:11px;font-weight:700;color:#9aa8b8}
+.sp-tick-chg{font-family:var(--mono);font-size:10px;font-weight:700}
+.sp-tick-chg.up{color:#00e5a0}.sp-tick-chg.dn{color:#ff4560}
 #s-cadastro,#s-login{align-items:center;justify-content:center;padding:80px 24px}
 .form-card{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:2rem;width:380px;max-width:96vw;z-index:1}
 .fc-back{font-family:var(--mono);font-size:10px;color:var(--t3);cursor:pointer;margin-bottom:1.2rem;display:inline-flex;align-items:center;gap:5px;transition:color .15s}
@@ -253,6 +282,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .role-tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px}
 .rt-host{background:rgba(245,166,35,.1);color:var(--y);border:1px solid rgba(245,166,35,.2)}
 .rt-member{background:rgba(138,146,160,.08);color:var(--t3);border:1px solid var(--border)}
+.rh-mob-exit{display:none}
 .room-body{display:flex;flex:1;overflow:hidden;height:calc(100vh - 94px)}
 .chart-col{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
 .chart-toolbar{display:flex;align-items:center;gap:3px;padding:5px 10px;background:var(--bg1);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
@@ -344,6 +374,270 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .au-btn{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);transition:all .15s}
 .au-btn.on{background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25)}
 #rooms-list{min-height:200px}
+
+/* ================================================================
+   MOBILE APP  — visível em max-width: 768px
+   ================================================================ */
+
+#mob-app{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:200;
+  flex-direction:column;
+  background:var(--bg0);
+  overflow:hidden;
+}
+#mob-app.mob-hidden{display:none!important}
+@media(max-width:768px){
+  #mob-app{display:flex}
+  .modal-bg.open,.auth-req.open,.confirm-del.open{z-index:400!important}
+
+  /* ─── Sala: container ──────────────────────────────── */
+  #s-room.on{
+    position:fixed;inset:0;z-index:300;
+    display:flex;flex-direction:column;overflow:hidden;
+    background:var(--bg0)
+  }
+
+  /* ─── Header da sala ──────────────────────────────── */
+  #s-room .rh{height:40px;padding:0 8px;gap:6px}
+  #s-room .rh-name{font-size:11px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #s-room .rh-back{font-size:9px;padding:2px 7px}
+  #s-room .rh-asset{font-size:10px;padding:2px 8px}
+  #s-room .role-tag{font-size:8px;padding:2px 6px}
+  #s-room #pregao-status-bar.enc-on{font-size:9px;padding:3px 8px;letter-spacing:.5px}
+
+  /* ─── Body: coluna em vez de linha ───────────────── */
+  #s-room .room-body{
+    flex-direction:column;
+    height:auto;flex:1;min-height:0;
+    overflow:hidden
+  }
+
+  /* ─── Coluna do gráfico (topo) ───────────────────── */
+  #s-room .chart-col{
+    flex:0 0 46vh;
+    min-width:0;overflow:hidden
+  }
+
+  /* Toolbar: scroll horizontal, sem quebra de linha */
+  #s-room .chart-toolbar{
+    overflow-x:auto;flex-wrap:nowrap;
+    padding:4px 8px;gap:2px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none
+  }
+  #s-room .chart-toolbar::-webkit-scrollbar{display:none}
+  #s-room .ct-sep{display:none}
+  #s-room .tft{font-size:9px;padding:3px 9px;white-space:nowrap;flex-shrink:0}
+
+  /* Botões de posição */
+  #s-room .bottom-op{padding:5px 8px;gap:5px}
+  #s-room .op-lbl{display:none}
+  #s-room .op-b{flex:1;padding:9px 2px;font-size:10px;text-align:center;letter-spacing:0}
+  #s-room .op-spacer{display:none}
+
+  /* ─── Painel lateral: vira painel inferior ───────── */
+  #s-room .room-side{
+    width:100%;border-left:none;border-top:1px solid var(--border);
+    flex:1;min-height:0;overflow:hidden
+  }
+  #s-room .side-tabs .stab{font-size:9px;padding:7px 4px}
+
+  /* Chat: mensagens ocupam o espaço restante */
+  #s-room .chat-inp-row{padding:5px 6px}
+  #s-room .chat-inp{font-size:11px;padding:6px 8px}
+
+  /* ─── Botão Sair no header (FREQUENTADOR) ──────── */
+  #s-room .rh-mob-exit{
+    display:flex;align-items:center;
+    font-family:var(--mono);font-size:9px;color:var(--t3);
+    border:1px solid var(--border2);border-radius:4px;
+    padding:3px 8px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    white-space:nowrap;flex-shrink:0
+  }
+  #s-room .rh-mob-exit:active{background:var(--bg3);color:var(--t1)}
+
+  /* ─── Painel membro: escondido no mobile ─────── */
+  #s-room .member-panel{display:none!important}
+
+  /* ─── Painel criador: 3 botões em linha ─────────── */
+  #s-room .creator-panel{
+    padding:5px 8px;
+    background:rgba(245,166,35,.03);
+    border-top:1px solid rgba(245,166,35,.12)
+  }
+  #s-room .cp-title{display:none}
+  #s-room .cp-btns{flex-direction:row;gap:5px}
+  #s-room .cp-btn{
+    flex:1;font-size:9px;font-weight:700;
+    padding:7px 3px;text-align:center;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    border-radius:6px
+  }
+
+  /* ─── Strip de áudio ────────────────────────────── */
+  #s-room .audio-strip{
+    padding:5px 10px;
+    padding-bottom:max(5px,env(safe-area-inset-bottom,5px))
+  }
+}
+
+/* top bar */
+.mob-topbar{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:48px;background:rgba(8,10,12,.97);border-bottom:1px solid var(--border);flex-shrink:0}
+.mob-tlogo{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:900;letter-spacing:2px;color:var(--t1)}
+.mob-tlogo span{color:var(--g)}
+.mob-tbar-r{display:flex;align-items:center;gap:8px}
+.mob-icon-btn{width:32px;height:32px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:var(--t2);transition:all .15s}
+.mob-icon-btn:active{background:var(--bg4)}
+
+/* panes */
+.mob-pane{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column}
+.mob-pane.on{display:flex}
+
+/* feed real */
+.mob-post-img{width:100%;border-radius:8px;margin-bottom:10px;object-fit:cover;max-height:220px}
+.mob-act-liked{color:var(--g)!important}
+.mob-act-liked .feed-lheart{filter:none}
+.mob-feed-empty{padding:48px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4);line-height:1.8}
+.mob-feed-load{padding:24px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--t4)}
+/* comments sheet */
+.mob-comment{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.mob-comment:last-child{border-bottom:none}
+.mob-comment-body{flex:1;min-width:0}
+.mob-comment-user{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--t2);margin-bottom:3px}
+.mob-comment-time{font-weight:400;color:var(--t4);margin-left:6px}
+.mob-comment-text{font-size:12px;color:var(--t1);line-height:1.45}
+/* compose image preview */
+.mob-compose-preview{width:100%;border-radius:8px;margin-top:8px;object-fit:cover;max-height:160px;display:block}
+.mob-compose-remove{font-family:var(--mono);font-size:9px;color:var(--r);cursor:pointer;margin-top:4px;display:inline-block}
+
+/* stories */
+.mob-stories-row{display:flex;gap:13px;padding:13px 16px 11px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid var(--border);flex-shrink:0}
+.mob-stories-row::-webkit-scrollbar{display:none}
+.mob-story{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mob-story-av{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--bg3);border:2.5px solid var(--border2);position:relative;transition:transform .15s}
+.mob-story-av:active{transform:scale(.93)}
+.mob-story-av.sadd{background:transparent;border:2px dashed rgba(0,229,160,.28);color:var(--g);font-size:22px}
+.mob-story-av.slive{border-color:#ff4560;animation:sring 2s ease-in-out infinite}
+@keyframes sring{0%,100%{box-shadow:0 0 0 1.5px rgba(255,69,96,.2),0 0 10px rgba(255,69,96,.15)}50%{box-shadow:0 0 0 3px rgba(255,69,96,.45),0 0 20px rgba(255,69,96,.4)}}
+.mob-story-dot{position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:50%;background:#ff4560;border:2px solid var(--bg0)}
+.mob-story-name{font-family:var(--mono);font-size:9px;color:var(--t4);max-width:58px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+
+/* feed */
+.mob-feed{display:flex;flex-direction:column}
+.mob-post{padding:14px 16px;border-bottom:1px solid var(--border);transition:background .12s;-webkit-tap-highlight-color:transparent}
+.mob-post:active{background:rgba(255,255,255,.015)}
+.mob-post-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.mob-post-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:700;flex-shrink:0}
+.mav-g{background:rgba(0,229,160,.1);color:var(--g);border:1px solid rgba(0,229,160,.2)}
+.mav-b{background:rgba(0,170,255,.1);color:var(--b);border:1px solid rgba(0,170,255,.2)}
+.mav-r{background:rgba(255,69,96,.1);color:var(--r);border:1px solid rgba(255,69,96,.2)}
+.mav-y{background:rgba(245,166,35,.1);color:var(--y);border:1px solid rgba(245,166,35,.2)}
+.mav-p{background:rgba(167,139,250,.1);color:var(--p);border:1px solid rgba(167,139,250,.2)}
+.mob-post-meta{flex:1;min-width:0}
+.mob-post-user{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.mob-live-tag{font-size:8px;font-weight:700;padding:2px 5px;border-radius:3px;background:rgba(255,69,96,.1);border:1px solid rgba(255,69,96,.28);color:#ff4560;letter-spacing:.5px;flex-shrink:0}
+.mob-post-time{font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:2px}
+.mob-post-more{color:var(--t4);font-size:17px;cursor:pointer;flex-shrink:0;letter-spacing:2px;padding:0 2px}
+.mob-signal{border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.msig-l{background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.18)}
+.msig-s{background:rgba(255,69,96,.06);border:1px solid rgba(255,69,96,.18)}
+.msig-f{background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.15)}
+.mob-sig-dir{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.5px}
+.msig-l .mob-sig-dir{color:var(--g)}
+.msig-s .mob-sig-dir{color:var(--r)}
+.msig-f .mob-sig-dir{color:var(--y)}
+.mob-sig-asset{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:3px}
+.mob-post-text{font-size:13px;color:var(--t2);line-height:1.55;margin-bottom:10px}
+.mob-post-acts{display:flex;align-items:center;gap:20px}
+.mob-act{font-family:var(--mono);font-size:11px;color:var(--t4);cursor:pointer;display:flex;align-items:center;gap:5px;transition:color .15s;padding:3px 0;-webkit-tap-highlight-color:transparent}
+.mob-act:active{color:var(--g)}
+
+/* salas */
+.mob-filter-row{display:flex;gap:6px;padding:10px 16px;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;flex-shrink:0}
+.mob-filter-row::-webkit-scrollbar{display:none}
+.mob-pill{font-family:var(--mono);font-size:10px;font-weight:700;padding:5px 13px;border-radius:20px;border:1px solid var(--border2);color:var(--t4);background:transparent;cursor:pointer;transition:all .15s;white-space:nowrap;letter-spacing:.5px}
+.mpall{background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.25);color:var(--g)}
+.mpb3{background:rgba(0,150,255,.08);border-color:rgba(0,150,255,.25);color:#00aaff}
+.mpfx{background:rgba(255,30,60,.08);border-color:rgba(255,30,60,.25);color:#ff2040}
+.mpcr{background:rgba(255,220,0,.08);border-color:rgba(255,220,0,.25);color:#ffe000}
+.mob-room-card{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .12s;-webkit-tap-highlight-color:transparent}
+.mob-room-card:active{background:rgba(255,255,255,.02)}
+.mob-room-badge{font-family:var(--mono);font-size:9px;font-weight:700;padding:3px 7px;border-radius:4px;flex-shrink:0}
+.mob-room-info{flex:1;min-width:0}
+.mob-room-name{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mob-room-host{font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:2px}
+.mob-room-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.mob-room-occ{font-family:var(--mono);font-size:10px;color:var(--t4)}
+.mob-enter-btn{font-family:var(--mono);font-size:10px;font-weight:700;padding:5px 12px;border-radius:5px;border:1px solid;cursor:pointer;white-space:nowrap;transition:all .15s}
+.mob-enter-btn:active{opacity:.7}
+
+/* mercado */
+.mob-mkt-card{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.mob-mkt-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.mob-mkt-info{flex:1}
+.mob-mkt-name{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--t1)}
+.mob-mkt-desc{font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:2px}
+.mob-spark{flex-shrink:0}
+.mob-mkt-right{text-align:right;flex-shrink:0}
+.mob-mkt-price{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--t1)}
+.mob-mkt-chg{font-family:var(--mono);font-size:11px;font-weight:700;margin-top:2px}
+.mob-mkt-chg.mup{color:var(--g)}.mob-mkt-chg.mdn{color:var(--r)}
+
+/* perfil */
+.mob-perfil-hero{padding:28px 20px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.mob-perfil-av{width:74px;height:74px;border-radius:50%;background:rgba(0,229,160,.08);border:2px solid rgba(0,229,160,.22);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:24px;font-weight:700;color:var(--g);margin-bottom:4px}
+.mob-perfil-id{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--t1)}
+.mob-perfil-sub{font-family:var(--mono);font-size:10px;color:var(--t4)}
+.mob-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.mob-stat-cell{background:var(--bg0);padding:16px 8px;text-align:center}
+.mob-stat-val{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--t1)}
+.mob-stat-lbl{font-family:var(--mono);font-size:9px;color:var(--t4);margin-top:3px;letter-spacing:.5px}
+.mob-perfil-btns{padding:16px;display:flex;flex-direction:column;gap:8px}
+.mob-btn-main{width:100%;padding:13px;background:var(--g);border:none;border-radius:8px;color:#080a0c;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.5px}
+.mob-btn-sec{width:100%;padding:13px;background:transparent;border:1px solid var(--border2);border-radius:8px;color:var(--t2);font-family:var(--mono);font-size:13px;cursor:pointer}
+
+/* bottom sheet overlay */
+.mob-overlay{position:absolute;inset:0;background:rgba(0,0,0,.85);display:none;align-items:flex-end;z-index:50}
+.mob-overlay.on{display:flex}
+.mob-sheet{background:var(--bg2);border:1px solid var(--border2);border-radius:18px 18px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0));width:100%;animation:sheet-up .22s ease}
+@keyframes sheet-up{from{transform:translateY(100%)}to{transform:none}}
+.mob-sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 18px}
+.mob-sheet-title{font-size:18px;font-weight:800;margin-bottom:16px}
+
+/* tab bar */
+.mob-tabbar{display:flex;height:58px;padding-bottom:env(safe-area-inset-bottom,0);background:rgba(8,10,12,.97);border-top:1px solid var(--border);flex-shrink:0}
+.mob-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--t4);transition:color .15s;padding:6px 0;position:relative;-webkit-tap-highlight-color:transparent}
+.mob-tab.active{color:var(--g)}
+.mob-tab.active::before{content:'';position:absolute;top:0;left:18%;right:18%;height:2px;background:var(--g);border-radius:0 0 2px 2px}
+.mob-tab-ico{font-size:17px;line-height:1.1}
+.mob-tab-lbl{font-family:var(--mono);font-size:8px;letter-spacing:.3px}
+/* poll cards */
+.mob-poll{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
+.mob-poll-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.mob-poll-badge{font-family:var(--mono);font-size:8px;letter-spacing:1.5px;padding:3px 8px;border-radius:4px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);color:#a78bfa}
+.mob-poll-time{font-family:var(--mono);font-size:9px;color:var(--t4)}
+.mob-poll-q{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:14px;color:var(--t1)}
+.mob-poll-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.mob-poll-btn{padding:10px;border:1px solid var(--border2);border-radius:8px;background:transparent;color:var(--t2);font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.mob-poll-btn.yes{border-color:rgba(0,229,160,.3);color:var(--g)}
+.mob-poll-btn.yes:hover,.mob-poll-btn.yes.voted{background:rgba(0,229,160,.12);border-color:var(--g)}
+.mob-poll-btn.no{border-color:rgba(255,69,96,.3);color:var(--r)}
+.mob-poll-btn.no:hover,.mob-poll-btn.no.voted{background:rgba(255,69,96,.12);border-color:var(--r)}
+.mob-poll-bars{display:flex;flex-direction:column;gap:6px}
+.mob-poll-bar-row{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px}
+.mob-poll-bar-lbl{width:28px;color:var(--t3)}
+.mob-poll-bar-track{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.mob-poll-bar-fill{height:100%;border-radius:3px;transition:width .4s ease}
+.mob-poll-bar-fill.pfill-yes{background:var(--g)}
+.mob-poll-bar-fill.pfill-no{background:var(--r)}
+.mob-poll-bar-pct{width:32px;text-align:right;color:var(--t3)}
+.mob-poll-votes{font-family:var(--mono);font-size:9px;color:var(--t4);margin-top:8px}
+/* preditivo pane */
+#mob-preditivo .mob-poll-badge{background:rgba(0,229,255,.08);border-color:rgba(0,229,255,.2);color:#00e5ff}
 </style>
 </head>
 <body>
@@ -351,16 +645,65 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
 <!-- SPLASH -->
 <div id="s-splash" class="screen on">
-  <div class="splash-corner c-tl"></div>
-  <div class="splash-corner c-br"></div>
-  <div class="splash-eyebrow">B3 · FOREX · CRIPTO</div>
-  <div class="splash-title">TRADE<span>ROOM</span></div>
-  <div class="splash-sub">análise coletiva entre traders reais</div>
-  <div class="splash-btns">
-    <button class="btn-p" onclick="go('s-lobby')">ENTRAR →</button>
-    <button class="btn-g" onclick="go('s-login')">JÁ TENHO CONTA</button>
+  <nav class="sp-nav">
+    <div class="sp-logo">TRADE<span>ROOM</span></div>
+    <div class="sp-nav-right">
+      <div class="sp-lang">
+        <button class="lang-btn active" data-lang="pt" onclick="setLang('pt')">PT</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+        <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">中文</button>
+      </div>
+      <button class="sp-enter-btn" onclick="splashEnter()">Entrar →</button>
+    </div>
+  </nav>
+  <div class="sp-main">
+    <div class="sp-hero">
+      <div class="sp-pill"><span class="sp-dot-live"></span><span id="sp-count">847</span>&nbsp;traders conectados agora</div>
+      <h1 class="sp-title">O mercado nunca para.<br><span>Nem você.</span></h1>
+      <p class="sp-subtitle">Análise coletiva em tempo real entre traders de B3, Forex e Cripto.</p>
+      <div class="sp-rooms-lbl">SALAS AO VIVO</div>
+      <div class="sp-rooms">
+        <div class="sp-room" onclick="splashEnter()">
+          <div class="sp-room-left">
+            <span class="sp-badge sp-b3">B3</span>
+            <div><div class="sp-room-name">IBOV Scalping Pro</div><div class="sp-room-host">por <strong>t.marques</strong></div></div>
+          </div>
+          <div class="sp-occ"><span class="sp-occ-bar"><span style="width:78%"></span></span><span class="sp-occ-txt">78/100</span></div>
+        </div>
+        <div class="sp-room" onclick="splashEnter()">
+          <div class="sp-room-left">
+            <span class="sp-badge sp-fx">FOREX</span>
+            <div><div class="sp-room-name">EUR/USD Day Trade</div><div class="sp-room-host">por <strong>k.ventura</strong></div></div>
+          </div>
+          <div class="sp-occ"><span class="sp-occ-bar"><span style="width:45%"></span></span><span class="sp-occ-txt">45/100</span></div>
+        </div>
+        <div class="sp-room" onclick="splashEnter()">
+          <div class="sp-room-left">
+            <span class="sp-badge sp-cr">CRYPTO</span>
+            <div><div class="sp-room-name">BTC/USDT Análise</div><div class="sp-room-host">por <strong>r.santos</strong></div></div>
+          </div>
+          <div class="sp-occ"><span class="sp-occ-bar"><span style="width:92%"></span></span><span class="sp-occ-txt">92/100</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="sp-canvas-wrap">
+      <canvas id="sp-neural"></canvas>
+    </div>
   </div>
-  <div class="splash-ticker"><div class="ticker-inner" id="ticker"></div></div>
+  <div class="sp-ticker">
+    <div class="sp-tick-item" id="sp-tick-win"><span class="sp-tick-name">WIN</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-sep"></div>
+    <div class="sp-tick-item" id="sp-tick-xau"><span class="sp-tick-name">XAU/USD</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-sep"></div>
+    <div class="sp-tick-item" id="sp-tick-btc"><span class="sp-tick-name">BTC/USDT</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-sep"></div>
+    <div class="sp-tick-item" id="sp-tick-eth"><span class="sp-tick-name">ETH/USDT</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-sep"></div>
+    <div class="sp-tick-item" id="sp-tick-eur"><span class="sp-tick-name">EUR/USD</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-sep"></div>
+    <div class="sp-tick-item" id="sp-tick-wti"><span class="sp-tick-name">WTI</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+  </div>
 </div>
 
 <!-- CADASTRO -->
@@ -511,6 +854,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="rh-r">
       <div class="rh-dot"></div>
       <div class="role-tag rt-member" id="room-role-tag">MEMBRO</div>
+      <div class="rh-mob-exit" id="rh-mob-exit" onclick="sairDaSala()">↩ SAIR</div>
     </div>
   </div>
   <div id="pregao-status-bar">⏹ PREGÃO ENCERRADO — aguardando reabertura pelo criador</div>
@@ -610,6 +954,395 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div onclick="document.getElementById('admin-login').style.display='none'" style="font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:10px;cursor:pointer">CANCELAR</div>
   </div>
 </div>
+
+<!-- ================================================================
+     MOBILE APP
+     ================================================================ -->
+<div id="mob-app">
+
+  <!-- ─── INÍCIO ─── -->
+  <div class="mob-pane on" id="mob-home">
+    <div class="mob-topbar">
+      <div class="mob-tlogo">TRADE<span>ROOM</span></div>
+      <div class="mob-tbar-r">
+        <div class="mob-icon-btn">🔔</div>
+        <div class="mob-icon-btn" onclick="openCompose()" title="Novo post">✏</div>
+      </div>
+    </div>
+
+    <!-- Stories -->
+    <div class="mob-stories-row">
+      <div class="mob-story">
+        <div class="mob-story-av sadd">＋</div>
+        <div class="mob-story-name">Criar</div>
+      </div>
+      <div class="mob-story">
+        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#061a0f,#0c2b18)">TM<span class="mob-story-dot"></span></div>
+        <div class="mob-story-name">t.marques</div>
+      </div>
+      <div class="mob-story">
+        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#06101a,#0c1b2e)">KV<span class="mob-story-dot"></span></div>
+        <div class="mob-story-name">k.ventura</div>
+      </div>
+      <div class="mob-story">
+        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#1a060c,#2b0d18)">RS<span class="mob-story-dot"></span></div>
+        <div class="mob-story-name">r.santos</div>
+      </div>
+      <div class="mob-story">
+        <div class="mob-story-av" style="background:linear-gradient(135deg,#100f06,#1a1a0c)">AL</div>
+        <div class="mob-story-name">a.lima</div>
+      </div>
+      <div class="mob-story">
+        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#0e0a1a,#1a102d)">JC<span class="mob-story-dot"></span></div>
+        <div class="mob-story-name">j.costa</div>
+      </div>
+      <div class="mob-story">
+        <div class="mob-story-av" style="background:linear-gradient(135deg,#060f1a,#0a1825)">MS</div>
+        <div class="mob-story-name">m.silva</div>
+      </div>
+    </div>
+
+    <!-- Feed -->
+    <div class="mob-feed">
+
+      <div id="mob-feed-list"><div class="mob-feed-load">Carregando feed...</div></div>
+
+      <!-- Poll 1 -->
+      <div class="mob-poll" id="mob-poll-1">
+        <div class="mob-poll-header">
+          <div class="mob-poll-badge">PREDITIVO</div>
+          <div class="mob-poll-time">Encerra em 4h 30min</div>
+        </div>
+        <div class="mob-poll-q">O IBOVESPA vai fechar ACIMA de 135.000 pontos hoje?</div>
+        <div class="mob-poll-btns">
+          <button class="mob-poll-btn yes" onclick="mobVote('mob-poll-1','yes',67)">✓ SIM</button>
+          <button class="mob-poll-btn no"  onclick="mobVote('mob-poll-1','no',67)">✗ NÃO</button>
+        </div>
+        <div class="mob-poll-bars">
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">SIM</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:67%"></div></div>
+            <div class="mob-poll-bar-pct">67%</div>
+          </div>
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">NÃO</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:33%"></div></div>
+            <div class="mob-poll-bar-pct">33%</div>
+          </div>
+        </div>
+        <div class="mob-poll-votes">312 votos · Resultado às 18:00</div>
+      </div>
+
+      <!-- Poll 2 -->
+      <div class="mob-poll" id="mob-poll-2">
+        <div class="mob-poll-header">
+          <div class="mob-poll-badge">PREDITIVO</div>
+          <div class="mob-poll-time">Encerra em 2h 15min</div>
+        </div>
+        <div class="mob-poll-q">O dólar (USD/BRL) vai superar R$ 5,40 esta semana?</div>
+        <div class="mob-poll-btns">
+          <button class="mob-poll-btn yes" onclick="mobVote('mob-poll-2','yes',41)">✓ SIM</button>
+          <button class="mob-poll-btn no"  onclick="mobVote('mob-poll-2','no',41)">✗ NÃO</button>
+        </div>
+        <div class="mob-poll-bars">
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">SIM</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:41%"></div></div>
+            <div class="mob-poll-bar-pct">41%</div>
+          </div>
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">NÃO</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:59%"></div></div>
+            <div class="mob-poll-bar-pct">59%</div>
+          </div>
+        </div>
+        <div class="mob-poll-votes">189 votos · Resultado sexta-feira</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── SALAS ─── -->
+  <div class="mob-pane" id="mob-salas">
+    <div class="mob-topbar">
+      <div class="mob-tlogo">SALAS <span>AO VIVO</span></div>
+      <div class="mob-tbar-r">
+        <div class="mob-icon-btn" onclick="openMobLogin()">＋</div>
+      </div>
+    </div>
+    <div class="mob-filter-row">
+      <div class="mob-pill mpall" onclick="mobFilter('all',this)">TODAS</div>
+      <div class="mob-pill" onclick="mobFilter('B3',this)">B3</div>
+      <div class="mob-pill" onclick="mobFilter('Forex',this)">FOREX</div>
+      <div class="mob-pill" onclick="mobFilter('Cripto',this)">CRIPTO</div>
+    </div>
+    <div id="mob-rooms-list">
+      <div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">Carregando salas...</div>
+    </div>
+  </div>
+
+  <!-- ─── MERCADO ─── -->
+  <div class="mob-pane" id="mob-mercado">
+    <div class="mob-topbar">
+      <div class="mob-tlogo">MERCADO</div>
+    </div>
+    <div style="padding:8px 16px 6px;font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;border-bottom:1px solid var(--border);flex-shrink:0">COTAÇÕES · TEMPO REAL</div>
+
+    <div class="mob-mkt-card" id="mob-mkt-win">
+      <div class="mob-mkt-ico" style="background:rgba(0,150,255,.08);border:1px solid rgba(0,150,255,.14)">🇧🇷</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">WIN</div><div class="mob-mkt-desc">Mini Índice · B3</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,22 12,19 22,21 32,15 42,11 52,7 56,5" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
+    </div>
+    <div class="mob-mkt-card" id="mob-mkt-xau">
+      <div class="mob-mkt-ico" style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.14)">🥇</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">XAU/USD</div><div class="mob-mkt-desc">Ouro · Commodities</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,18 12,15 22,16 32,12 42,10 52,8 56,6" fill="none" stroke="#f5a623" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
+    </div>
+    <div class="mob-mkt-card" id="mob-mkt-btc">
+      <div class="mob-mkt-ico" style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.14)">₿</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">BTC/USDT</div><div class="mob-mkt-desc">Bitcoin · Cripto</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,20 12,17 22,19 32,14 42,10 52,12 56,8" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
+    </div>
+    <div class="mob-mkt-card" id="mob-mkt-eth">
+      <div class="mob-mkt-ico" style="background:rgba(100,120,255,.08);border:1px solid rgba(100,120,255,.14)">⚡</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">ETH/USDT</div><div class="mob-mkt-desc">Ethereum · Cripto</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,22 12,18 22,20 32,14 42,10 52,11 56,8" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
+    </div>
+    <div class="mob-mkt-card" id="mob-mkt-eur">
+      <div class="mob-mkt-ico" style="background:rgba(255,30,60,.08);border:1px solid rgba(255,30,60,.14)">💱</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">EUR/USD</div><div class="mob-mkt-desc">Euro · Forex</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,6 12,8 22,7 32,11 42,15 52,17 56,20" fill="none" stroke="#ff4560" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
+    </div>
+    <div class="mob-mkt-card" id="mob-mkt-wti">
+      <div class="mob-mkt-ico" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.14)">🛢</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">WTI</div><div class="mob-mkt-desc">Petróleo · Commodities</div></div>
+      <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,8 12,10 22,9 32,13 42,16 52,14 56,18" fill="none" stroke="#ff4560" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
+    </div>
+  </div>
+
+  <!-- ─── PREDITIVO ─── -->
+  <div class="mob-pane" id="mob-preditivo">
+    <div class="mob-topbar">
+      <div class="mob-tlogo">PREDITIVO <span>ENQUETES</span></div>
+    </div>
+    <div style="padding:8px 16px 6px;font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;border-bottom:1px solid var(--border);flex-shrink:0">MERCADO PREDITIVO · VOTE E ACOMPANHE</div>
+    <div style="padding:16px;overflow-y:auto;flex:1">
+
+      <div class="mob-poll" id="mob-ppoll-1">
+        <div class="mob-poll-header">
+          <div class="mob-poll-badge">AO VIVO</div>
+          <div class="mob-poll-time">Encerra em 4h 30min</div>
+        </div>
+        <div class="mob-poll-q">O IBOVESPA vai fechar ACIMA de 135.000 pontos hoje?</div>
+        <div class="mob-poll-btns">
+          <button class="mob-poll-btn yes" onclick="mobVote('mob-ppoll-1','yes',67)">✓ SIM</button>
+          <button class="mob-poll-btn no"  onclick="mobVote('mob-ppoll-1','no',67)">✗ NÃO</button>
+        </div>
+        <div class="mob-poll-bars">
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">SIM</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:67%"></div></div>
+            <div class="mob-poll-bar-pct">67%</div>
+          </div>
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">NÃO</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:33%"></div></div>
+            <div class="mob-poll-bar-pct">33%</div>
+          </div>
+        </div>
+        <div class="mob-poll-votes">312 votos · Resultado às 18:00</div>
+      </div>
+
+      <div class="mob-poll" id="mob-ppoll-2">
+        <div class="mob-poll-header">
+          <div class="mob-poll-badge">AO VIVO</div>
+          <div class="mob-poll-time">Encerra em 2h 15min</div>
+        </div>
+        <div class="mob-poll-q">O dólar (USD/BRL) vai superar R$ 5,40 esta semana?</div>
+        <div class="mob-poll-btns">
+          <button class="mob-poll-btn yes" onclick="mobVote('mob-ppoll-2','yes',41)">✓ SIM</button>
+          <button class="mob-poll-btn no"  onclick="mobVote('mob-ppoll-2','no',41)">✗ NÃO</button>
+        </div>
+        <div class="mob-poll-bars">
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">SIM</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:41%"></div></div>
+            <div class="mob-poll-bar-pct">41%</div>
+          </div>
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">NÃO</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:59%"></div></div>
+            <div class="mob-poll-bar-pct">59%</div>
+          </div>
+        </div>
+        <div class="mob-poll-votes">189 votos · Resultado sexta-feira</div>
+      </div>
+
+      <div class="mob-poll" id="mob-ppoll-3">
+        <div class="mob-poll-header">
+          <div class="mob-poll-badge">NOVO</div>
+          <div class="mob-poll-time">Encerra amanhã</div>
+        </div>
+        <div class="mob-poll-q">O Fed vai cortar os juros na próxima reunião de junho?</div>
+        <div class="mob-poll-btns">
+          <button class="mob-poll-btn yes" onclick="mobVote('mob-ppoll-3','yes',55)">✓ SIM</button>
+          <button class="mob-poll-btn no"  onclick="mobVote('mob-ppoll-3','no',55)">✗ NÃO</button>
+        </div>
+        <div class="mob-poll-bars">
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">SIM</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:55%"></div></div>
+            <div class="mob-poll-bar-pct">55%</div>
+          </div>
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">NÃO</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:45%"></div></div>
+            <div class="mob-poll-bar-pct">45%</div>
+          </div>
+        </div>
+        <div class="mob-poll-votes">87 votos · Em aberto</div>
+      </div>
+
+      <div class="mob-poll" id="mob-ppoll-4">
+        <div class="mob-poll-header">
+          <div class="mob-poll-badge">NOVO</div>
+          <div class="mob-poll-time">Encerra em 3 dias</div>
+        </div>
+        <div class="mob-poll-q">O Bitcoin vai atingir US$ 100.000 antes do fim do mês?</div>
+        <div class="mob-poll-btns">
+          <button class="mob-poll-btn yes" onclick="mobVote('mob-ppoll-4','yes',72)">✓ SIM</button>
+          <button class="mob-poll-btn no"  onclick="mobVote('mob-ppoll-4','no',72)">✗ NÃO</button>
+        </div>
+        <div class="mob-poll-bars">
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">SIM</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:72%"></div></div>
+            <div class="mob-poll-bar-pct">72%</div>
+          </div>
+          <div class="mob-poll-bar-row">
+            <div class="mob-poll-bar-lbl">NÃO</div>
+            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:28%"></div></div>
+            <div class="mob-poll-bar-pct">28%</div>
+          </div>
+        </div>
+        <div class="mob-poll-votes">541 votos · Em aberto</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── PERFIL ─── -->
+  <div class="mob-pane" id="mob-perfil">
+    <div class="mob-topbar">
+      <div class="mob-tlogo">PERFIL</div>
+    </div>
+    <div class="mob-perfil-hero">
+      <div class="mob-perfil-av" id="mob-pav">?</div>
+      <div class="mob-perfil-id" id="mob-pid">visitante</div>
+      <div class="mob-perfil-sub" id="mob-psub">Não autenticado</div>
+    </div>
+    <div class="mob-stats-grid">
+      <div class="mob-stat-cell"><div class="mob-stat-val" id="mob-stat-dias">—</div><div class="mob-stat-lbl">DIAS</div></div>
+      <div class="mob-stat-cell"><div class="mob-stat-val" id="mob-stat-salas">—</div><div class="mob-stat-lbl">SALAS</div></div>
+      <div class="mob-stat-cell"><div class="mob-stat-val" id="mob-stat-sinais">—</div><div class="mob-stat-lbl">SINAIS</div></div>
+    </div>
+    <div class="mob-perfil-btns" id="mob-perfil-btns">
+      <button class="mob-btn-main" onclick="openMobLogin()">ENTRAR →</button>
+      <button class="mob-btn-sec" onclick="mobShowDesktop('s-cadastro')">CRIAR CONTA</button>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="mob-tabbar">
+    <div class="mob-tab active" id="mtab-home" onclick="mobTab('home',this)">
+      <div class="mob-tab-ico">⌂</div>
+      <div class="mob-tab-lbl">Início</div>
+    </div>
+    <div class="mob-tab" id="mtab-salas" onclick="mobTab('salas',this)">
+      <div class="mob-tab-ico">▶</div>
+      <div class="mob-tab-lbl">Salas</div>
+    </div>
+    <div class="mob-tab" id="mtab-mercado" onclick="mobTab('mercado',this)">
+      <div class="mob-tab-ico">◈</div>
+      <div class="mob-tab-lbl">Mercado</div>
+    </div>
+    <div class="mob-tab" id="mtab-preditivo" onclick="mobTab('preditivo',this)">
+      <div class="mob-tab-ico">⬡</div>
+      <div class="mob-tab-lbl">Preditivo</div>
+    </div>
+    <div class="mob-tab" id="mtab-perfil" onclick="mobTab('perfil',this)">
+      <div class="mob-tab-ico">◎</div>
+      <div class="mob-tab-lbl">Perfil</div>
+    </div>
+  </div>
+
+  <!-- Bottom Sheet: Compose -->
+  <div class="mob-overlay" id="mob-compose" onclick="if(event.target===this)closeCompose()">
+    <div class="mob-sheet">
+      <div class="mob-sheet-handle"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div class="mob-sheet-title" style="margin:0;font-size:16px">Novo Post</div>
+        <span onclick="closeCompose()" style="font-size:20px;color:var(--t3);cursor:pointer;line-height:1">✕</span>
+      </div>
+      <textarea id="compose-txt" maxlength="500" placeholder="O que está acontecendo no mercado? Análise, setup, macro…"
+        oninput="document.getElementById('compose-counter').textContent=this.value.length+'/500'"
+        style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--t1);font-family:inherit;font-size:13px;padding:10px 12px;outline:none;resize:none;height:110px;box-sizing:border-box;line-height:1.5"></textarea>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+        <span id="compose-counter" style="font-family:var(--mono);font-size:10px;color:var(--t4)">0/500</span>
+        <label style="cursor:pointer;display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--t3)">
+          📷 IMAGEM
+          <input type="file" id="compose-img" accept="image/*" style="display:none" onchange="previewComposeImg(this)">
+        </label>
+      </div>
+      <img id="compose-preview" class="mob-compose-preview" style="display:none" alt="">
+      <span id="compose-remove-img" class="mob-compose-remove" style="display:none" onclick="removeComposeImg()">✕ Remover imagem</span>
+      <button id="compose-submit" class="mob-btn-main" style="margin-top:14px" onclick="submitPost()">POSTAR →</button>
+    </div>
+  </div>
+
+  <!-- Bottom Sheet: Comments -->
+  <div class="mob-overlay" id="mob-comments" onclick="if(event.target===this)closeComments()">
+    <div class="mob-sheet" style="max-height:78vh;display:flex;flex-direction:column;padding-bottom:max(12px,env(safe-area-inset-bottom,12px))">
+      <div class="mob-sheet-handle"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0">
+        <div class="mob-sheet-title" style="margin:0;font-size:16px">Comentários</div>
+        <span onclick="closeComments()" style="font-size:20px;color:var(--t3);cursor:pointer;line-height:1">✕</span>
+      </div>
+      <div id="mob-comments-list" style="flex:1;overflow-y:auto;margin-bottom:10px;padding-right:2px"></div>
+      <div style="display:flex;gap:6px;flex-shrink:0;border-top:1px solid var(--border);padding-top:10px">
+        <input id="comment-inp" class="chat-inp" placeholder="Adicionar comentário…"
+          onkeydown="if(event.key==='Enter')submitComment()"
+          style="flex:1;font-size:12px;padding:8px 10px">
+        <div class="send-b" onclick="submitComment()" style="width:34px;height:34px">↑</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Sheet: Login -->
+  <div class="mob-overlay" id="mob-overlay" onclick="if(event.target===this)closeMobOverlay()">
+    <div class="mob-sheet">
+      <div class="mob-sheet-handle"></div>
+      <div class="mob-sheet-title">Entrar no TradeRoom</div>
+      <div class="field"><label>EMAIL</label><input type="email" id="ml-email" placeholder="seu@email.com" autocomplete="email"></div>
+      <div class="field"><label>SENHA</label>
+        <div class="pwd-wrap">
+          <input type="password" id="ml-pwd" placeholder="Sua senha" autocomplete="current-password" onkeydown="if(event.key==='Enter')doMobLogin()">
+          <span class="pwd-toggle" onclick="togglePwd('ml-pwd',this)">MOSTRAR</span>
+        </div>
+      </div>
+      <button class="mob-btn-main" style="margin-top:4px" onclick="doMobLogin()">ENTRAR →</button>
+      <div class="divider" style="margin:12px 0"><div class="dl"></div><div class="dt">ou</div><div class="dl"></div></div>
+      <button class="mob-btn-sec" onclick="closeMobOverlay();mobShowDesktop('s-cadastro')">CRIAR CONTA</button>
+    </div>
+  </div>
+
+</div><!-- /#mob-app -->
 
 <script>
 const SUPABASE_URL = 'https://btqgizadenxvgnybjifx.supabase.co'
@@ -1044,12 +1777,21 @@ async function cadFinalizar() {
 
 async function loadUserProfile(user) {
   const { data } = await sb.from('usuarios').select('*').eq('id', user.id).single()
-  if (data) { currentUser = { id: user.id, trader_id: data.trader_id || user.email.split('@')[0], nome: data.nome, loggedIn: true } }
-  else { currentUser = { id: user.id, trader_id: user.email.split('@')[0], loggedIn: true } }
+  if (data) { currentUser = { id: user.id, email: user.email, trader_id: data.trader_id || user.email.split('@')[0], nome: data.nome, loggedIn: true } }
+  else { currentUser = { id: user.id, email: user.email, trader_id: user.email.split('@')[0], loggedIn: true } }
   updateUserUI()
+  if (typeof mobUpdatePerfil === 'function') mobUpdatePerfil()
 }
 
-sb.auth.getSession().then(({ data }) => { if (data.session?.user) loadUserProfile(data.session.user) })
+sb.auth.onAuthStateChange(async function(event, session) {
+  if (event === 'INITIAL_SESSION' && session && session.user) {
+    await loadUserProfile(session.user)
+  } else if (event === 'SIGNED_OUT') {
+    currentUser = { trader_id: 'visitante', loggedIn: false }
+    updateUserUI()
+    if (typeof mobUpdatePerfil === 'function') mobUpdatePerfil()
+  }
+})
 
 // ==================== NAV ====================
 function go(id) {
@@ -1173,6 +1915,8 @@ async function enterRoom(data) {
   currentSymbol = getSymbolForRoom(data.mercado, data.ativos || [])
   document.getElementById('creator-panel').style.display = currentIsCriador ? 'block' : 'none'
   document.getElementById('member-panel').style.display = currentIsCriador ? 'none' : 'block'
+  var mobExit = document.getElementById('rh-mob-exit')
+  if (mobExit) mobExit.style.display = currentIsCriador ? 'none' : ''
   const opBtns = document.querySelectorAll('.op-b')
   const opLabel = document.getElementById('op-label')
   opBtns.forEach(b => { b.disabled = !currentIsCriador })
@@ -1527,13 +2271,568 @@ function togglePwd(id,btn){const el=document.getElementById(id);const show=el.ty
 function checkStrength(el){const v=el.value;const score=[v.length>=8,/[A-Z]|[a-z]/.test(v),/\d/.test(v),/[^A-Za-z0-9]/.test(v)].filter(Boolean).length;const cols=['#ff4560','#f5a623','#0af','#00e5a0'];for(let i=0;i<4;i++)document.getElementById('str'+i).style.background=i<score?cols[score-1]:'var(--border2)'}
 function cadNext(){const nome=document.getElementById('c-nome').value.trim();const email=document.getElementById('c-email').value.trim();if(nome.length<2){toast('Informe seu nome','t-r');return}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Email invalido','t-r');return}document.getElementById('cad-step1').style.display='none';document.getElementById('cad-step2').style.display=''}
 
-// ==================== TICKER ====================
-const TICKS=[{n:'WIN',v:'192.075',c:'+0,87%',up:true},{n:'WDO',v:'4.999',c:'-0,32%',up:false},{n:'EUR/USD',v:'1.0892',c:'+0,14%',up:true},{n:'XAU/USD',v:'3.320',c:'+0,22%',up:true},{n:'BTC/USD',v:'94.450',c:'+1,8%',up:true},{n:'GBP/USD',v:'1.2748',c:'-0,08%',up:false},{n:'IBOV',v:'128.450',c:'+0,44%',up:true},{n:'ETH/USD',v:'1.720',c:'+2,1%',up:true}]
-const ticker=document.getElementById('ticker');let th='';for(let i=0;i<3;i++)TICKS.forEach(t=>{th+='<span class="tick-i"><span class="t-name">'+t.n+'</span><span class="t-val">'+t.v+'</span><span class="'+(t.up?'t-up':'t-dn')+'">'+t.c+'</span></span>'});ticker.innerHTML=th
+// ==================== SPLASH ====================
+function splashEnter(){ go('s-lobby') }
+function setLang(l){document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
+;(function(){
+  const canvas=document.getElementById('sp-neural');if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const COUNT=115,MAX_D=130;let W=0,H=0,nodes=[];
+  const PAL=[[0,229,160],[210,228,248],[167,139,250],[255,210,50],[0,229,160],[210,228,248]];
+  const WT=[.34,.28,.15,.08,.10,.05];
+  function pickCol(){let r=Math.random(),s=0;for(let i=0;i<WT.length;i++){s+=WT[i];if(r<s)return PAL[i]}return PAL[0]}
+  function resize(){W=canvas.offsetWidth||window.innerWidth;H=canvas.offsetHeight||window.innerHeight;canvas.width=W;canvas.height=H}
+  function initNodes(){nodes=[];for(let i=0;i<COUNT;i++){const c=pickCol();nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.7+.5,ph:Math.random()*Math.PI*2,c:c})}}
+  resize();initNodes();
+  window.addEventListener('resize',function(){resize();initNodes()});
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    const t=performance.now()/1000;
+    for(let i=0;i<nodes.length;i++){const n=nodes[i];n.x+=n.vx;n.y+=n.vy;if(n.x<0)n.x=W;if(n.x>W)n.x=0;if(n.y<0)n.y=H;if(n.y>H)n.y=0}
+    for(let i=0;i<nodes.length;i++){for(let j=i+1;j<nodes.length;j++){
+      const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<MAX_D){
+        const a=(1-d/MAX_D)*.16;
+        const ri=nodes[i].c,rj=nodes[j].c;
+        ctx.strokeStyle='rgba('+Math.round((ri[0]+rj[0])/2)+','+Math.round((ri[1]+rj[1])/2)+','+Math.round((ri[2]+rj[2])/2)+','+a+')';
+        ctx.lineWidth=.45;ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke();
+      }
+    }}
+    nodes.forEach(function(n){
+      const p=.5+.5*Math.sin(t*1.8+n.ph);
+      const R=n.c[0],G=n.c[1],B=n.c[2];
+      ctx.beginPath();ctx.arc(n.x,n.y,n.r*(0.7+0.4*p),0,Math.PI*2);
+      ctx.fillStyle='rgba('+R+','+G+','+B+','+(0.45+0.45*p)+')';ctx.fill();
+      ctx.beginPath();ctx.arc(n.x,n.y,n.r*(0.7+0.4*p)*3.8,0,Math.PI*2);
+      ctx.fillStyle='rgba('+R+','+G+','+B+','+(0.028*p)+')';ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+;(function(){const el=document.getElementById('sp-count');if(!el)return;let v=847;setInterval(function(){v+=Math.floor(Math.random()*9)-4;v=Math.max(800,Math.min(999,v));el.textContent=v},2800)})();
 
 function toast(msg,cls){if(!cls)cls='t-g';const wrap=document.getElementById('toast-wrap');const el=document.createElement('div');el.className='toast '+cls;el.textContent=msg;wrap.appendChild(el);setTimeout(function(){el.remove()},2600)}
 
 updateUserUI()
+
+// ==================== MOBILE APP ====================
+var mobCurFilter = 'all'
+
+var feedLoaded = false
+
+function mobTab(name, btn) {
+  document.querySelectorAll('.mob-pane').forEach(function(p){ p.classList.remove('on') })
+  document.querySelectorAll('.mob-tab').forEach(function(t){ t.classList.remove('active') })
+  var pane = document.getElementById('mob-' + name)
+  if (pane) pane.classList.add('on')
+  if (btn) btn.classList.add('active')
+  if (name === 'home' && !feedLoaded) { feedLoaded = true; loadFeed() }
+  if (name === 'salas') {
+    if (!allRooms.length) {
+      loadRooms().then(function(){ mobRenderRooms() })
+    } else {
+      mobRenderRooms()
+    }
+  }
+  if (name === 'perfil') mobUpdatePerfil()
+}
+
+function mobVote(pollId, choice, totalBefore) {
+  var poll = document.getElementById(pollId)
+  if (!poll) return
+  poll.querySelectorAll('.mob-poll-btn').forEach(function(b){ b.disabled = true; b.style.opacity = '.5' })
+  var voted = poll.querySelector('.mob-poll-btn.' + choice)
+  if (voted) { voted.classList.add('voted'); voted.style.opacity = '1' }
+  var newTotal = totalBefore + 1
+  var yPct = choice === 'yes' ? Math.round((totalBefore * 0.67 + 1) / newTotal * 100) : Math.round(totalBefore * 0.67 / newTotal * 100)
+  if (pollId === 'mob-poll-2' || pollId === 'mob-ppoll-2') {
+    yPct = choice === 'yes' ? Math.round((totalBefore * 0.41 + 1) / newTotal * 100) : Math.round(totalBefore * 0.41 / newTotal * 100)
+  }
+  var nPct = 100 - yPct
+  var fills = poll.querySelectorAll('.mob-poll-bar-fill')
+  var pcts  = poll.querySelectorAll('.mob-poll-bar-pct')
+  if (fills[0]) fills[0].style.width = yPct + '%'
+  if (fills[1]) fills[1].style.width = nPct + '%'
+  if (pcts[0])  pcts[0].textContent  = yPct + '%'
+  if (pcts[1])  pcts[1].textContent  = nPct + '%'
+  var vEl = poll.querySelector('.mob-poll-votes')
+  if (vEl) vEl.textContent = (newTotal) + ' votos · obrigado!'
+}
+
+function mobTabGo(name) {
+  mobTab(name, document.getElementById('mtab-' + name))
+}
+
+function mobFilter(filter, el) {
+  mobCurFilter = filter
+  document.querySelectorAll('.mob-filter-row .mob-pill').forEach(function(p){
+    p.className = 'mob-pill'
+  })
+  var cls = { all:'mpall', B3:'mpb3', Forex:'mpfx', Cripto:'mpcr' }[filter] || 'mpall'
+  if (el) el.classList.add(cls)
+  mobRenderRooms()
+}
+
+function mobRenderRooms() {
+  var list = document.getElementById('mob-rooms-list')
+  if (!list) return
+  var rooms = mobCurFilter === 'all' ? allRooms : allRooms.filter(function(r){ return r.mercado === mobCurFilter })
+  if (!rooms.length) {
+    list.innerHTML = '<div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">Nenhuma sala disponível no momento.</div>'
+    return
+  }
+  var COL = {
+    B3:    { badge:'background:rgba(0,150,255,.12);border:1px solid rgba(0,150,255,.25);color:#00aaff', btn:'background:rgba(0,150,255,.08);border-color:rgba(0,150,255,.3);color:#00aaff' },
+    Forex: { badge:'background:rgba(255,30,60,.12);border:1px solid rgba(255,30,60,.25);color:#ff2040', btn:'background:rgba(255,30,60,.08);border-color:rgba(255,30,60,.3);color:#ff2040' },
+    Cripto:{ badge:'background:rgba(255,220,0,.12);border:1px solid rgba(255,220,0,.25);color:#ffe000', btn:'background:rgba(255,220,0,.08);border-color:rgba(255,220,0,.3);color:#ffe000' }
+  }
+  list.innerHTML = rooms.map(function(r) {
+    var c = COL[r.mercado] || COL.B3
+    var lotada = r.membros_count >= r.limite
+    var tid = r.trader_id || r.criador_id || 'host'
+    return '<div class="mob-room-card" onclick="mobEntrar(\'' + r.id + '\')">' +
+      '<div class="mob-room-badge" style="' + c.badge + '">' + r.mercado + '</div>' +
+      '<div class="mob-room-info">' +
+        '<div class="mob-room-name">' + r.nome + '</div>' +
+        '<div class="mob-room-host">@' + tid + ' · ' + r.membros_count + '/' + r.limite + '</div>' +
+      '</div>' +
+      '<div class="mob-room-right">' +
+        '<div style="width:6px;height:6px;border-radius:50%;background:' + (lotada?'var(--r)':'var(--g)') + ';box-shadow:0 0 8px ' + (lotada?'var(--r)':'var(--g)') + '"></div>' +
+        '<button class="mob-enter-btn" style="' + c.btn + (lotada?';opacity:.4;cursor:not-allowed':'') + '" ' + (lotada?'disabled':'') + ' onclick="event.stopPropagation();mobEntrar(\'' + r.id + '\')">' + (lotada?'LOTADA':'ENTRAR') + '</button>' +
+      '</div>' +
+    '</div>'
+  }).join('')
+}
+
+// ==================== FEED REAL ====================
+var feedPosts = []
+var feedMyLikes = new Set()
+var feedCommentsPostId = null
+var feedRealtimeSub = null
+var feedAvatarColors = ['mav-g','mav-b','mav-r','mav-y','mav-p']
+
+function feedHashStr(str) {
+  var h = 0
+  for (var i = 0; i < (str||'').length; i++) h = (Math.imul(h, 31) + str.charCodeAt(i)) | 0
+  return Math.abs(h)
+}
+function feedEscape(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+function feedTimeAgo(ts) {
+  var diff = (Date.now() - new Date(ts)) / 1000
+  if (diff < 60) return 'agora'
+  if (diff < 3600) return Math.floor(diff/60) + 'min'
+  if (diff < 86400) return Math.floor(diff/3600) + 'h'
+  return Math.floor(diff/86400) + 'd'
+}
+function feedAvColor(traderId) {
+  return feedAvatarColors[feedHashStr(traderId) % feedAvatarColors.length]
+}
+
+async function loadFeed() {
+  var list = document.getElementById('mob-feed-list')
+  if (list) list.innerHTML = '<div class="mob-feed-load">Carregando feed...</div>'
+  var res = await sb.from('posts').select('*').order('criado_em', { ascending: false }).limit(40)
+  feedPosts = res.data || []
+  if (currentUser.loggedIn && feedPosts.length) {
+    var ids = feedPosts.map(function(p){ return p.id })
+    var lres = await sb.from('post_curtidas').select('post_id').eq('usuario_id', currentUser.id).in('post_id', ids)
+    feedMyLikes = new Set((lres.data || []).map(function(l){ return l.post_id }))
+  } else {
+    feedMyLikes = new Set()
+  }
+  renderFeed()
+  subscribeToFeed()
+}
+
+function renderFeed() {
+  var list = document.getElementById('mob-feed-list')
+  if (!list) return
+  if (!feedPosts.length) {
+    list.innerHTML = '<div class="mob-feed-empty">Nenhum post ainda.<br>Seja o primeiro a compartilhar uma análise! ✏</div>'
+    return
+  }
+  list.innerHTML = feedPosts.map(function(p){ return renderFeedPost(p) }).join('')
+}
+
+function renderFeedPost(p) {
+  var liked = feedMyLikes.has(p.id)
+  var av = (p.trader_id || 'TR').substring(0,2).toUpperCase()
+  var col = feedAvColor(p.trader_id || '')
+  var img = p.imagem_url ? '<img class="mob-post-img" src="' + feedEscape(p.imagem_url) + '" alt="gráfico" loading="lazy">' : ''
+  return '<div class="mob-post" data-pid="' + p.id + '">' +
+    '<div class="mob-post-hd">' +
+      '<div class="mob-post-av ' + col + '">' + av + '</div>' +
+      '<div class="mob-post-meta">' +
+        '<div class="mob-post-user">@' + feedEscape(p.trader_id) + '</div>' +
+        '<div class="mob-post-time">' + feedTimeAgo(p.criado_em) + '</div>' +
+      '</div>' +
+    '</div>' +
+    img +
+    '<div class="mob-post-text">' + feedEscape(p.conteudo) + '</div>' +
+    '<div class="mob-post-acts">' +
+      '<div class="mob-act' + (liked ? ' mob-act-liked' : '') + '" onclick="feedCurtir(\'' + p.id + '\',this)">' +
+        (liked ? '❤️' : '🤍') + '&nbsp;<span class="flike-n">' + (p.curtidas || 0) + '</span>' +
+      '</div>' +
+      '<div class="mob-act" onclick="openComments(\'' + p.id + '\')">' +
+        '💬&nbsp;<span class="fcmt-n">' + (p.comentarios_count || 0) + '</span>' +
+      '</div>' +
+      '<div class="mob-act">↗</div>' +
+    '</div>' +
+  '</div>'
+}
+
+async function feedCurtir(postId, el) {
+  if (!currentUser.loggedIn) { openMobLogin(); return }
+  var post = feedPosts.find(function(p){ return p.id === postId })
+  if (!post) return
+  var liked = feedMyLikes.has(postId)
+  if (liked) {
+    feedMyLikes.delete(postId)
+    post.curtidas = Math.max(0, (post.curtidas || 1) - 1)
+    await sb.from('post_curtidas').delete().eq('post_id', postId).eq('usuario_id', currentUser.id)
+    await sb.from('posts').update({ curtidas: post.curtidas }).eq('id', postId)
+  } else {
+    var ins = await sb.from('post_curtidas').insert({ post_id: postId, usuario_id: currentUser.id })
+    if (ins.error) return
+    feedMyLikes.add(postId)
+    post.curtidas = (post.curtidas || 0) + 1
+    await sb.from('posts').update({ curtidas: post.curtidas }).eq('id', postId)
+  }
+  if (el) {
+    var now = feedMyLikes.has(postId)
+    el.className = 'mob-act' + (now ? ' mob-act-liked' : '')
+    el.innerHTML = (now ? '❤️' : '🤍') + '&nbsp;<span class="flike-n">' + post.curtidas + '</span>'
+  }
+}
+
+function openCompose() {
+  if (!currentUser.loggedIn) { openMobLogin(); return }
+  document.getElementById('mob-compose').classList.add('on')
+  var ta = document.getElementById('compose-txt')
+  ta.value = ''
+  document.getElementById('compose-counter').textContent = '0/500'
+  document.getElementById('compose-preview').style.display = 'none'
+  document.getElementById('compose-remove-img').style.display = 'none'
+  document.getElementById('compose-img').value = ''
+  var btn = document.getElementById('compose-submit')
+  btn.textContent = 'POSTAR →'; btn.disabled = false
+  setTimeout(function(){ ta.focus() }, 300)
+}
+function closeCompose() {
+  document.getElementById('mob-compose').classList.remove('on')
+}
+function previewComposeImg(inp) {
+  if (!inp.files || !inp.files[0]) return
+  var reader = new FileReader()
+  reader.onload = function(e) {
+    var prev = document.getElementById('compose-preview')
+    prev.src = e.target.result
+    prev.style.display = 'block'
+    document.getElementById('compose-remove-img').style.display = 'inline-block'
+  }
+  reader.readAsDataURL(inp.files[0])
+}
+function removeComposeImg() {
+  document.getElementById('compose-img').value = ''
+  document.getElementById('compose-preview').style.display = 'none'
+  document.getElementById('compose-remove-img').style.display = 'none'
+}
+
+async function submitPost() {
+  var txt = document.getElementById('compose-txt').value.trim()
+  if (!txt) { toast('Escreva algo antes de postar','t-r'); return }
+  var btn = document.getElementById('compose-submit')
+  btn.textContent = 'POSTANDO...'; btn.disabled = true
+  var imgUrl = null
+  var fileInput = document.getElementById('compose-img')
+  if (fileInput && fileInput.files && fileInput.files[0]) {
+    var file = fileInput.files[0]
+    var ext = file.name.split('.').pop().toLowerCase()
+    var path = currentUser.id + '/' + Date.now() + '.' + ext
+    var up = await sb.storage.from('post-images').upload(path, file, { upsert: true })
+    if (!up.error) {
+      imgUrl = sb.storage.from('post-images').getPublicUrl(path).data.publicUrl
+    }
+  }
+  var ins = await sb.from('posts').insert({
+    usuario_id: currentUser.id,
+    trader_id: currentUser.trader_id,
+    conteudo: txt,
+    imagem_url: imgUrl
+  }).select().single()
+  btn.textContent = 'POSTAR →'; btn.disabled = false
+  if (ins.error) { toast('Erro: ' + (ins.error.message || ins.error.code || 'tente novamente'), 't-r'); return }
+  closeCompose()
+  toast('Post publicado!','t-g')
+  feedPosts.unshift(ins.data)
+  renderFeed()
+}
+
+async function openComments(postId) {
+  feedCommentsPostId = postId
+  document.getElementById('mob-comments').classList.add('on')
+  document.getElementById('mob-comments-list').innerHTML = '<div class="mob-feed-load">Carregando...</div>'
+  document.getElementById('comment-inp').value = ''
+  await loadComments(postId)
+}
+function closeComments() {
+  document.getElementById('mob-comments').classList.remove('on')
+  feedCommentsPostId = null
+}
+async function loadComments(postId) {
+  var res = await sb.from('comentarios').select('*').eq('post_id', postId).order('criado_em', { ascending: true }).limit(60)
+  var list = document.getElementById('mob-comments-list')
+  var cmts = res.data || []
+  if (!cmts.length) {
+    list.innerHTML = '<div class="mob-feed-load">Nenhum comentário ainda.</div>'
+    return
+  }
+  list.innerHTML = cmts.map(function(c) {
+    var av = (c.trader_id||'TR').substring(0,2).toUpperCase()
+    var col = feedAvColor(c.trader_id||'')
+    return '<div class="mob-comment">' +
+      '<div class="mob-post-av ' + col + '" style="width:28px;height:28px;font-size:9px;flex-shrink:0">' + av + '</div>' +
+      '<div class="mob-comment-body">' +
+        '<div class="mob-comment-user">@' + feedEscape(c.trader_id) +
+          '<span class="mob-comment-time">' + feedTimeAgo(c.criado_em) + '</span></div>' +
+        '<div class="mob-comment-text">' + feedEscape(c.conteudo) + '</div>' +
+      '</div></div>'
+  }).join('')
+  list.scrollTop = list.scrollHeight
+}
+async function submitComment() {
+  if (!currentUser.loggedIn) { openMobLogin(); return }
+  if (!feedCommentsPostId) return
+  var inp = document.getElementById('comment-inp')
+  var txt = inp.value.trim()
+  if (!txt) return
+  inp.value = ''
+  var ins = await sb.from('comentarios').insert({
+    post_id: feedCommentsPostId,
+    usuario_id: currentUser.id,
+    trader_id: currentUser.trader_id,
+    conteudo: txt
+  })
+  if (ins.error) { toast('Erro: ' + (ins.error.message || ins.error.code || 'tente novamente'), 't-r'); return }
+  var post = feedPosts.find(function(p){ return p.id === feedCommentsPostId })
+  if (post) {
+    post.comentarios_count = (post.comentarios_count || 0) + 1
+    var el = document.querySelector('[data-pid="' + feedCommentsPostId + '"] .fcmt-n')
+    if (el) el.textContent = post.comentarios_count
+    await sb.from('posts').update({ comentarios_count: post.comentarios_count }).eq('id', feedCommentsPostId)
+  }
+  await loadComments(feedCommentsPostId)
+}
+
+function subscribeToFeed() {
+  if (feedRealtimeSub) { try { sb.removeChannel(feedRealtimeSub) } catch(e){} }
+  feedRealtimeSub = sb.channel('feed-realtime')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, function(payload) {
+      if (!feedPosts.find(function(p){ return p.id === payload.new.id })) {
+        feedPosts.unshift(payload.new)
+        renderFeed()
+      }
+    })
+    .subscribe()
+}
+
+var mobPendingRoomId = null
+
+function mobEntrar(id) {
+  if (!currentUser.loggedIn) { mobPendingRoomId = id; openMobLogin(); return }
+  var room = allRooms.find(function(r){ return r.id === id })
+  if (!room) return
+  enterRoom(room)
+}
+
+function mobUpdatePerfil() {
+  var av   = document.getElementById('mob-pav')
+  var pid  = document.getElementById('mob-pid')
+  var psub = document.getElementById('mob-psub')
+  var btns = document.getElementById('mob-perfil-btns')
+  if (!av) return
+  if (currentUser.loggedIn) {
+    av.textContent  = (currentUser.trader_id||'TR').substring(0,2).toUpperCase()
+    pid.textContent = '#' + (currentUser.trader_id||'trader')
+    psub.textContent = currentUser.email || ''
+    btns.innerHTML = '<button class="mob-btn-sec" onclick="doMobLogout()">SAIR DA CONTA</button>'
+  } else {
+    av.textContent  = '?'
+    pid.textContent = 'visitante'
+    psub.textContent = 'Não autenticado'
+    btns.innerHTML =
+      '<button class="mob-btn-main" onclick="openMobLogin()">ENTRAR →</button>' +
+      '<button class="mob-btn-sec" onclick="mobShowDesktop(\'s-cadastro\')">CRIAR CONTA</button>'
+  }
+}
+
+function openMobLogin() {
+  document.getElementById('mob-overlay').classList.add('on')
+  var em = document.getElementById('ml-email')
+  if (em) setTimeout(function(){ em.focus() }, 300)
+}
+function closeMobOverlay() {
+  document.getElementById('mob-overlay').classList.remove('on')
+}
+
+async function doMobLogin() {
+  var email = document.getElementById('ml-email').value.trim()
+  var pwd   = document.getElementById('ml-pwd').value
+  if (!email || !pwd) { toast('Preencha email e senha', 't-r'); return }
+  var btn = document.querySelector('#mob-overlay .mob-btn-main')
+  if (btn) { btn.textContent = 'ENTRANDO...'; btn.disabled = true }
+  var res = await sb.auth.signInWithPassword({ email: email, password: pwd })
+  if (btn) { btn.textContent = 'ENTRAR →'; btn.disabled = false }
+  if (res.error) { toast(res.error.message || 'Erro ao entrar', 't-r'); return }
+  await loadUserProfile(res.data.user)
+  closeMobOverlay()
+  toast('Bem-vindo, ' + currentUser.trader_id + '!', 't-g')
+  if (mobPendingRoomId) {
+    var pid = mobPendingRoomId
+    mobPendingRoomId = null
+    mobEntrar(pid)
+  }
+}
+
+async function doMobLogout() {
+  await sb.auth.signOut()
+  currentUser = { trader_id: 'visitante', loggedIn: false }
+  toast('Sessão encerrada', 't-g')
+  mobUpdatePerfil()
+}
+
+function mobShowDesktop(screenId) {
+  document.getElementById('mob-app').classList.add('mob-hidden')
+  closeMobOverlay()
+  _origGo(screenId)
+}
+
+// Patch go() to intercept s-lobby and s-splash on mobile
+var _origGo = go
+window.go = function(screenId) {
+  if (window.innerWidth <= 768) {
+    if (screenId === 's-lobby' || screenId === 's-splash') {
+      _origGo(screenId)
+      document.getElementById('mob-app').classList.remove('mob-hidden')
+      mobTab('home', document.getElementById('mtab-home'))
+      return
+    }
+  }
+  _origGo(screenId)
+}
+// Carregar feed na abertura do mobile (sem clicar em tab)
+if (window.innerWidth <= 768 && !feedLoaded) {
+  feedLoaded = true
+  loadFeed()
+}
+
+// ==================== MARKET DATA ====================
+// Fontes por ativo:
+//   BTC/ETH  → Binance (CORS ok, sem chave)
+//   EUR/USD  → Frankfurter / ECB (CORS ok, sem chave)
+//   XAU/USD  → CoinGecko via PAX Gold (1 PAXG = 1 oz ouro, CORS ok)
+//   WTI      → Yahoo Finance v8 chart CL=F (request individual)
+//   WIN/IBOV → Yahoo Finance v8 chart ^BVSP (request individual)
+
+var mktInterval = null
+var mktEurPrev = null  // armazena taxa anterior para calcular variação EUR/USD
+
+function mktFmt(price, decimals) {
+  if (decimals === 0) return Math.round(price).toLocaleString('en-US')
+  var s = price.toFixed(decimals)
+  var p = s.split('.')
+  p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return p.join('.')
+}
+
+function updateMktAsset(key, price, chgPct, decimals) {
+  if (typeof decimals === 'undefined') decimals = 2
+  var priceStr = mktFmt(price, decimals)
+  var up = chgPct >= 0
+  var chgStr = (up ? '+' : '') + chgPct.toFixed(2) + '%'
+
+  var sp = document.getElementById('sp-tick-' + key)
+  if (sp) {
+    sp.querySelector('.sp-tick-val').textContent = priceStr
+    var sc = sp.querySelector('.sp-tick-chg')
+    if (sc) { sc.textContent = chgStr; sc.className = 'sp-tick-chg ' + (up ? 'up' : 'dn') }
+  }
+
+  var mob = document.getElementById('mob-mkt-' + key)
+  if (mob) {
+    var mp = mob.querySelector('.mob-mkt-price')
+    var mc = mob.querySelector('.mob-mkt-chg')
+    if (mp) mp.textContent = priceStr
+    if (mc) {
+      mc.textContent = (up ? '▲ +' : '▼ ') + Math.abs(chgPct).toFixed(2) + '%'
+      mc.className = 'mob-mkt-chg ' + (up ? 'mup' : 'mdn')
+    }
+  }
+}
+
+// Yahoo Finance v8 chart — request individual por símbolo (mais confiável que v7 batch)
+async function mktFetchYF(sym, key, dec) {
+  var r = await fetch(
+    'https://query2.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(sym) + '?interval=1d&range=2d',
+    { headers: { 'Accept': 'application/json' } }
+  )
+  if (!r.ok) throw new Error('YF ' + r.status)
+  var d = await r.json()
+  var meta = d.chart.result[0].meta
+  var price = meta.regularMarketPrice
+  var prev  = meta.chartPreviousClose || meta.previousClose || price
+  var chg   = prev ? (price - prev) / prev * 100 : 0
+  updateMktAsset(key, price, chg, dec)
+}
+
+async function fetchMarketData() {
+  // 1. BTC/USDT + ETH/USDT — Binance (sem CORS, sem chave, 24h change incluído)
+  try {
+    var br = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=%5B%22BTCUSDT%22%2C%22ETHUSDT%22%5D')
+    var bl = await br.json()
+    bl.forEach(function(t) {
+      var p = parseFloat(t.lastPrice), c = parseFloat(t.priceChangePercent)
+      if (t.symbol === 'BTCUSDT') updateMktAsset('btc', p, c, 2)
+      if (t.symbol === 'ETHUSDT') updateMktAsset('eth', p, c, 2)
+    })
+  } catch(e) {}
+
+  // 2. EUR/USD — Frankfurter (ECB, atualização diária, CORS garantido)
+  //    Variação calculada comparando com o valor da busca anterior na sessão
+  try {
+    var fr = await fetch('https://api.frankfurter.dev/v1/latest?from=EUR&to=USD')
+    var fd = await fr.json()
+    var eurPrice = fd.rates.USD
+    var eurChg = mktEurPrev ? (eurPrice - mktEurPrev) / mktEurPrev * 100 : 0
+    if (!mktEurPrev) mktEurPrev = eurPrice
+    updateMktAsset('eur', eurPrice, eurChg, 4)
+  } catch(e) {}
+
+  // 3. XAU/USD — CoinGecko via PAX Gold (1 PAXG = 1 oz ouro físico, 24h change real)
+  try {
+    var gr = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=pax-gold&vs_currencies=usd&include_24hr_change=true')
+    var gd = await gr.json()
+    var xauPrice = gd['pax-gold'].usd
+    var xauChg   = gd['pax-gold'].usd_24h_change || 0
+    updateMktAsset('xau', xauPrice, xauChg, 2)
+  } catch(e) {}
+
+  // 4. WTI (CL=F) + WIN/IBOV (^BVSP) — Yahoo Finance v8 chart, requests independentes
+  //    Se CORS bloquear um, o outro não é afetado
+  try { await mktFetchYF('CL=F',  'wti', 2) } catch(e) {}
+  try { await mktFetchYF('^BVSP', 'win', 0) } catch(e) {}
+}
+
+function startMarketData() {
+  fetchMarketData()
+  if (mktInterval) clearInterval(mktInterval)
+  mktInterval = setInterval(fetchMarketData, 30000)
+}
+
+startMarketData()
 </script>
 </body>
 </html>
