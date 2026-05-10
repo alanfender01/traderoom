@@ -692,7 +692,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
   </div>
   <div class="sp-ticker">
-    <div class="sp-tick-item" id="sp-tick-win"><span class="sp-tick-name">IBOV</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-item" id="sp-tick-win"><span class="sp-tick-name">BTC/BRL</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
     <div class="sp-tick-item" id="sp-tick-xau"><span class="sp-tick-name">XAU/USD</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
@@ -1090,7 +1090,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
     <div class="mob-mkt-card" id="mob-mkt-win">
       <div class="mob-mkt-ico" style="background:rgba(0,150,255,.08);border:1px solid rgba(0,150,255,.14)">🇧🇷</div>
-      <div class="mob-mkt-info"><div class="mob-mkt-name">IBOV</div><div class="mob-mkt-desc">Ibovespa · B3</div></div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">BTC/BRL</div><div class="mob-mkt-desc">Bitcoin · Real</div></div>
       <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,22 12,19 22,21 32,15 42,11 52,7 56,5" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
       <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
@@ -2735,7 +2735,7 @@ if (window.innerWidth <= 768 && !feedLoaded) {
 //   XAU/USD   → CoinGecko via PAX Gold (1 PAXG = 1 oz ouro, CORS ok)
 //   USD/BRL   → AwesomeAPI (CORS ok, sem chave, pctChange incluso)
 //   XAG/USD   → AwesomeAPI (CORS ok, sem chave, pctChange incluso)
-//   IBOV      → brapi.dev ^BVSP (CORS ok, sem chave)
+//   BTC/BRL   → AwesomeAPI (CORS ok, sem chave, pctChange incluso)
 
 var mktInterval = null
 
@@ -2793,9 +2793,9 @@ async function fetchMarketData() {
     updateMktAsset('xau', xauPrice, xauChg, 2)
   } catch(e) {}
 
-  // 3. USD/BRL + XAG/USD — AwesomeAPI (CORS-friendly, pctChange incluso)
+  // 3. USD/BRL + XAG/USD + BTC/BRL — AwesomeAPI (CORS-friendly, pctChange incluso)
   try {
-    var ar = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL,XAG-USD')
+    var ar = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL,XAG-USD,BTC-BRL')
     var ad = await ar.json()
     if (ad['USDBRL']) {
       var brlPrice = parseFloat(ad['USDBRL'].bid)
@@ -2807,16 +2807,10 @@ async function fetchMarketData() {
       var xagChg   = parseFloat(ad['XAGUSD'].pctChange) || 0
       updateMktAsset('wti', xagPrice, xagChg, 2)
     }
-  } catch(e) {}
-
-  // 4. IBOV — brapi.dev (índice B3, CORS-friendly, sem chave)
-  try {
-    var ibr = await fetch('https://brapi.dev/api/quote/%5EBVSP?fundamental=false&dividends=false')
-    var ibd = await ibr.json()
-    if (ibd.results && ibd.results[0]) {
-      var ibPrice = ibd.results[0].regularMarketPrice
-      var ibChg   = ibd.results[0].regularMarketChangePercent || 0
-      updateMktAsset('win', ibPrice, ibChg, 0)
+    if (ad['BTCBRL']) {
+      var btcbrlPrice = parseFloat(ad['BTCBRL'].bid)
+      var btcbrlChg   = parseFloat(ad['BTCBRL'].pctChange) || 0
+      updateMktAsset('win', btcbrlPrice, btcbrlChg, 0)
     }
   } catch(e) {}
 }
