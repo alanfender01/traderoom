@@ -1701,7 +1701,7 @@ function atualizarLobbyCard(roomId, updates) {
     const occEl = card.querySelector('.nc-val')
     if (occEl) occEl.textContent = String(ocupacao).padStart(2,'0') + '/' + String(limite).padStart(2,'0')
     const room = allRooms.find(x => x.id === roomId)
-    if (room && room.criador_id !== FAKE_ID) {
+    if (room) {
       const lotada = ocupacao >= limite
       const btnWrap = card.querySelector('.nc-btn-wrap')
       if (btnWrap) {
@@ -1797,7 +1797,7 @@ function updateUserUI() {
 async function loadRooms() {
   const el = document.getElementById('rooms-list')
   el.innerHTML = '<div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div>'
-  const { data, error } = await sb.from('salas').select('*').eq('ativa', true).order('criado_em', { ascending: false })
+  const { data, error } = await sb.from('salas').select('*').eq('ativa', true).neq('criador_id', FAKE_ID).order('criado_em', { ascending: false })
   if (error) { el.innerHTML = '<div class="loading-rooms" style="color:var(--r)">Erro ao carregar salas.</div>'; return }
   allRooms = data || []
   renderRooms('')
@@ -1819,14 +1819,7 @@ function renderRooms(filter) {
     return r.mercado === currentMkt && (!filter || r.nome.toLowerCase().includes(filter.toLowerCase()))
   })
 
-  // Salas reais primeiro, fakes por último
-  filtered.sort(function(a, b) {
-    var aFake = a.criador_id === FAKE_ID ? 1 : 0
-    var bFake = b.criador_id === FAKE_ID ? 1 : 0
-    return aFake - bFake
-  })
-
-  if (!filtered.length) { el.innerHTML = '<div class="loading-rooms">Nenhuma sala encontrada.</div>'; return }
+  if (!filtered.length) { el.innerHTML = '<div class="loading-rooms">Nenhuma sala ao vivo no momento.</div>'; return }
 
   var clsMap = { B3:'nb', Forex:'nr', Cripto:'ny' }
   var cls = clsMap[currentMkt] || 'nb'
@@ -1839,7 +1832,7 @@ function renderRooms(filter) {
     var ativo = ativos.length > 1 ? ativos.join(' / ') : (ativos[0] || currentMkt)
     var limite = r.limite || 10
     var ocupacao = r.ocupacao || 0
-    var lotada = ocupacao >= limite || r.criador_id === FAKE_ID
+    var lotada = ocupacao >= limite
     var occ = String(ocupacao).padStart(2,'0') + '/' + String(limite).padStart(2,'0')
     var roomJson = JSON.stringify({ id:r.id, nome:r.nome, mercado:r.mercado, ativos:ativos, criador_id:r.criador_id }).replace(/"/g,'&quot;')
 
@@ -1889,7 +1882,7 @@ function switchMkt(mkt, el) {
 // ==================== ENTRAR SALA ====================
 async function enterRoom(data) {
   const _occ = data.ocupacao || 0; const _lim = data.limite || 10;
-  if (data.criador_id === FAKE_ID || _occ >= _lim) { toast("Sala lotada! Tente outra.", "t-r"); return }
+  if (_occ >= _lim) { toast("Sala lotada! Tente outra.", "t-r"); return }
   if (!currentUser.loggedIn) { document.getElementById('auth-req').classList.add('open'); return }
   currentRoom = data
   currentIsCriador = !!(data.criador_id && currentUser.id && data.criador_id === currentUser.id)
@@ -2262,7 +2255,7 @@ async function loadSplashRooms() {
   if (!el) return
   try {
     var res = await sb.from('salas').select('*').eq('ativa', true)
-      .order('criado_em', { ascending: false }).limit(3)
+      .neq('criador_id', FAKE_ID).order('criado_em', { ascending: false }).limit(3)
     var rooms = res.data || []
     if (!rooms.length) {
       el.innerHTML = '<div class="sp-rooms-empty">Nenhuma sala ao vivo agora</div>'
