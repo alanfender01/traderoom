@@ -952,34 +952,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
 
     <!-- Stories -->
-    <div class="mob-stories-row">
-      <div class="mob-story">
+    <div class="mob-stories-row" id="mob-stories-row">
+      <div class="mob-story" onclick="currentUser.loggedIn?openModal():openMobLogin()">
         <div class="mob-story-av sadd">＋</div>
         <div class="mob-story-name">Criar</div>
-      </div>
-      <div class="mob-story">
-        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#061a0f,#0c2b18)">TM<span class="mob-story-dot"></span></div>
-        <div class="mob-story-name">t.marques</div>
-      </div>
-      <div class="mob-story">
-        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#06101a,#0c1b2e)">KV<span class="mob-story-dot"></span></div>
-        <div class="mob-story-name">k.ventura</div>
-      </div>
-      <div class="mob-story">
-        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#1a060c,#2b0d18)">RS<span class="mob-story-dot"></span></div>
-        <div class="mob-story-name">r.santos</div>
-      </div>
-      <div class="mob-story">
-        <div class="mob-story-av" style="background:linear-gradient(135deg,#100f06,#1a1a0c)">AL</div>
-        <div class="mob-story-name">a.lima</div>
-      </div>
-      <div class="mob-story">
-        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#0e0a1a,#1a102d)">JC<span class="mob-story-dot"></span></div>
-        <div class="mob-story-name">j.costa</div>
-      </div>
-      <div class="mob-story">
-        <div class="mob-story-av" style="background:linear-gradient(135deg,#060f1a,#0a1825)">MS</div>
-        <div class="mob-story-name">m.silva</div>
       </div>
     </div>
 
@@ -1678,12 +1654,15 @@ function iniciarLobbyRealtime() {
       const idx = allRooms.findIndex(x => x.id === r.id)
       if (idx !== -1) { allRooms[idx].ocupacao = r.ocupacao; allRooms[idx].pregao_encerrado = r.pregao_encerrado }
       atualizarLobbyCard(r.id, { ocupacao: r.ocupacao, limite: r.limite || 10, pregao_encerrado: r.pregao_encerrado })
+      mobRenderRooms()
     })
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'salas' }, () => { loadRooms() })
     .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'salas' }, (payload) => {
       allRooms = allRooms.filter(x => x.id !== payload.old.id)
       renderRooms(document.getElementById('search-inp').value)
       updateCounts()
+      mobRenderStories()
+      mobRenderRooms()
     })
     .subscribe()
 }
@@ -1797,11 +1776,13 @@ function updateUserUI() {
 async function loadRooms() {
   const el = document.getElementById('rooms-list')
   el.innerHTML = '<div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div>'
-  const { data, error } = await sb.from('salas').select('*').eq('ativa', true).neq('criador_id', FAKE_ID).order('criado_em', { ascending: false })
+  const { data, error } = await sb.from('salas').select('*, criador:criador_id(trader_id)').eq('ativa', true).neq('criador_id', FAKE_ID).order('criado_em', { ascending: false })
   if (error) { el.innerHTML = '<div class="loading-rooms" style="color:var(--r)">Erro ao carregar salas.</div>'; return }
   allRooms = data || []
   renderRooms('')
   updateCounts()
+  mobRenderStories()
+  mobRenderRooms()
 }
 
 function updateCounts() {
@@ -2382,12 +2363,47 @@ function mobFilter(filter, el) {
   mobRenderRooms()
 }
 
+var MOB_STORY_COLORS = [
+  'linear-gradient(135deg,#061a0f,#0c2b18)',
+  'linear-gradient(135deg,#06101a,#0c1b2e)',
+  'linear-gradient(135deg,#1a060c,#2b0d18)',
+  'linear-gradient(135deg,#0e0a1a,#1a102d)',
+  'linear-gradient(135deg,#100f06,#1a1a0c)',
+  'linear-gradient(135deg,#060f1a,#0a1825)',
+  'linear-gradient(135deg,#0d0619,#180b2e)',
+  'linear-gradient(135deg,#190b06,#2e1408)'
+]
+
+function mobRenderStories() {
+  var row = document.getElementById('mob-stories-row')
+  if (!row) return
+  var criar = '<div class="mob-story" onclick="currentUser.loggedIn?openModal():openMobLogin()">' +
+    '<div class="mob-story-av sadd">＋</div>' +
+    '<div class="mob-story-name">Criar</div>' +
+    '</div>'
+  if (!allRooms.length) { row.innerHTML = criar; return }
+  var html = criar
+  allRooms.slice(0, 8).forEach(function(r, i) {
+    var tid = (r.criador && r.criador.trader_id) ? r.criador.trader_id : null
+    var initials = tid ? tid.substring(0, 2).toUpperCase() : 'TR'
+    var label = tid ? tid : r.nome.substring(0, 8).toLowerCase()
+    var bg = MOB_STORY_COLORS[i % MOB_STORY_COLORS.length]
+    html += '<div class="mob-story" onclick="mobEntrar(\'' + r.id + '\')">' +
+      '<div class="mob-story-av slive" style="background:' + bg + '">' +
+        initials + '<span class="mob-story-dot"></span>' +
+      '</div>' +
+      '<div class="mob-story-name">' + label + '</div>' +
+    '</div>'
+  })
+  row.innerHTML = html
+}
+
 function mobRenderRooms() {
   var list = document.getElementById('mob-rooms-list')
   if (!list) return
   var rooms = mobCurFilter === 'all' ? allRooms : allRooms.filter(function(r){ return r.mercado === mobCurFilter })
   if (!rooms.length) {
-    list.innerHTML = '<div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">Nenhuma sala disponível no momento.</div>'
+    list.innerHTML = '<div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">Nenhuma sala ao vivo no momento.</div>'
     return
   }
   var COL = {
@@ -2397,17 +2413,26 @@ function mobRenderRooms() {
   }
   list.innerHTML = rooms.map(function(r) {
     var c = COL[r.mercado] || COL.B3
-    var lotada = r.membros_count >= r.limite
-    var tid = r.trader_id || r.criador_id || 'host'
+    var ocupacao = r.ocupacao || 0
+    var limite = r.limite || 10
+    var lotada = ocupacao >= limite
+    var encerrado = !!r.pregao_encerrado
+    var ativo = (r.ativos && r.ativos.length) ? r.ativos.slice(0, 2).join(' · ') : r.mercado
+    var statusLabel = encerrado ? 'ENCERRADO' : (lotada ? 'LOTADA' : 'ENTRAR')
+    var statusColor = encerrado ? 'var(--t4)' : (lotada ? 'var(--r)' : 'var(--g)')
+    var disabled = lotada || encerrado
     return '<div class="mob-room-card" onclick="mobEntrar(\'' + r.id + '\')">' +
       '<div class="mob-room-badge" style="' + c.badge + '">' + r.mercado + '</div>' +
       '<div class="mob-room-info">' +
         '<div class="mob-room-name">' + r.nome + '</div>' +
-        '<div class="mob-room-host">@' + tid + ' · ' + r.membros_count + '/' + r.limite + '</div>' +
+        '<div class="mob-room-host">' + ativo + ' · ' + ocupacao + '/' + limite + '</div>' +
       '</div>' +
       '<div class="mob-room-right">' +
-        '<div style="width:6px;height:6px;border-radius:50%;background:' + (lotada?'var(--r)':'var(--g)') + ';box-shadow:0 0 8px ' + (lotada?'var(--r)':'var(--g)') + '"></div>' +
-        '<button class="mob-enter-btn" style="' + c.btn + (lotada?';opacity:.4;cursor:not-allowed':'') + '" ' + (lotada?'disabled':'') + ' onclick="event.stopPropagation();mobEntrar(\'' + r.id + '\')">' + (lotada?'LOTADA':'ENTRAR') + '</button>' +
+        '<div style="width:6px;height:6px;border-radius:50%;background:' + statusColor + ';box-shadow:0 0 8px ' + statusColor + '"></div>' +
+        '<button class="mob-enter-btn" style="' + c.btn + (disabled ? ';opacity:.4;cursor:not-allowed' : '') + '" ' +
+          (disabled ? 'disabled' : 'onclick="event.stopPropagation();mobEntrar(\'' + r.id + '\')"') + '>' +
+          statusLabel +
+        '</button>' +
       '</div>' +
     '</div>'
   }).join('')
@@ -2731,10 +2756,11 @@ window.go = function(screenId) {
   }
   _origGo(screenId)
 }
-// Carregar feed na abertura do mobile (sem clicar em tab)
+// Carregar feed e salas na abertura do mobile (sem clicar em tab)
 if (window.innerWidth <= 768 && !feedLoaded) {
   feedLoaded = true
   loadFeed()
+  loadRooms()
 }
 
 // ==================== MARKET DATA ====================
