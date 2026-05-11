@@ -1785,10 +1785,13 @@ async function loadRooms() {
   updateCounts()
   mobRenderRooms()
   const ids = [...new Set(allRooms.map(r => r.criador_id).filter(Boolean))]
+  console.log('[stories] criador_ids extraídos:', ids)
   if (ids.length) {
-    const { data: udata } = await sb.from('usuarios').select('id, trader_id').in('id', ids)
+    const { data: udata, error: uerr } = await sb.from('usuarios').select('id, trader_id').in('id', ids)
+    console.log('[stories] query usuarios resultado:', udata, '| erro:', uerr)
     if (udata) udata.forEach(u => { criadorMap[u.id] = u.trader_id })
   }
+  console.log('[stories] criadorMap final:', criadorMap)
   mobRenderStories()
 }
 
