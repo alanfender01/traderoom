@@ -1776,7 +1776,7 @@ function updateUserUI() {
 async function loadRooms() {
   const el = document.getElementById('rooms-list')
   el.innerHTML = '<div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div>'
-  const { data, error } = await sb.from('salas').select('*, criador:criador_id(trader_id)').eq('ativa', true).neq('criador_id', FAKE_ID).order('criado_em', { ascending: false })
+  const { data, error } = await sb.from('salas').select('*').eq('ativa', true).neq('criador_id', FAKE_ID).order('criado_em', { ascending: false })
   if (error) { el.innerHTML = '<div class="loading-rooms" style="color:var(--r)">Erro ao carregar salas.</div>'; return }
   allRooms = data || []
   renderRooms('')
@@ -2384,9 +2384,8 @@ function mobRenderStories() {
   if (!allRooms.length) { row.innerHTML = criar; return }
   var html = criar
   allRooms.slice(0, 8).forEach(function(r, i) {
-    var tid = (r.criador && r.criador.trader_id) ? r.criador.trader_id : null
-    var initials = tid ? tid.substring(0, 2).toUpperCase() : 'TR'
-    var label = tid ? tid : r.nome.substring(0, 8).toLowerCase()
+    var initials = r.nome.replace(/[^A-Za-z0-9]/g, '').substring(0, 2).toUpperCase() || 'TR'
+    var label = r.nome.substring(0, 9).toLowerCase()
     var bg = MOB_STORY_COLORS[i % MOB_STORY_COLORS.length]
     html += '<div class="mob-story" onclick="mobEntrar(\'' + r.id + '\')">' +
       '<div class="mob-story-av slive" style="background:' + bg + '">' +
