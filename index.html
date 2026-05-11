@@ -85,6 +85,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .sp-occ-bar{display:block;width:54px;height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
 .sp-occ-bar span{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#00e5a0,#0af)}
 .sp-occ-txt{font-family:var(--mono);font-size:9px;color:#3a4455}
+.sp-rooms-empty,.sp-rooms-loading{font-family:var(--mono);font-size:11px;color:#3a4455;text-align:center;padding:18px 0;letter-spacing:1px}
 .sp-canvas-wrap{position:absolute;inset:0;z-index:0;pointer-events:none}
 #sp-neural{width:100%;height:100%}
 .sp-ticker{display:flex;align-items:center;height:38px;background:rgba(0,0,0,.65);border-top:1px solid rgba(255,255,255,.05);flex-shrink:0;padding:0 28px;position:relative;z-index:3}
@@ -664,28 +665,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <h1 class="sp-title">O mercado nunca para.<br><span>Nem você.</span></h1>
       <p class="sp-subtitle">Análise coletiva em tempo real entre traders de B3, Forex e Cripto.</p>
       <div class="sp-rooms-lbl">SALAS AO VIVO</div>
-      <div class="sp-rooms">
-        <div class="sp-room" onclick="splashEnter()">
-          <div class="sp-room-left">
-            <span class="sp-badge sp-b3">B3</span>
-            <div><div class="sp-room-name">IBOV Scalping Pro</div><div class="sp-room-host">por <strong>t.marques</strong></div></div>
-          </div>
-          <div class="sp-occ"><span class="sp-occ-bar"><span style="width:78%"></span></span><span class="sp-occ-txt">78/100</span></div>
-        </div>
-        <div class="sp-room" onclick="splashEnter()">
-          <div class="sp-room-left">
-            <span class="sp-badge sp-fx">FOREX</span>
-            <div><div class="sp-room-name">EUR/USD Day Trade</div><div class="sp-room-host">por <strong>k.ventura</strong></div></div>
-          </div>
-          <div class="sp-occ"><span class="sp-occ-bar"><span style="width:45%"></span></span><span class="sp-occ-txt">45/100</span></div>
-        </div>
-        <div class="sp-room" onclick="splashEnter()">
-          <div class="sp-room-left">
-            <span class="sp-badge sp-cr">CRYPTO</span>
-            <div><div class="sp-room-name">BTC/USDT Análise</div><div class="sp-room-host">por <strong>r.santos</strong></div></div>
-          </div>
-          <div class="sp-occ"><span class="sp-occ-bar"><span style="width:92%"></span></span><span class="sp-occ-txt">92/100</span></div>
-        </div>
+      <div class="sp-rooms" id="sp-rooms-list">
+        <div class="sp-rooms-loading">Carregando salas...</div>
       </div>
     </div>
     <div class="sp-canvas-wrap">
@@ -693,7 +674,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
   </div>
   <div class="sp-ticker">
-    <div class="sp-tick-item" id="sp-tick-win"><span class="sp-tick-name">WIN</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-item" id="sp-tick-win"><span class="sp-tick-name">BTC/BRL</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
     <div class="sp-tick-item" id="sp-tick-xau"><span class="sp-tick-name">XAU/USD</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
@@ -701,9 +682,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="sp-tick-sep"></div>
     <div class="sp-tick-item" id="sp-tick-eth"><span class="sp-tick-name">ETH/USDT</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
-    <div class="sp-tick-item" id="sp-tick-eur"><span class="sp-tick-name">EUR/USD</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-item" id="sp-tick-eur"><span class="sp-tick-name">USD/BRL</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
     <div class="sp-tick-sep"></div>
-    <div class="sp-tick-item" id="sp-tick-wti"><span class="sp-tick-name">WTI</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
+    <div class="sp-tick-item" id="sp-tick-wti"><span class="sp-tick-name">XAG/USD</span><span class="sp-tick-val">—</span><span class="sp-tick-chg">—</span></div>
   </div>
 </div>
 
@@ -972,34 +953,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
 
     <!-- Stories -->
-    <div class="mob-stories-row">
-      <div class="mob-story">
+    <div class="mob-stories-row" id="mob-stories-row">
+      <div class="mob-story" onclick="currentUser.loggedIn?openModal():openMobLogin()">
         <div class="mob-story-av sadd">＋</div>
         <div class="mob-story-name">Criar</div>
-      </div>
-      <div class="mob-story">
-        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#061a0f,#0c2b18)">TM<span class="mob-story-dot"></span></div>
-        <div class="mob-story-name">t.marques</div>
-      </div>
-      <div class="mob-story">
-        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#06101a,#0c1b2e)">KV<span class="mob-story-dot"></span></div>
-        <div class="mob-story-name">k.ventura</div>
-      </div>
-      <div class="mob-story">
-        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#1a060c,#2b0d18)">RS<span class="mob-story-dot"></span></div>
-        <div class="mob-story-name">r.santos</div>
-      </div>
-      <div class="mob-story">
-        <div class="mob-story-av" style="background:linear-gradient(135deg,#100f06,#1a1a0c)">AL</div>
-        <div class="mob-story-name">a.lima</div>
-      </div>
-      <div class="mob-story">
-        <div class="mob-story-av slive" style="background:linear-gradient(135deg,#0e0a1a,#1a102d)">JC<span class="mob-story-dot"></span></div>
-        <div class="mob-story-name">j.costa</div>
-      </div>
-      <div class="mob-story">
-        <div class="mob-story-av" style="background:linear-gradient(135deg,#060f1a,#0a1825)">MS</div>
-        <div class="mob-story-name">m.silva</div>
       </div>
     </div>
 
@@ -1091,7 +1048,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
     <div class="mob-mkt-card" id="mob-mkt-win">
       <div class="mob-mkt-ico" style="background:rgba(0,150,255,.08);border:1px solid rgba(0,150,255,.14)">🇧🇷</div>
-      <div class="mob-mkt-info"><div class="mob-mkt-name">WIN</div><div class="mob-mkt-desc">Mini Índice · B3</div></div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">BTC/BRL</div><div class="mob-mkt-desc">Bitcoin · Real</div></div>
       <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,22 12,19 22,21 32,15 42,11 52,7 56,5" fill="none" stroke="#00e5a0" stroke-width="1.2" stroke-linecap="round"/></svg>
       <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
@@ -1114,14 +1071,14 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
     <div class="mob-mkt-card" id="mob-mkt-eur">
-      <div class="mob-mkt-ico" style="background:rgba(255,30,60,.08);border:1px solid rgba(255,30,60,.14)">💱</div>
-      <div class="mob-mkt-info"><div class="mob-mkt-name">EUR/USD</div><div class="mob-mkt-desc">Euro · Forex</div></div>
+      <div class="mob-mkt-ico" style="background:rgba(255,30,60,.08);border:1px solid rgba(255,30,60,.14)">💵</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">USD/BRL</div><div class="mob-mkt-desc">Dólar · Forex</div></div>
       <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,6 12,8 22,7 32,11 42,15 52,17 56,20" fill="none" stroke="#ff4560" stroke-width="1.2" stroke-linecap="round"/></svg>
       <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
     <div class="mob-mkt-card" id="mob-mkt-wti">
-      <div class="mob-mkt-ico" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.14)">🛢</div>
-      <div class="mob-mkt-info"><div class="mob-mkt-name">WTI</div><div class="mob-mkt-desc">Petróleo · Commodities</div></div>
+      <div class="mob-mkt-ico" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.14)">🥈</div>
+      <div class="mob-mkt-info"><div class="mob-mkt-name">XAG/USD</div><div class="mob-mkt-desc">Prata · Commodities</div></div>
       <svg class="mob-spark" width="58" height="28" viewBox="0 0 58 28"><polyline points="2,8 12,10 22,9 32,13 42,16 52,14 56,18" fill="none" stroke="#ff4560" stroke-width="1.2" stroke-linecap="round"/></svg>
       <div class="mob-mkt-right"><div class="mob-mkt-price">—</div><div class="mob-mkt-chg">—</div></div>
     </div>
@@ -1351,6 +1308,8 @@ const SUPABASE_KEY = 'sb_publishable_lpcSO7-IQJL0g2pF3UgQLw_AneC6pXw'
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 const FAKE_ID = '00000000-0000-0000-0000-000000000099'
+
+loadSplashRooms()
 
 let currentUser = { trader_id: 'visitante', loggedIn: false }
 let currentMkt = 'B3'
@@ -1696,12 +1655,15 @@ function iniciarLobbyRealtime() {
       const idx = allRooms.findIndex(x => x.id === r.id)
       if (idx !== -1) { allRooms[idx].ocupacao = r.ocupacao; allRooms[idx].pregao_encerrado = r.pregao_encerrado }
       atualizarLobbyCard(r.id, { ocupacao: r.ocupacao, limite: r.limite || 10, pregao_encerrado: r.pregao_encerrado })
+      mobRenderRooms()
     })
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'salas' }, () => { loadRooms() })
     .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'salas' }, (payload) => {
       allRooms = allRooms.filter(x => x.id !== payload.old.id)
       renderRooms(document.getElementById('search-inp').value)
       updateCounts()
+      mobRenderStories()
+      mobRenderRooms()
     })
     .subscribe()
 }
@@ -1719,7 +1681,7 @@ function atualizarLobbyCard(roomId, updates) {
     const occEl = card.querySelector('.nc-val')
     if (occEl) occEl.textContent = String(ocupacao).padStart(2,'0') + '/' + String(limite).padStart(2,'0')
     const room = allRooms.find(x => x.id === roomId)
-    if (room && room.criador_id !== FAKE_ID) {
+    if (room) {
       const lotada = ocupacao >= limite
       const btnWrap = card.querySelector('.nc-btn-wrap')
       if (btnWrap) {
@@ -1815,11 +1777,13 @@ function updateUserUI() {
 async function loadRooms() {
   const el = document.getElementById('rooms-list')
   el.innerHTML = '<div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div>'
-  const { data, error } = await sb.from('salas').select('*').eq('ativa', true).order('criado_em', { ascending: false })
+  const { data, error } = await sb.from('salas').select('*, criador:criador_id(trader_id)').eq('ativa', true).neq('criador_id', FAKE_ID).order('criado_em', { ascending: false })
   if (error) { el.innerHTML = '<div class="loading-rooms" style="color:var(--r)">Erro ao carregar salas.</div>'; return }
   allRooms = data || []
   renderRooms('')
   updateCounts()
+  mobRenderStories()
+  mobRenderRooms()
 }
 
 function updateCounts() {
@@ -1837,14 +1801,7 @@ function renderRooms(filter) {
     return r.mercado === currentMkt && (!filter || r.nome.toLowerCase().includes(filter.toLowerCase()))
   })
 
-  // Salas reais primeiro, fakes por último
-  filtered.sort(function(a, b) {
-    var aFake = a.criador_id === FAKE_ID ? 1 : 0
-    var bFake = b.criador_id === FAKE_ID ? 1 : 0
-    return aFake - bFake
-  })
-
-  if (!filtered.length) { el.innerHTML = '<div class="loading-rooms">Nenhuma sala encontrada.</div>'; return }
+  if (!filtered.length) { el.innerHTML = '<div class="loading-rooms">Nenhuma sala ao vivo no momento.</div>'; return }
 
   var clsMap = { B3:'nb', Forex:'nr', Cripto:'ny' }
   var cls = clsMap[currentMkt] || 'nb'
@@ -1857,7 +1814,7 @@ function renderRooms(filter) {
     var ativo = ativos.length > 1 ? ativos.join(' / ') : (ativos[0] || currentMkt)
     var limite = r.limite || 10
     var ocupacao = r.ocupacao || 0
-    var lotada = ocupacao >= limite || r.criador_id === FAKE_ID
+    var lotada = ocupacao >= limite
     var occ = String(ocupacao).padStart(2,'0') + '/' + String(limite).padStart(2,'0')
     var roomJson = JSON.stringify({ id:r.id, nome:r.nome, mercado:r.mercado, ativos:ativos, criador_id:r.criador_id }).replace(/"/g,'&quot;')
 
@@ -1907,7 +1864,7 @@ function switchMkt(mkt, el) {
 // ==================== ENTRAR SALA ====================
 async function enterRoom(data) {
   const _occ = data.ocupacao || 0; const _lim = data.limite || 10;
-  if (data.criador_id === FAKE_ID || _occ >= _lim) { toast("Sala lotada! Tente outra.", "t-r"); return }
+  if (_occ >= _lim) { toast("Sala lotada! Tente outra.", "t-r"); return }
   if (!currentUser.loggedIn) { document.getElementById('auth-req').classList.add('open'); return }
   currentRoom = data
   currentIsCriador = !!(data.criador_id && currentUser.id && data.criador_id === currentUser.id)
@@ -2274,6 +2231,38 @@ function cadNext(){const nome=document.getElementById('c-nome').value.trim();con
 
 // ==================== SPLASH ====================
 function splashEnter(){ go('s-lobby') }
+
+async function loadSplashRooms() {
+  var el = document.getElementById('sp-rooms-list')
+  if (!el) return
+  try {
+    var res = await sb.from('salas').select('*').eq('ativa', true)
+      .neq('criador_id', FAKE_ID).order('criado_em', { ascending: false }).limit(3)
+    var rooms = res.data || []
+    if (!rooms.length) {
+      el.innerHTML = '<div class="sp-rooms-empty">Nenhuma sala ao vivo agora</div>'
+      return
+    }
+    var mktMap = { B3: ['sp-b3','B3'], Forex: ['sp-fx','FOREX'], Cripto: ['sp-cr','CRYPTO'] }
+    el.innerHTML = rooms.map(function(r) {
+      var mkt = mktMap[r.mercado] || ['sp-b3','B3']
+      var limite = r.limite || 10
+      var ocupacao = r.ocupacao || 0
+      var pct = Math.round(Math.min(ocupacao / limite * 100, 100))
+      return '<div class="sp-room" onclick="splashEnter()">'
+        + '<div class="sp-room-left">'
+        + '<span class="sp-badge ' + mkt[0] + '">' + mkt[1] + '</span>'
+        + '<div><div class="sp-room-name">' + r.nome + '</div></div>'
+        + '</div>'
+        + '<div class="sp-occ"><span class="sp-occ-bar"><span style="width:' + pct + '%"></span></span>'
+        + '<span class="sp-occ-txt">' + ocupacao + '/' + limite + '</span></div>'
+        + '</div>'
+    }).join('')
+  } catch(e) {
+    el.innerHTML = '<div class="sp-rooms-empty">Nenhuma sala ao vivo agora</div>'
+  }
+}
+
 function setLang(l){document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
 ;(function(){
   const canvas=document.getElementById('sp-neural');if(!canvas)return;
@@ -2375,12 +2364,47 @@ function mobFilter(filter, el) {
   mobRenderRooms()
 }
 
+var MOB_STORY_COLORS = [
+  'linear-gradient(135deg,#061a0f,#0c2b18)',
+  'linear-gradient(135deg,#06101a,#0c1b2e)',
+  'linear-gradient(135deg,#1a060c,#2b0d18)',
+  'linear-gradient(135deg,#0e0a1a,#1a102d)',
+  'linear-gradient(135deg,#100f06,#1a1a0c)',
+  'linear-gradient(135deg,#060f1a,#0a1825)',
+  'linear-gradient(135deg,#0d0619,#180b2e)',
+  'linear-gradient(135deg,#190b06,#2e1408)'
+]
+
+function mobRenderStories() {
+  var row = document.getElementById('mob-stories-row')
+  if (!row) return
+  var criar = '<div class="mob-story" onclick="currentUser.loggedIn?openModal():openMobLogin()">' +
+    '<div class="mob-story-av sadd">＋</div>' +
+    '<div class="mob-story-name">Criar</div>' +
+    '</div>'
+  if (!allRooms.length) { row.innerHTML = criar; return }
+  var html = criar
+  allRooms.slice(0, 8).forEach(function(r, i) {
+    var tid = (r.criador && r.criador.trader_id) ? r.criador.trader_id : null
+    var initials = tid ? tid.substring(0, 2).toUpperCase() : 'TR'
+    var label = tid ? tid : r.nome.substring(0, 8).toLowerCase()
+    var bg = MOB_STORY_COLORS[i % MOB_STORY_COLORS.length]
+    html += '<div class="mob-story" onclick="mobEntrar(\'' + r.id + '\')">' +
+      '<div class="mob-story-av slive" style="background:' + bg + '">' +
+        initials + '<span class="mob-story-dot"></span>' +
+      '</div>' +
+      '<div class="mob-story-name">' + label + '</div>' +
+    '</div>'
+  })
+  row.innerHTML = html
+}
+
 function mobRenderRooms() {
   var list = document.getElementById('mob-rooms-list')
   if (!list) return
   var rooms = mobCurFilter === 'all' ? allRooms : allRooms.filter(function(r){ return r.mercado === mobCurFilter })
   if (!rooms.length) {
-    list.innerHTML = '<div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">Nenhuma sala disponível no momento.</div>'
+    list.innerHTML = '<div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">Nenhuma sala ao vivo no momento.</div>'
     return
   }
   var COL = {
@@ -2390,17 +2414,26 @@ function mobRenderRooms() {
   }
   list.innerHTML = rooms.map(function(r) {
     var c = COL[r.mercado] || COL.B3
-    var lotada = r.membros_count >= r.limite
-    var tid = r.trader_id || r.criador_id || 'host'
+    var ocupacao = r.ocupacao || 0
+    var limite = r.limite || 10
+    var lotada = ocupacao >= limite
+    var encerrado = !!r.pregao_encerrado
+    var ativo = (r.ativos && r.ativos.length) ? r.ativos.slice(0, 2).join(' · ') : r.mercado
+    var statusLabel = encerrado ? 'ENCERRADO' : (lotada ? 'LOTADA' : 'ENTRAR')
+    var statusColor = encerrado ? 'var(--t4)' : (lotada ? 'var(--r)' : 'var(--g)')
+    var disabled = lotada || encerrado
     return '<div class="mob-room-card" onclick="mobEntrar(\'' + r.id + '\')">' +
       '<div class="mob-room-badge" style="' + c.badge + '">' + r.mercado + '</div>' +
       '<div class="mob-room-info">' +
         '<div class="mob-room-name">' + r.nome + '</div>' +
-        '<div class="mob-room-host">@' + tid + ' · ' + r.membros_count + '/' + r.limite + '</div>' +
+        '<div class="mob-room-host">' + ativo + ' · ' + ocupacao + '/' + limite + '</div>' +
       '</div>' +
       '<div class="mob-room-right">' +
-        '<div style="width:6px;height:6px;border-radius:50%;background:' + (lotada?'var(--r)':'var(--g)') + ';box-shadow:0 0 8px ' + (lotada?'var(--r)':'var(--g)') + '"></div>' +
-        '<button class="mob-enter-btn" style="' + c.btn + (lotada?';opacity:.4;cursor:not-allowed':'') + '" ' + (lotada?'disabled':'') + ' onclick="event.stopPropagation();mobEntrar(\'' + r.id + '\')">' + (lotada?'LOTADA':'ENTRAR') + '</button>' +
+        '<div style="width:6px;height:6px;border-radius:50%;background:' + statusColor + ';box-shadow:0 0 8px ' + statusColor + '"></div>' +
+        '<button class="mob-enter-btn" style="' + c.btn + (disabled ? ';opacity:.4;cursor:not-allowed' : '') + '" ' +
+          (disabled ? 'disabled' : 'onclick="event.stopPropagation();mobEntrar(\'' + r.id + '\')"') + '>' +
+          statusLabel +
+        '</button>' +
       '</div>' +
     '</div>'
   }).join('')
@@ -2724,22 +2757,22 @@ window.go = function(screenId) {
   }
   _origGo(screenId)
 }
-// Carregar feed na abertura do mobile (sem clicar em tab)
+// Carregar feed e salas na abertura do mobile (sem clicar em tab)
 if (window.innerWidth <= 768 && !feedLoaded) {
   feedLoaded = true
   loadFeed()
+  loadRooms()
 }
 
 // ==================== MARKET DATA ====================
 // Fontes por ativo:
-//   BTC/ETH  → Binance (CORS ok, sem chave)
-//   EUR/USD  → Frankfurter / ECB (CORS ok, sem chave)
-//   XAU/USD  → CoinGecko via PAX Gold (1 PAXG = 1 oz ouro, CORS ok)
-//   WTI      → Yahoo Finance v8 chart CL=F (request individual)
-//   WIN/IBOV → Yahoo Finance v8 chart ^BVSP (request individual)
+//   BTC/ETH   → Binance (CORS ok, sem chave)
+//   XAU/USD   → CoinGecko via PAX Gold (1 PAXG = 1 oz ouro, CORS ok)
+//   USD/BRL   → AwesomeAPI (CORS ok, sem chave, pctChange incluso)
+//   XAG/USD   → AwesomeAPI (CORS ok, sem chave, pctChange incluso)
+//   BTC/BRL   → AwesomeAPI (CORS ok, sem chave, pctChange incluso)
 
 var mktInterval = null
-var mktEurPrev = null  // armazena taxa anterior para calcular variação EUR/USD
 
 function mktFmt(price, decimals) {
   if (decimals === 0) return Math.round(price).toLocaleString('en-US')
@@ -2757,7 +2790,8 @@ function updateMktAsset(key, price, chgPct, decimals) {
 
   var sp = document.getElementById('sp-tick-' + key)
   if (sp) {
-    sp.querySelector('.sp-tick-val').textContent = priceStr
+    var sv = sp.querySelector('.sp-tick-val')
+    if (sv) sv.textContent = priceStr
     var sc = sp.querySelector('.sp-tick-chg')
     if (sc) { sc.textContent = chgStr; sc.className = 'sp-tick-chg ' + (up ? 'up' : 'dn') }
   }
@@ -2774,21 +2808,6 @@ function updateMktAsset(key, price, chgPct, decimals) {
   }
 }
 
-// Yahoo Finance v8 chart — request individual por símbolo (mais confiável que v7 batch)
-async function mktFetchYF(sym, key, dec) {
-  var r = await fetch(
-    'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(sym) + '?interval=1d&range=2d',
-    { headers: { 'Accept': 'application/json' } }
-  )
-  if (!r.ok) throw new Error('YF ' + r.status)
-  var d = await r.json()
-  var meta = d.chart.result[0].meta
-  var price = meta.regularMarketPrice
-  var prev  = meta.chartPreviousClose || meta.previousClose || price
-  var chg   = prev ? (price - prev) / prev * 100 : 0
-  updateMktAsset(key, price, chg, dec)
-}
-
 async function fetchMarketData() {
   // 1. BTC/USDT + ETH/USDT — Binance (sem CORS, sem chave, 24h change incluído)
   try {
@@ -2801,18 +2820,7 @@ async function fetchMarketData() {
     })
   } catch(e) {}
 
-  // 2. EUR/USD — Frankfurter (ECB, atualização diária, CORS garantido)
-  //    Variação calculada comparando com o valor da busca anterior na sessão
-  try {
-    var fr = await fetch('https://api.frankfurter.app/latest?from=EUR&to=USD')
-    var fd = await fr.json()
-    var eurPrice = fd.rates.USD
-    var eurChg = mktEurPrev ? (eurPrice - mktEurPrev) / mktEurPrev * 100 : 0
-    if (!mktEurPrev) mktEurPrev = eurPrice
-    updateMktAsset('eur', eurPrice, eurChg, 4)
-  } catch(e) {}
-
-  // 3. XAU/USD — CoinGecko via PAX Gold (1 PAXG = 1 oz ouro físico, 24h change real)
+  // 2. XAU/USD — CoinGecko via PAX Gold (1 PAXG = 1 oz ouro físico, 24h change real)
   try {
     var gr = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=pax-gold&vs_currencies=usd&include_24hr_change=true')
     var gd = await gr.json()
@@ -2821,10 +2829,21 @@ async function fetchMarketData() {
     updateMktAsset('xau', xauPrice, xauChg, 2)
   } catch(e) {}
 
-  // 4. WTI (CL=F) + WIN/IBOV (^BVSP) — Yahoo Finance v8 chart, requests independentes
-  //    Se CORS bloquear um, o outro não é afetado
-  try { await mktFetchYF('CL=F',  'wti', 2) } catch(e) {}
-  try { await mktFetchYF('^BVSP', 'win', 0) } catch(e) {}
+  // 3. USD/BRL + XAG/USD + BTC/BRL — AwesomeAPI (CORS-friendly, pctChange incluso)
+  try {
+    var ar = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL,XAG-USD,BTC-BRL')
+    if (!ar.ok) throw new Error('AwesomeAPI HTTP ' + ar.status)
+    var ad = await ar.json()
+    if (ad['USDBRL']) {
+      updateMktAsset('eur', parseFloat(ad['USDBRL'].bid), parseFloat(ad['USDBRL'].pctChange) || 0, 4)
+    }
+    if (ad['XAGUSD']) {
+      updateMktAsset('wti', parseFloat(ad['XAGUSD'].bid), parseFloat(ad['XAGUSD'].pctChange) || 0, 2)
+    }
+    if (ad['BTCBRL']) {
+      updateMktAsset('win', parseFloat(ad['BTCBRL'].bid), parseFloat(ad['BTCBRL'].pctChange) || 0, 0)
+    }
+  } catch(e) { console.warn('[market] AwesomeAPI:', e.message) }
 }
 
 function startMarketData() {
