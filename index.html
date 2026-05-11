@@ -2755,7 +2755,8 @@ function updateMktAsset(key, price, chgPct, decimals) {
 
   var sp = document.getElementById('sp-tick-' + key)
   if (sp) {
-    sp.querySelector('.sp-tick-val').textContent = priceStr
+    var sv = sp.querySelector('.sp-tick-val')
+    if (sv) sv.textContent = priceStr
     var sc = sp.querySelector('.sp-tick-chg')
     if (sc) { sc.textContent = chgStr; sc.className = 'sp-tick-chg ' + (up ? 'up' : 'dn') }
   }
@@ -2796,23 +2797,18 @@ async function fetchMarketData() {
   // 3. USD/BRL + XAG/USD + BTC/BRL — AwesomeAPI (CORS-friendly, pctChange incluso)
   try {
     var ar = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL,XAG-USD,BTC-BRL')
+    if (!ar.ok) throw new Error('AwesomeAPI HTTP ' + ar.status)
     var ad = await ar.json()
     if (ad['USDBRL']) {
-      var brlPrice = parseFloat(ad['USDBRL'].bid)
-      var brlChg   = parseFloat(ad['USDBRL'].pctChange) || 0
-      updateMktAsset('eur', brlPrice, brlChg, 4)
+      updateMktAsset('eur', parseFloat(ad['USDBRL'].bid), parseFloat(ad['USDBRL'].pctChange) || 0, 4)
     }
     if (ad['XAGUSD']) {
-      var xagPrice = parseFloat(ad['XAGUSD'].bid)
-      var xagChg   = parseFloat(ad['XAGUSD'].pctChange) || 0
-      updateMktAsset('wti', xagPrice, xagChg, 2)
+      updateMktAsset('wti', parseFloat(ad['XAGUSD'].bid), parseFloat(ad['XAGUSD'].pctChange) || 0, 2)
     }
     if (ad['BTCBRL']) {
-      var btcbrlPrice = parseFloat(ad['BTCBRL'].bid)
-      var btcbrlChg   = parseFloat(ad['BTCBRL'].pctChange) || 0
-      updateMktAsset('win', btcbrlPrice, btcbrlChg, 0)
+      updateMktAsset('win', parseFloat(ad['BTCBRL'].bid), parseFloat(ad['BTCBRL'].pctChange) || 0, 0)
     }
-  } catch(e) {}
+  } catch(e) { console.warn('[market] AwesomeAPI:', e.message) }
 }
 
 function startMarketData() {
