@@ -964,58 +964,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
       <div id="mob-feed-list"><div class="mob-feed-load">Carregando feed...</div></div>
 
-      <!-- Poll 1 -->
-      <div class="mob-poll" id="mob-poll-1">
-        <div class="mob-poll-header">
-          <div class="mob-poll-badge">PREDITIVO</div>
-          <div class="mob-poll-time">Encerra em 4h 30min</div>
-        </div>
-        <div class="mob-poll-q">O IBOVESPA vai fechar ACIMA de 135.000 pontos hoje?</div>
-        <div class="mob-poll-btns">
-          <button class="mob-poll-btn yes" onclick="mobVote('mob-poll-1','yes',67)">✓ SIM</button>
-          <button class="mob-poll-btn no"  onclick="mobVote('mob-poll-1','no',67)">✗ NÃO</button>
-        </div>
-        <div class="mob-poll-bars">
-          <div class="mob-poll-bar-row">
-            <div class="mob-poll-bar-lbl">SIM</div>
-            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:67%"></div></div>
-            <div class="mob-poll-bar-pct">67%</div>
-          </div>
-          <div class="mob-poll-bar-row">
-            <div class="mob-poll-bar-lbl">NÃO</div>
-            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:33%"></div></div>
-            <div class="mob-poll-bar-pct">33%</div>
-          </div>
-        </div>
-        <div class="mob-poll-votes">312 votos · Resultado às 18:00</div>
-      </div>
-
-      <!-- Poll 2 -->
-      <div class="mob-poll" id="mob-poll-2">
-        <div class="mob-poll-header">
-          <div class="mob-poll-badge">PREDITIVO</div>
-          <div class="mob-poll-time">Encerra em 2h 15min</div>
-        </div>
-        <div class="mob-poll-q">O dólar (USD/BRL) vai superar R$ 5,40 esta semana?</div>
-        <div class="mob-poll-btns">
-          <button class="mob-poll-btn yes" onclick="mobVote('mob-poll-2','yes',41)">✓ SIM</button>
-          <button class="mob-poll-btn no"  onclick="mobVote('mob-poll-2','no',41)">✗ NÃO</button>
-        </div>
-        <div class="mob-poll-bars">
-          <div class="mob-poll-bar-row">
-            <div class="mob-poll-bar-lbl">SIM</div>
-            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:41%"></div></div>
-            <div class="mob-poll-bar-pct">41%</div>
-          </div>
-          <div class="mob-poll-bar-row">
-            <div class="mob-poll-bar-lbl">NÃO</div>
-            <div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:59%"></div></div>
-            <div class="mob-poll-bar-pct">59%</div>
-          </div>
-        </div>
-        <div class="mob-poll-votes">189 votos · Resultado sexta-feira</div>
-      </div>
-
     </div>
   </div>
 
@@ -2410,7 +2358,7 @@ function renderPreditivo() {
   var list = document.getElementById('mob-enquetes-list')
   if (!list) return
   if (!enquetes.length) {
-    list.innerHTML = '<div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">Nenhuma enquete disponível.</div>'
+    list.innerHTML = '<div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">Nenhuma enquete ativa no momento.</div>'
     return
   }
   list.innerHTML = enquetes.map(renderEnqueteCard).join('')
