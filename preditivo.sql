@@ -32,6 +32,11 @@ CREATE POLICY "usuario insere proprio voto"
   ON enquete_votos FOR INSERT
   WITH CHECK (auth.uid() = usuario_id);
 
+-- Permissões explícitas para os roles do Supabase
+GRANT SELECT ON enquetes      TO anon, authenticated;
+GRANT SELECT ON enquete_votos TO anon, authenticated;
+GRANT INSERT ON enquete_votos TO authenticated;
+
 CREATE OR REPLACE FUNCTION votar_enquete(
   p_enquete_id UUID,
   p_usuario_id UUID,

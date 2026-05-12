@@ -2397,19 +2397,22 @@ function subscribePreditivo() {
 }
 
 function atualizarEnqueteCard(id, votos_sim, votos_nao) {
-  var card = document.getElementById('enq-' + id)
-  if (!card) return
-  var total   = votos_sim + votos_nao
-  var pctSim  = total ? Math.round(votos_sim / total * 100) : 50
-  var pctNao  = 100 - pctSim
-  var fills   = card.querySelectorAll('.mob-poll-bar-fill')
-  var pcts    = card.querySelectorAll('.mob-poll-bar-pct')
-  var votesEl = card.querySelector('.mob-poll-votes')
-  if (fills[0]) fills[0].style.width = pctSim + '%'
-  if (fills[1]) fills[1].style.width = pctNao + '%'
-  if (pcts[0])  pcts[0].textContent  = pctSim + '%'
-  if (pcts[1])  pcts[1].textContent  = pctNao + '%'
-  if (votesEl)  votesEl.textContent  = total + ' voto' + (total !== 1 ? 's' : '')
+  var total  = votos_sim + votos_nao
+  var pctSim = total ? Math.round(votos_sim / total * 100) : 50
+  var pctNao = 100 - pctSim
+  function applyUpdate(card) {
+    if (!card) return
+    var fills   = card.querySelectorAll('.mob-poll-bar-fill')
+    var pcts    = card.querySelectorAll('.mob-poll-bar-pct')
+    var votesEl = card.querySelector('.mob-poll-votes')
+    if (fills[0]) fills[0].style.width = pctSim + '%'
+    if (fills[1]) fills[1].style.width = pctNao + '%'
+    if (pcts[0])  pcts[0].textContent  = pctSim + '%'
+    if (pcts[1])  pcts[1].textContent  = pctNao + '%'
+    if (votesEl)  votesEl.textContent  = total + ' voto' + (total !== 1 ? 's' : '')
+  }
+  applyUpdate(document.getElementById('enq-' + id))
+  applyUpdate(document.getElementById('feed-enq-' + id))
 }
 
 async function votar(enqueteId, voto) {
@@ -2426,7 +2429,9 @@ async function votar(enqueteId, voto) {
   meusVotos[enqueteId] = voto
   var idx = enquetes.findIndex(function(e) { return e.id === enqueteId })
   if (idx !== -1) { enquetes[idx].votos_sim = res.data.votos_sim; enquetes[idx].votos_nao = res.data.votos_nao }
-  if (card) { var tmp = document.createElement('div'); tmp.innerHTML = renderEnqueteCard(enquetes[idx]); card.replaceWith(tmp.firstChild) }
+  if (card && idx !== -1) { var tmp = document.createElement('div'); tmp.innerHTML = renderEnqueteCard(enquetes[idx]); card.replaceWith(tmp.firstChild) }
+  var fCard = document.getElementById('feed-enq-' + enqueteId)
+  if (fCard && idx !== -1) { var tmp2 = document.createElement('div'); tmp2.innerHTML = renderFeedEnquete(enquetes[idx]); fCard.replaceWith(tmp2.firstChild) }
   toast('Voto registrado!', 't-g')
 }
 
@@ -2468,18 +2473,60 @@ async function loadFeed() {
   } else {
     feedMyLikes = new Set()
   }
+  var eres = await sb.from('enquetes').select('*').order('criado_em', { ascending: false }).limit(10)
+  console.log('[enquetes] query resultado:', eres.data, '| erro:', eres.error)
+  enquetes = eres.data || []
+  if (currentUser.loggedIn && enquetes.length) {
+    var eIds = enquetes.map(function(e) { return e.id })
+    var vres = await sb.from('enquete_votos').select('enquete_id, voto').eq('usuario_id', currentUser.id).in('enquete_id', eIds)
+    if (vres.data) vres.data.forEach(function(v) { meusVotos[v.enquete_id] = v.voto })
+  }
   renderFeed()
   subscribeToFeed()
+}
+
+function renderFeedEnquete(e) {
+  var total    = e.votos_sim + e.votos_nao
+  var pctSim   = total ? Math.round(e.votos_sim / total * 100) : 50
+  var pctNao   = 100 - pctSim
+  var encerrada = new Date(e.encerra_em) <= Date.now()
+  var meuVoto  = meusVotos[e.id]
+  var jaVotou  = meuVoto !== undefined
+  var timeStr  = encerrada ? 'Encerrada' : 'Encerra em ' + preditivoTimeLeft(e.encerra_em)
+  function btn(label, cls, voto) {
+    var mine   = jaVotou && meuVoto === voto
+    var dimmed = jaVotou && !mine
+    var dis    = jaVotou || encerrada
+    return '<button class="mob-poll-btn ' + cls + (mine ? ' voted' : '') + '"' +
+      (dis ? ' disabled' : ' onclick="votar(\'' + e.id + '\',' + voto + ')"') +
+      (dimmed ? ' style="opacity:.35"' : '') + '>' + label + '</button>'
+  }
+  return '<div class="mob-poll" id="feed-enq-' + e.id + '">' +
+    '<div class="mob-poll-header"><div class="mob-poll-badge">PREDITIVO</div><div class="mob-poll-time">' + timeStr + '</div></div>' +
+    '<div class="mob-poll-q">' + e.pergunta + '</div>' +
+    '<div class="mob-poll-btns">' + btn('✓ SIM', 'yes', true) + btn('✗ NÃO', 'no', false) + '</div>' +
+    '<div class="mob-poll-bars">' +
+      '<div class="mob-poll-bar-row"><div class="mob-poll-bar-lbl">SIM</div><div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-yes" style="width:' + pctSim + '%"></div></div><div class="mob-poll-bar-pct">' + pctSim + '%</div></div>' +
+      '<div class="mob-poll-bar-row"><div class="mob-poll-bar-lbl">NÃO</div><div class="mob-poll-bar-track"><div class="mob-poll-bar-fill pfill-no" style="width:' + pctNao + '%"></div></div><div class="mob-poll-bar-pct">' + pctNao + '%</div></div>' +
+    '</div>' +
+    '<div class="mob-poll-votes">' + total + ' voto' + (total !== 1 ? 's' : '') + '</div>' +
+  '</div>'
 }
 
 function renderFeed() {
   var list = document.getElementById('mob-feed-list')
   if (!list) return
-  if (!feedPosts.length) {
-    list.innerHTML = '<div class="mob-feed-empty">Nenhum post ainda.<br>Seja o primeiro a compartilhar uma análise! ✏</div>'
+  var items = []
+  enquetes.forEach(function(e) { items.push({ type: 'enquete', data: e, ts: new Date(e.criado_em) }) })
+  feedPosts.forEach(function(p)  { items.push({ type: 'post',    data: p, ts: new Date(p.criado_em) }) })
+  items.sort(function(a, b) { return b.ts - a.ts })
+  if (!items.length) {
+    list.innerHTML = '<div class="mob-feed-empty">Nenhum conteúdo ainda.<br>Seja o primeiro a compartilhar uma análise! ✏</div>'
     return
   }
-  list.innerHTML = feedPosts.map(function(p){ return renderFeedPost(p) }).join('')
+  list.innerHTML = items.map(function(item) {
+    return item.type === 'enquete' ? renderFeedEnquete(item.data) : renderFeedPost(item.data)
+  }).join('')
 }
 
 function renderFeedPost(p) {
