@@ -1156,7 +1156,13 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 const FAKE_ID = '00000000-0000-0000-0000-000000000099'
 
-loadSplashRooms()
+loadSplashRooms();
+
+// TESTE DIAGNÓSTICO — remover após confirmar
+(async function() {
+  var r = await sb.from('enquetes').select('*')
+  console.log('[DIAG enquetes] data:', r.data, '| error:', r.error, '| status:', r.status)
+})()
 
 let currentUser = { trader_id: 'visitante', loggedIn: false }
 let currentMkt = 'B3'
