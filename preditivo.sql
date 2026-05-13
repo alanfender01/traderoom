@@ -3,8 +3,8 @@ CREATE TABLE enquetes (
   pergunta    TEXT NOT NULL,
   votos_sim   INT  NOT NULL DEFAULT 0,
   votos_nao   INT  NOT NULL DEFAULT 0,
-  encerra_em  TIMESTAMP NOT NULL,
-  criado_em   TIMESTAMP NOT NULL DEFAULT NOW()
+  encerra_em  TIMESTAMPTZ NOT NULL,
+  criado_em   TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE enquete_votos (
@@ -22,6 +22,7 @@ CREATE INDEX idx_enquete_votos_usuario ON enquete_votos(usuario_id);
 ALTER TABLE enquetes       ENABLE ROW LEVEL SECURITY;
 ALTER TABLE enquete_votos  ENABLE ROW LEVEL SECURITY;
 
+-- Sem filtro de tempo: JS trata exibição de enquetes encerradas no client
 CREATE POLICY "leitura publica enquetes"
   ON enquetes FOR SELECT USING (true);
 
@@ -76,6 +77,6 @@ EXCEPTION WHEN unique_violation THEN
 END;
 $$;
 
--- Enquete de teste
+-- Enquete de teste (NOW() com TIMESTAMPTZ já é UTC — sem ambiguidade de fuso)
 INSERT INTO enquetes (pergunta, encerra_em)
 VALUES ('O IBOVESPA vai fechar ACIMA de 130.000 pontos hoje?', NOW() + INTERVAL '8 hours');
