@@ -1636,7 +1636,7 @@ var criadorMap = {}
 async function loadRooms() {
   const el = document.getElementById('rooms-list')
   el.innerHTML = '<div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div>'
-  const { data, error } = await sb.from('salas').select('*').eq('ativa', true).neq('criador_id', FAKE_ID).order('criado_em', { ascending: false })
+  const { data, error } = await sb.from('salas').select('*').eq('ativa', true).order('criado_em', { ascending: false })
   if (error) { el.innerHTML = '<div class="loading-rooms" style="color:var(--r)">Erro ao carregar salas.</div>'; return }
   allRooms = data || []
   renderRooms('')
@@ -2104,7 +2104,7 @@ async function loadSplashRooms() {
   if (!el) return
   try {
     var res = await sb.from('salas').select('*').eq('ativa', true)
-      .neq('criador_id', FAKE_ID).order('criado_em', { ascending: false }).limit(3)
+      .order('criado_em', { ascending: false }).limit(3)
     var rooms = res.data || []
     if (!rooms.length) {
       el.innerHTML = '<div class="sp-rooms-empty">Nenhuma sala ao vivo agora</div>'
