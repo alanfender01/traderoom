@@ -399,6 +399,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   #s-room.on{
     position:fixed;inset:0;z-index:300;
     display:flex;flex-direction:column;overflow:hidden;
+    min-height:0;
     background:var(--bg0)
   }
 
@@ -413,13 +414,13 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   /* ─── Body: coluna em vez de linha ───────────────── */
   #s-room .room-body{
     flex-direction:column;
-    height:auto;flex:1;min-height:0;
+    height:0;flex:1;min-height:0;
     overflow:hidden
   }
 
   /* ─── Coluna do gráfico (topo) ───────────────────── */
   #s-room .chart-col{
-    flex:0 0 46vh;
+    flex:0 0 46%;
     min-width:0;overflow:hidden
   }
 
