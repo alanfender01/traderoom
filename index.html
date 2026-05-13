@@ -331,7 +331,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .side-tabs{display:flex;border-bottom:1px solid var(--border)}
 .stab{flex:1;padding:8px;font-family:var(--mono);font-size:10px;text-align:center;cursor:pointer;color:var(--t3);border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.5px}
 .stab.active{color:var(--g);border-bottom-color:var(--g)}
-.chat-msgs{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:5px;scrollbar-width:thin;scrollbar-color:var(--bg4) transparent}
+#side-chat{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.chat-msgs{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:5px;scrollbar-width:thin;scrollbar-color:var(--bg4) transparent;min-height:0}
 .cmsg-hd{display:flex;align-items:center;gap:5px;margin-bottom:1px}
 .cmsg-u{font-family:var(--mono);font-size:10px;font-weight:700}
 .cmsg-u.host{color:var(--y)}.cmsg-u.me{color:var(--g)}.cmsg-u.other{color:var(--b)}.cmsg-u.sys{color:var(--t4)}
@@ -447,7 +448,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   #s-room .side-tabs .stab{font-size:9px;padding:7px 4px}
 
   /* Chat: mensagens ocupam o espaço restante */
-  #s-room .chat-inp-row{padding:5px 6px}
+  #s-room #side-chat{flex:1;min-height:0;overflow:hidden}
+  #s-room .chat-msgs{flex:1;overflow-y:auto;min-height:0}
+  #s-room .chat-inp-row{padding:5px 6px;flex-shrink:0}
   #s-room .chat-inp{font-size:11px;padding:6px 8px}
 
   /* ─── Botão Sair no header (FREQUENTADOR) ──────── */
@@ -879,7 +882,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <div class="stab active" onclick="swSide('chat',this)">CHAT</div>
         <div class="stab" onclick="swSide('traders',this)">TRADERS</div>
       </div>
-      <div id="side-chat" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+      <div id="side-chat">
         <div class="chat-msgs" id="chat-msgs"></div>
         <div class="chat-inp-row">
           <input class="chat-inp" id="chat-inp" placeholder="mensagem..." onkeydown="if(event.key==='Enter')sendMsg()">
