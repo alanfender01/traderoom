@@ -138,6 +138,31 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .lobby-body{display:flex;flex:1;overflow:hidden;height:calc(100vh - 100px)}
 .lobby-main{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin}
 .lobby-side{width:210px;background:var(--bg1);border-left:1px solid var(--border);padding:12px;overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
+.lobby-feed{width:280px;background:var(--bg1);border-left:1px solid var(--border);overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column}
+.lf-header{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 6px;flex-shrink:0}
+.lf-compose-btn{font-family:var(--mono);font-size:10px;background:rgba(0,170,255,.12);border:1px solid rgba(0,170,255,.3);color:var(--b);border-radius:4px;padding:4px 9px;cursor:pointer;transition:background .15s}
+.lf-compose-btn:hover{background:rgba(0,170,255,.2)}
+.lf-compose{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px;margin:0 12px 8px;flex-shrink:0}
+.lf-textarea{width:100%;background:transparent;border:none;color:var(--t1);font-size:12px;font-family:inherit;resize:none;outline:none;height:70px;line-height:1.5;box-sizing:border-box}
+.lf-compose-footer{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.lf-counter{font-family:var(--mono);font-size:10px;color:var(--t4)}
+.lf-list{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.desk-post{padding:12px;border-bottom:1px solid var(--border);transition:background .12s}
+.desk-post:hover{background:rgba(255,255,255,.018)}
+.desk-post-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.desk-post-text{font-size:12px;color:var(--t2);line-height:1.55;margin-bottom:8px;word-break:break-word}
+.desk-post-acts{display:flex;align-items:center;gap:16px}
+.desk-act{font-family:var(--mono);font-size:10px;color:var(--t4);cursor:pointer;display:flex;align-items:center;gap:4px;transition:color .15s;padding:2px 0;user-select:none}
+.desk-act:hover{color:var(--t2)}
+.desk-act-liked{color:var(--g)!important}
+.desk-post-img{width:100%;border-radius:6px;margin-bottom:8px;object-fit:cover;max-height:150px}
+.desk-comments{background:var(--bg2);border-radius:6px;padding:8px;margin-top:8px;display:none}
+.desk-comments.open{display:block}
+.desk-comment{font-size:11px;color:var(--t2);padding:4px 0;border-bottom:1px solid var(--border);font-family:var(--mono);line-height:1.4}
+.desk-comment:last-child{border-bottom:none}
+.desk-cmt-inp-row{display:flex;gap:5px;margin-top:7px}
+.desk-cmt-inp{flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--t1);font-family:var(--mono);font-size:11px;padding:5px 7px;outline:none}
+.desk-cmt-send{font-family:var(--mono);font-size:10px;background:rgba(0,170,255,.12);border:1px solid rgba(0,170,255,.3);color:var(--b);border-radius:4px;padding:5px 8px;cursor:pointer;flex-shrink:0}
 .search-row{display:flex;gap:7px;margin-bottom:12px}
 .search-inp{flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--t1);font-family:var(--mono);font-size:12px;padding:7px 10px;outline:none;transition:border-color .15s}
 .search-inp:focus{border-color:var(--g)}
@@ -771,6 +796,23 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <div class="slot-body"><div class="slot-txt" data-i18n="lobby.sponsored_txt">Alcance traders ativos da B3 com sua marca no centro do pregão.</div><button class="saiba-btn" data-i18n="lobby.know_more">SAIBA MAIS →</button></div>
       </div>
       <div id="rooms-list"><div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div></div>
+    </div>
+    <div class="lobby-feed">
+      <div class="lf-header">
+        <div class="ls-title" style="margin:0" data-i18n="lobby.feed">FEED</div>
+        <button class="lf-compose-btn" onclick="openDeskCompose()">+ POST</button>
+      </div>
+      <div id="desk-compose" class="lf-compose" style="display:none">
+        <textarea id="desk-compose-txt" class="lf-textarea" maxlength="500" placeholder="Compartilhe uma análise..." oninput="document.getElementById('desk-compose-counter').textContent=this.value.length+'/500'"></textarea>
+        <div class="lf-compose-footer">
+          <span id="desk-compose-counter" class="lf-counter">0/500</span>
+          <div style="display:flex;gap:6px">
+            <button class="btn-cancel" style="font-size:10px;padding:5px 10px" onclick="closeDeskCompose()">CANCELAR</button>
+            <button class="btn-criar btn-criar-b3" style="font-size:10px;padding:5px 12px" id="desk-compose-submit" onclick="submitDeskPost()">POSTAR →</button>
+          </div>
+        </div>
+      </div>
+      <div id="desk-feed-list" class="lf-list"><div class="mob-feed-load">Carregando feed...</div></div>
     </div>
     <div class="lobby-side">
       <div class="ls-title" data-i18n="lobby.live">AO VIVO</div>
@@ -1622,7 +1664,7 @@ function go(id) {
   const el = document.getElementById(id)
   if (!el) return
   el.classList.add('on')
-  if (id === 's-lobby') { pararRealtime(); loadRooms(); iniciarLobbyRealtime() }
+  if (id === 's-lobby') { pararRealtime(); loadRooms(); iniciarLobbyRealtime(); loadFeed() }
   if (id === 's-room') { pararLobbyRealtime(); initTradingView() }
   window.scrollTo(0, 0)
 }
@@ -2172,7 +2214,7 @@ var LANG={
     'lobby.know_more':'SAIBA MAIS →','lobby.live':'AO VIVO',
     'lobby.traders':'traders','lobby.salas':'salas',
     'lobby.most_active':'+ ativo','lobby.forex_24h':'forex',
-    'lobby.notifications':'NOTIFICAÇÕES','lobby.loading':'Carregando salas...',
+    'lobby.feed':'FEED','lobby.notifications':'NOTIFICAÇÕES','lobby.loading':'Carregando salas...',
     'lobby.no_rooms':'Nenhuma sala ao vivo no momento.',
     'rooms.loading':'Carregando salas...','rooms.error':'Erro ao carregar salas.',
     'rooms.open_hdr':'SALAS ABERTAS','rooms.word':'SALAS',
@@ -2228,7 +2270,7 @@ var LANG={
     'lobby.know_more':'LEARN MORE →','lobby.live':'LIVE',
     'lobby.traders':'traders','lobby.salas':'rooms',
     'lobby.most_active':'top','lobby.forex_24h':'forex',
-    'lobby.notifications':'NOTIFICATIONS','lobby.loading':'Loading rooms...',
+    'lobby.feed':'FEED','lobby.notifications':'NOTIFICATIONS','lobby.loading':'Loading rooms...',
     'lobby.no_rooms':'No live rooms at the moment.',
     'rooms.loading':'Loading rooms...','rooms.error':'Error loading rooms.',
     'rooms.open_hdr':'OPEN ROOMS','rooms.word':'ROOMS',
@@ -2284,7 +2326,7 @@ var LANG={
     'lobby.know_more':'SABER MÁS →','lobby.live':'EN VIVO',
     'lobby.traders':'traders','lobby.salas':'salas',
     'lobby.most_active':'+ activo','lobby.forex_24h':'forex',
-    'lobby.notifications':'NOTIFICACIONES','lobby.loading':'Cargando salas...',
+    'lobby.feed':'FEED','lobby.notifications':'NOTIFICACIONES','lobby.loading':'Cargando salas...',
     'lobby.no_rooms':'Sin salas en vivo por el momento.',
     'rooms.loading':'Cargando salas...','rooms.error':'Error al cargar salas.',
     'rooms.open_hdr':'SALAS ABIERTAS','rooms.word':'SALAS',
@@ -2340,7 +2382,7 @@ var LANG={
     'lobby.know_more':'了解更多 →','lobby.live':'直播',
     'lobby.traders':'交易员','lobby.salas':'房间',
     'lobby.most_active':'最活跃','lobby.forex_24h':'外汇',
-    'lobby.notifications':'通知','lobby.loading':'加载房间中...',
+    'lobby.feed':'动态','lobby.notifications':'通知','lobby.loading':'加载房间中...',
     'lobby.no_rooms':'暂无直播房间。',
     'rooms.loading':'加载房间中...','rooms.error':'加载房间出错。',
     'rooms.open_hdr':'开放房间','rooms.word':'间',
@@ -2396,7 +2438,7 @@ var LANG={
     'lobby.know_more':'詳細 →','lobby.live':'ライブ',
     'lobby.traders':'トレーダー','lobby.salas':'ルーム',
     'lobby.most_active':'トップ','lobby.forex_24h':'外為',
-    'lobby.notifications':'通知','lobby.loading':'ルーム読込中...',
+    'lobby.feed':'フィード','lobby.notifications':'通知','lobby.loading':'ルーム読込中...',
     'lobby.no_rooms':'現在ライブルームはありません。',
     'rooms.loading':'ルーム読込中...','rooms.error':'ルームの読込に失敗しました。',
     'rooms.open_hdr':'オープンルーム','rooms.word':'ルーム',
@@ -2452,7 +2494,7 @@ var LANG={
     'lobby.know_more':'УЗНАТЬ БОЛЬШЕ →','lobby.live':'В ЭФИРЕ',
     'lobby.traders':'трейдеров','lobby.salas':'комнат',
     'lobby.most_active':'топ','lobby.forex_24h':'форекс',
-    'lobby.notifications':'УВЕДОМЛЕНИЯ','lobby.loading':'Загрузка комнат...',
+    'lobby.feed':'ЛЕНТА','lobby.notifications':'УВЕДОМЛЕНИЯ','lobby.loading':'Загрузка комнат...',
     'lobby.no_rooms':'Нет активных комнат в данный момент.',
     'rooms.loading':'Загрузка комнат...','rooms.error':'Ошибка загрузки комнат.',
     'rooms.open_hdr':'ОТКРЫТЫЕ КОМНАТЫ','rooms.word':'КОМНАТ',
@@ -2859,6 +2901,7 @@ async function loadFeed() {
     if (vres.data) vres.data.forEach(function(v) { meusVotos[v.enquete_id] = v.voto })
   }
   renderFeed()
+  renderDeskFeed()
   subscribeToFeed()
 }
 
@@ -3018,6 +3061,7 @@ async function submitPost() {
   toast('Post publicado!','t-g')
   feedPosts.unshift(ins.data)
   renderFeed()
+  renderDeskFeed()
 }
 
 async function openComments(postId) {
@@ -3083,9 +3127,174 @@ function subscribeToFeed() {
       if (!feedPosts.find(function(p){ return p.id === payload.new.id })) {
         feedPosts.unshift(payload.new)
         renderFeed()
+        renderDeskFeed()
       }
     })
     .subscribe()
+}
+
+// ==================== DESKTOP FEED ====================
+function renderDeskFeed() {
+  var list = document.getElementById('desk-feed-list')
+  if (!list) return
+  if (!feedPosts.length) {
+    list.innerHTML = '<div class="mob-feed-empty">Nenhum post ainda.<br>Seja o primeiro! ✏</div>'
+    return
+  }
+  list.innerHTML = feedPosts.map(renderDeskPost).join('')
+}
+
+function renderDeskPost(p) {
+  var liked = feedMyLikes.has(p.id)
+  var av = (p.trader_id || 'TR').substring(0,2).toUpperCase()
+  var col = feedAvColor(p.trader_id || '')
+  var img = p.imagem_url ? '<img class="desk-post-img" src="' + feedEscape(p.imagem_url) + '" alt="gráfico" loading="lazy">' : ''
+  return '<div class="desk-post" data-pid="' + p.id + '">' +
+    '<div class="desk-post-hd">' +
+      '<div class="mob-post-av ' + col + '" style="width:30px;height:30px;font-size:10px;flex-shrink:0">' + av + '</div>' +
+      '<div class="mob-post-meta">' +
+        '<div class="mob-post-user" style="font-size:11px">@' + feedEscape(p.trader_id) + '</div>' +
+        '<div class="mob-post-time">' + feedTimeAgo(p.criado_em) + '</div>' +
+      '</div>' +
+    '</div>' +
+    img +
+    '<div class="desk-post-text">' + feedEscape(p.conteudo) + '</div>' +
+    '<div class="desk-post-acts">' +
+      '<div class="desk-act' + (liked ? ' desk-act-liked' : '') + '" onclick="deskFeedCurtir(\'' + p.id + '\',this)">' +
+        (liked ? '❤️' : '🤍') + '&nbsp;<span class="flike-n">' + (p.curtidas || 0) + '</span>' +
+      '</div>' +
+      '<div class="desk-act" onclick="toggleDeskComments(\'' + p.id + '\')">' +
+        '💬&nbsp;<span class="fcmt-n">' + (p.comentarios_count || 0) + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="desk-comments" id="desk-cmt-' + p.id + '">' +
+      '<div id="desk-cmt-loading-' + p.id + '" class="mob-feed-load" style="display:none">Carregando...</div>' +
+      '<div id="desk-cmt-list-' + p.id + '"></div>' +
+      '<div class="desk-cmt-inp-row">' +
+        '<input type="text" class="desk-cmt-inp" id="desk-cmt-inp-' + p.id + '" placeholder="Comentar..." maxlength="280" onkeydown="if(event.key===\'Enter\')submitDeskComment(\'' + p.id + '\')">' +
+        '<button class="desk-cmt-send" onclick="submitDeskComment(\'' + p.id + '\')">→</button>' +
+      '</div>' +
+    '</div>' +
+  '</div>'
+}
+
+async function deskFeedCurtir(postId, el) {
+  if (!currentUser.loggedIn) { toast(T('auth.title'), 't-b'); return }
+  var post = feedPosts.find(function(p){ return p.id === postId })
+  if (!post) return
+  var liked = feedMyLikes.has(postId)
+  if (liked) {
+    feedMyLikes.delete(postId)
+    post.curtidas = Math.max(0, (post.curtidas || 1) - 1)
+    await sb.from('post_curtidas').delete().eq('post_id', postId).eq('usuario_id', currentUser.id)
+    await sb.from('posts').update({ curtidas: post.curtidas }).eq('id', postId)
+  } else {
+    var ins = await sb.from('post_curtidas').insert({ post_id: postId, usuario_id: currentUser.id })
+    if (ins.error) return
+    feedMyLikes.add(postId)
+    post.curtidas = (post.curtidas || 0) + 1
+    await sb.from('posts').update({ curtidas: post.curtidas }).eq('id', postId)
+  }
+  var now = feedMyLikes.has(postId)
+  if (el) {
+    el.className = 'desk-act' + (now ? ' desk-act-liked' : '')
+    el.innerHTML = (now ? '❤️' : '🤍') + '&nbsp;<span class="flike-n">' + post.curtidas + '</span>'
+  }
+  // sync mobile post if visible
+  var mobEl = document.querySelector('#mob-feed-list [data-pid="' + postId + '"] .mob-act')
+  if (mobEl) {
+    mobEl.className = 'mob-act' + (now ? ' mob-act-liked' : '')
+    mobEl.innerHTML = (now ? '❤️' : '🤍') + '&nbsp;<span class="flike-n">' + post.curtidas + '</span>'
+  }
+}
+
+async function toggleDeskComments(postId) {
+  var box = document.getElementById('desk-cmt-' + postId)
+  if (!box) return
+  if (box.classList.contains('open')) { box.classList.remove('open'); return }
+  box.classList.add('open')
+  var loadingDiv = document.getElementById('desk-cmt-loading-' + postId)
+  var listDiv = document.getElementById('desk-cmt-list-' + postId)
+  if (loadingDiv) loadingDiv.style.display = 'block'
+  var res = await sb.from('comentarios').select('*').eq('post_id', postId).order('criado_em', { ascending: true }).limit(30)
+  if (loadingDiv) loadingDiv.style.display = 'none'
+  var cmts = res.data || []
+  if (listDiv) {
+    if (!cmts.length) {
+      listDiv.innerHTML = '<div class="desk-comment" style="color:var(--t4)">Nenhum comentário ainda.</div>'
+    } else {
+      listDiv.innerHTML = cmts.map(function(c) {
+        return '<div class="desk-comment"><span style="color:var(--b)">@' + feedEscape(c.trader_id || '?') + '</span> ' + feedEscape(c.conteudo) + '</div>'
+      }).join('')
+    }
+  }
+}
+
+async function submitDeskComment(postId) {
+  if (!currentUser.loggedIn) { toast(T('auth.title'), 't-b'); return }
+  var inp = document.getElementById('desk-cmt-inp-' + postId)
+  if (!inp) return
+  var txt = inp.value.trim()
+  if (!txt) return
+  inp.value = ''
+  var ins = await sb.from('comentarios').insert({
+    post_id: postId,
+    usuario_id: currentUser.id,
+    trader_id: currentUser.trader_id,
+    conteudo: txt
+  })
+  if (ins.error) { toast('Erro ao comentar', 't-r'); inp.value = txt; return }
+  var listDiv = document.getElementById('desk-cmt-list-' + postId)
+  if (listDiv) {
+    var emptyDiv = listDiv.querySelector('[style*="t4"]')
+    if (emptyDiv) emptyDiv.remove()
+    var div = document.createElement('div')
+    div.className = 'desk-comment'
+    div.innerHTML = '<span style="color:var(--b)">@' + feedEscape(currentUser.trader_id || '?') + '</span> ' + feedEscape(txt)
+    listDiv.appendChild(div)
+  }
+  var post = feedPosts.find(function(p){ return p.id === postId })
+  if (post) {
+    post.comentarios_count = (post.comentarios_count || 0) + 1
+    var cntEl = document.querySelector('#desk-feed-list [data-pid="' + postId + '"] .fcmt-n')
+    if (cntEl) cntEl.textContent = post.comentarios_count
+  }
+}
+
+function openDeskCompose() {
+  if (!currentUser.loggedIn) { toast(T('auth.title'), 't-b'); return }
+  var compose = document.getElementById('desk-compose')
+  if (!compose) return
+  var isOpen = compose.style.display !== 'none'
+  if (!isOpen) {
+    document.getElementById('desk-compose-txt').value = ''
+    document.getElementById('desk-compose-counter').textContent = '0/500'
+  }
+  compose.style.display = isOpen ? 'none' : 'block'
+}
+
+function closeDeskCompose() {
+  var c = document.getElementById('desk-compose')
+  if (c) c.style.display = 'none'
+}
+
+async function submitDeskPost() {
+  var txt = document.getElementById('desk-compose-txt').value.trim()
+  if (!txt) { toast('Escreva algo antes de postar', 't-r'); return }
+  var btn = document.getElementById('desk-compose-submit')
+  btn.textContent = 'POSTANDO...'; btn.disabled = true
+  var ins = await sb.from('posts').insert({
+    usuario_id: currentUser.id,
+    trader_id: currentUser.trader_id,
+    conteudo: txt
+  }).select().single()
+  btn.textContent = 'POSTAR →'; btn.disabled = false
+  if (ins.error) { toast('Erro: ' + (ins.error.message || 'tente novamente'), 't-r'); return }
+  closeDeskCompose()
+  toast('Post publicado!', 't-g')
+  feedPosts.unshift(ins.data)
+  renderFeed()
+  renderDeskFeed()
 }
 
 var mobPendingRoomId = null
