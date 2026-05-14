@@ -1164,7 +1164,6 @@ const FAKE_ID = '00000000-0000-0000-0000-000000000099'
 var currentLang = localStorage.getItem('tr_lang') || 'pt'
 
 loadSplashRooms();
-setLang(currentLang);
 
 // TESTE DIAGNÓSTICO — remover após confirmar
 (async function() {
@@ -2498,6 +2497,7 @@ function setLang(l){
   document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===l)})
   applyLang(l)
 }
+setLang(currentLang);
 ;(function(){
   const canvas=document.getElementById('sp-neural');if(!canvas)return;
   const ctx=canvas.getContext('2d');
