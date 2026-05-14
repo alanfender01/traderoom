@@ -658,16 +658,18 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
         <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
         <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">中文</button>
+        <button class="lang-btn" data-lang="ja" onclick="setLang('ja')">JA</button>
+        <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">RU</button>
       </div>
-      <button class="sp-enter-btn" onclick="splashEnter()">Entrar →</button>
+      <button class="sp-enter-btn" data-i18n="sp.enter" onclick="splashEnter()">Entrar →</button>
     </div>
   </nav>
   <div class="sp-main">
     <div class="sp-hero">
-      <div class="sp-pill"><span class="sp-dot-live"></span><span id="sp-count">847</span>&nbsp;traders conectados agora</div>
-      <h1 class="sp-title">O mercado nunca para.<br><span>Nem você.</span></h1>
-      <p class="sp-subtitle">Análise coletiva em tempo real entre traders de B3, Forex e Cripto.</p>
-      <div class="sp-rooms-lbl">SALAS AO VIVO</div>
+      <div class="sp-pill"><span class="sp-dot-live"></span><span id="sp-count">847</span>&nbsp;<span data-i18n="sp.connected">traders conectados agora</span></div>
+      <h1 class="sp-title" data-i18n-html="sp.title">O mercado nunca para.<br><span>Nem você.</span></h1>
+      <p class="sp-subtitle" data-i18n="sp.subtitle">Análise coletiva em tempo real entre traders de B3, Forex e Cripto.</p>
+      <div class="sp-rooms-lbl" data-i18n="sp.rooms_lbl">SALAS AO VIVO</div>
       <div class="sp-rooms" id="sp-rooms-list">
         <div class="sp-rooms-loading">Carregando salas...</div>
       </div>
@@ -694,51 +696,51 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <!-- CADASTRO -->
 <div id="s-cadastro" class="screen">
   <div class="form-card" id="cad-step1">
-    <div class="fc-back" onclick="go('s-splash')">← VOLTAR</div>
+    <div class="fc-back" data-i18n="back" onclick="go('s-splash')">← VOLTAR</div>
     <div class="steps"><div class="step-bar active"></div><div class="step-bar"></div></div>
-    <div class="fc-title">Criar conta</div>
-    <div class="fc-sub">Seus dados ficam seguros.</div>
-    <div class="field"><label>NOME COMPLETO</label><input type="text" id="c-nome" placeholder="João Silva" oninput="onNome(this)"></div>
-    <div class="field"><label>EMAIL</label><input type="email" id="c-email" placeholder="joao@email.com"></div>
-    <div class="field"><label>TELEFONE</label><input type="tel" id="c-tel" placeholder="(11) 99999-9999" oninput="maskTel(this)" maxlength="15"></div>
+    <div class="fc-title" data-i18n="cad.title1">Criar conta</div>
+    <div class="fc-sub" data-i18n="cad.sub1">Seus dados ficam seguros.</div>
+    <div class="field"><label data-i18n="cad.name_lbl">NOME COMPLETO</label><input type="text" id="c-nome" placeholder="João Silva" data-i18n-ph="cad.name_ph" oninput="onNome(this)"></div>
+    <div class="field"><label data-i18n="cad.email_lbl">EMAIL</label><input type="email" id="c-email" placeholder="joao@email.com"></div>
+    <div class="field"><label data-i18n="cad.tel_lbl">TELEFONE</label><input type="tel" id="c-tel" placeholder="(11) 99999-9999" data-i18n-ph="cad.tel_ph" oninput="maskTel(this)" maxlength="15"></div>
     <div class="id-block">
-      <div class="ib-label">SEU ID NAS SALAS</div>
-      <div class="ib-row"><span class="ib-hash">#</span><span class="ib-val" id="id-preview">trader_jo4x</span><span class="ib-regen" onclick="regenId()">↻ OUTRO</span></div>
-      <div class="ib-note">Como todos te verão. Único e permanente.</div>
+      <div class="ib-label" data-i18n="cad.id_lbl">SEU ID NAS SALAS</div>
+      <div class="ib-row"><span class="ib-hash">#</span><span class="ib-val" id="id-preview">trader_jo4x</span><span class="ib-regen" data-i18n="cad.id_regen" onclick="regenId()">↻ OUTRO</span></div>
+      <div class="ib-note" data-i18n="cad.id_note">Como todos te verão. Único e permanente.</div>
     </div>
-    <button class="btn-p" style="width:100%" onclick="cadNext()">CONTINUAR →</button>
+    <button class="btn-p" style="width:100%" data-i18n="cad.next" onclick="cadNext()">CONTINUAR →</button>
   </div>
   <div class="form-card" id="cad-step2" style="display:none">
-    <div class="fc-back" onclick="document.getElementById('cad-step1').style.display='';document.getElementById('cad-step2').style.display='none'">← VOLTAR</div>
+    <div class="fc-back" data-i18n="back" onclick="document.getElementById('cad-step1').style.display='';document.getElementById('cad-step2').style.display='none'">← VOLTAR</div>
     <div class="steps"><div class="step-bar done"></div><div class="step-bar active"></div></div>
-    <div class="fc-title">Crie sua senha</div>
-    <div class="field"><label>SENHA</label><div class="pwd-wrap"><input type="password" id="c-pwd1" placeholder="Mínimo 6 caracteres" oninput="checkStrength(this)" autocomplete="new-password"><span class="pwd-toggle" onclick="togglePwd('c-pwd1',this)">MOSTRAR</span></div><div class="strength-bar"><div class="sb" id="str0"></div><div class="sb" id="str1"></div><div class="sb" id="str2"></div><div class="sb" id="str3"></div></div></div>
-    <div class="field"><label>CONFIRMAR SENHA</label><input type="password" id="c-pwd2" placeholder="Repita a senha" autocomplete="new-password"></div>
-    <button class="btn-p" style="width:100%;margin-top:8px" id="btn-cad-fin" onclick="cadFinalizar()">CRIAR CONTA →</button>
+    <div class="fc-title" data-i18n="cad.title2">Crie sua senha</div>
+    <div class="field"><label data-i18n="cad.pwd_lbl">SENHA</label><div class="pwd-wrap"><input type="password" id="c-pwd1" placeholder="Mínimo 6 caracteres" data-i18n-ph="cad.pwd_ph" oninput="checkStrength(this)" autocomplete="new-password"><span class="pwd-toggle" data-i18n="cad.show" onclick="togglePwd('c-pwd1',this)">MOSTRAR</span></div><div class="strength-bar"><div class="sb" id="str0"></div><div class="sb" id="str1"></div><div class="sb" id="str2"></div><div class="sb" id="str3"></div></div></div>
+    <div class="field"><label data-i18n="cad.cpwd_lbl">CONFIRMAR SENHA</label><input type="password" id="c-pwd2" placeholder="Repita a senha" data-i18n-ph="cad.cpwd_ph" autocomplete="new-password"></div>
+    <button class="btn-p" style="width:100%;margin-top:8px" id="btn-cad-fin" data-i18n="cad.finish" onclick="cadFinalizar()">CRIAR CONTA →</button>
   </div>
   <div class="form-card" id="cad-step3" style="display:none;text-align:center">
     <div class="success-ico">✓</div>
-    <div class="fc-title" style="text-align:center">Conta criada!</div>
-    <div class="warn-note">Anote sua senha agora.</div>
+    <div class="fc-title" style="text-align:center" data-i18n="cad.title3">Conta criada!</div>
+    <div class="warn-note" data-i18n="cad.note">Anote sua senha agora.</div>
     <div class="cred-box">
       <div class="cred-row"><span class="cred-lbl">ID</span><span class="cred-val green" id="final-id"></span></div>
       <div class="cred-row"><span class="cred-lbl">EMAIL</span><span class="cred-val" id="final-email"></span></div>
     </div>
-    <button class="btn-p" style="width:100%" onclick="go('s-lobby')">ENTRAR NO LOBBY →</button>
+    <button class="btn-p" style="width:100%" data-i18n="cad.enter_lobby" onclick="go('s-lobby')">ENTRAR NO LOBBY →</button>
   </div>
 </div>
 
 <!-- LOGIN -->
 <div id="s-login" class="screen">
   <div class="form-card">
-    <div class="fc-back" onclick="go('s-splash')">← VOLTAR</div>
-    <div class="fc-title">Entrar</div>
-    <div class="fc-sub" style="margin-bottom:1.5rem">Use seu email e senha.</div>
-    <div class="field"><label>EMAIL</label><input type="email" id="l-email" placeholder="seu@email.com"></div>
-    <div class="field"><label>SENHA</label><div class="pwd-wrap"><input type="password" id="l-pwd" placeholder="Sua senha"><span class="pwd-toggle" onclick="togglePwd('l-pwd',this)">MOSTRAR</span></div></div>
-    <button class="btn-p" style="width:100%;margin-top:8px" id="btn-login" onclick="doLogin()">ENTRAR →</button>
-    <div class="divider"><div class="dl"></div><div class="dt">ou</div><div class="dl"></div></div>
-    <button class="btn-g" style="width:100%" onclick="go('s-cadastro')">CRIAR CONTA</button>
+    <div class="fc-back" data-i18n="back" onclick="go('s-splash')">← VOLTAR</div>
+    <div class="fc-title" data-i18n="login.title">Entrar</div>
+    <div class="fc-sub" style="margin-bottom:1.5rem" data-i18n="login.sub">Use seu email e senha.</div>
+    <div class="field"><label data-i18n="cad.email_lbl">EMAIL</label><input type="email" id="l-email" placeholder="seu@email.com"></div>
+    <div class="field"><label data-i18n="login.pwd_lbl">SENHA</label><div class="pwd-wrap"><input type="password" id="l-pwd" placeholder="Sua senha" data-i18n-ph="login.pwd_ph"><span class="pwd-toggle" data-i18n="cad.show" onclick="togglePwd('l-pwd',this)">MOSTRAR</span></div></div>
+    <button class="btn-p" style="width:100%;margin-top:8px" id="btn-login" data-i18n="login.btn" onclick="doLogin()">ENTRAR →</button>
+    <div class="divider"><div class="dl"></div><div class="dt" data-i18n="login.or">ou</div><div class="dl"></div></div>
+    <button class="btn-g" style="width:100%" data-i18n="login.register" onclick="go('s-cadastro')">CRIAR CONTA</button>
   </div>
 </div>
 
@@ -759,28 +761,28 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <div class="lobby-body">
     <div class="lobby-main">
       <div class="search-row">
-        <input class="search-inp" id="search-inp" placeholder="Buscar sala..." oninput="filterRooms(this.value)">
-        <button class="new-btn nb3-btn" id="new-btn" onclick="openModal()">+ NOVA SALA</button>
+        <input class="search-inp" id="search-inp" placeholder="Buscar sala..." data-i18n-ph="lobby.search_ph" oninput="filterRooms(this.value)">
+        <button class="new-btn nb3-btn" id="new-btn" data-i18n="lobby.new_room" onclick="openModal()">+ NOVA SALA</button>
       </div>
-      <div class="sec-label">SALA PATROCINADA</div>
+      <div class="sec-label" data-i18n="lobby.sponsored">SALA PATROCINADA</div>
       <div class="sponsor-slot">
         <div class="slot-shimmer"></div>
-        <div class="slot-top"><div><div class="slot-name">SALA PATROCINADA</div><div style="font-family:var(--mono);font-size:9px;color:var(--t3)">Espaço disponível para sua corretora</div></div><div class="slot-avail"><div class="slot-pulse"></div>DISPONÍVEL</div></div>
-        <div class="slot-body"><div class="slot-txt">Alcance traders ativos da B3 com sua marca no centro do pregão.</div><button class="saiba-btn">SAIBA MAIS →</button></div>
+        <div class="slot-top"><div><div class="slot-name" data-i18n="lobby.sponsored">SALA PATROCINADA</div><div style="font-family:var(--mono);font-size:9px;color:var(--t3)" data-i18n="lobby.sponsored_sub">Espaço disponível para sua corretora</div></div><div class="slot-avail"><div class="slot-pulse"></div><span data-i18n="lobby.available">DISPONÍVEL</span></div></div>
+        <div class="slot-body"><div class="slot-txt" data-i18n="lobby.sponsored_txt">Alcance traders ativos da B3 com sua marca no centro do pregão.</div><button class="saiba-btn" data-i18n="lobby.know_more">SAIBA MAIS →</button></div>
       </div>
       <div id="rooms-list"><div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div></div>
     </div>
     <div class="lobby-side">
-      <div class="ls-title">AO VIVO</div>
+      <div class="ls-title" data-i18n="lobby.live">AO VIVO</div>
       <div class="side-stat-grid">
-        <div class="ss"><div class="ss-val" id="live-count">—</div><div class="ss-lbl">traders</div></div>
-        <div class="ss"><div class="ss-val" id="live-rooms">—</div><div class="ss-lbl">salas</div></div>
-        <div class="ss"><div class="ss-val" style="color:var(--g)">B3</div><div class="ss-lbl">+ ativo</div></div>
-        <div class="ss"><div class="ss-val" style="color:var(--b)">24h</div><div class="ss-lbl">forex</div></div>
+        <div class="ss"><div class="ss-val" id="live-count">—</div><div class="ss-lbl" data-i18n="lobby.traders">traders</div></div>
+        <div class="ss"><div class="ss-val" id="live-rooms">—</div><div class="ss-lbl" data-i18n="lobby.salas">salas</div></div>
+        <div class="ss"><div class="ss-val" style="color:var(--g)">B3</div><div class="ss-lbl" data-i18n="lobby.most_active">+ ativo</div></div>
+        <div class="ss"><div class="ss-val" style="color:var(--b)">24h</div><div class="ss-lbl" data-i18n="lobby.forex_24h">forex</div></div>
       </div>
-      <div class="ls-title">NOTIFICAÇÕES</div>
-      <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--g)"></div><span class="ni-type" style="color:var(--g)">B3</span><span class="ni-time">agora</span></div><div class="ni-text">Salas abertas para o pregão de hoje.</div></div>
-      <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--b)"></div><span class="ni-type" style="color:var(--b)">FOREX</span><span class="ni-time">08:30</span></div><div class="ni-text">London Session aberta.</div></div>
+      <div class="ls-title" data-i18n="lobby.notifications">NOTIFICAÇÕES</div>
+      <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--g)"></div><span class="ni-type" style="color:var(--g)">B3</span><span class="ni-time">agora</span></div><div class="ni-text" data-i18n="notif.b3">Salas abertas para o pregão de hoje.</div></div>
+      <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--b)"></div><span class="ni-type" style="color:var(--b)">FOREX</span><span class="ni-time">08:30</span></div><div class="ni-text" data-i18n="notif.forex">London Session aberta.</div></div>
     </div>
   </div>
 </div>
@@ -790,16 +792,16 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <div class="modal">
     <div class="mhdr"><div class="mhdr-title" id="m-title">CRIAR SALA — B3</div><div class="mhdr-close" onclick="closeModal()">✕</div></div>
     <div class="mbody">
-      <div class="field"><label>NOME DA SALA</label><input type="text" id="m-name" placeholder="Ex: VENCEDORES, OS FODÕES..."></div>
-      <div class="field"><label>MERCADO</label>
+      <div class="field"><label data-i18n="modal.name_lbl">NOME DA SALA</label><input type="text" id="m-name" placeholder="Ex: VENCEDORES, OS FODÕES..." data-i18n-ph="modal.name_ph"></div>
+      <div class="field"><label data-i18n="modal.mkt_lbl">MERCADO</label>
         <select id="m-mercado" onchange="updateModalMkt(this.value)" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--t1);font-family:var(--mono);font-size:13px;padding:9px 12px;outline:none">
           <option value="B3">B3</option><option value="Forex">Forex</option><option value="Cripto">Cripto</option>
         </select>
       </div>
-      <div class="field"><label>ATIVOS</label><div class="assets-wrap" id="m-assets"></div></div>
-      <div class="field"><label>LIMITE DE TRADERS</label><div class="slider-row"><input type="range" min="2" max="10" value="10" id="m-limit" oninput="document.getElementById('m-lv').textContent=this.value"><span class="slider-val" id="m-lv">10</span></div></div>
+      <div class="field"><label data-i18n="modal.assets_lbl">ATIVOS</label><div class="assets-wrap" id="m-assets"></div></div>
+      <div class="field"><label data-i18n="modal.limit_lbl">LIMITE DE TRADERS</label><div class="slider-row"><input type="range" min="2" max="10" value="10" id="m-limit" oninput="document.getElementById('m-lv').textContent=this.value"><span class="slider-val" id="m-lv">10</span></div></div>
     </div>
-    <div class="mftr"><button class="btn-cancel" onclick="closeModal()">CANCELAR</button><button class="btn-criar btn-criar-b3" id="m-criar-btn" onclick="criarSala()">▶ CRIAR SALA</button></div>
+    <div class="mftr"><button class="btn-cancel" data-i18n="modal.cancel" onclick="closeModal()">CANCELAR</button><button class="btn-criar btn-criar-b3" id="m-criar-btn" onclick="criarSala()">▶ CRIAR SALA</button></div>
   </div>
 </div>
 
@@ -807,11 +809,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <div class="auth-req" id="auth-req">
   <div class="auth-req-box">
     <div class="ar-icon">🔐</div>
-    <div class="ar-title">Login necessário</div>
-    <div class="ar-sub">Para entrar em uma sala você precisa ter uma conta. É rápido e gratuito!</div>
+    <div class="ar-title" data-i18n="auth.title">Login necessário</div>
+    <div class="ar-sub" data-i18n="auth.sub">Para entrar em uma sala você precisa ter uma conta. É rápido e gratuito!</div>
     <div class="ar-btns">
-      <button class="btn-g" style="flex:1" onclick="document.getElementById('auth-req').classList.remove('open')">CANCELAR</button>
-      <button class="btn-p" style="flex:2;padding:12px" onclick="document.getElementById('auth-req').classList.remove('open');go('s-login')">ENTRAR / CADASTRAR</button>
+      <button class="btn-g" style="flex:1" data-i18n="auth.cancel" onclick="document.getElementById('auth-req').classList.remove('open')">CANCELAR</button>
+      <button class="btn-p" style="flex:2;padding:12px" data-i18n="auth.enter" onclick="document.getElementById('auth-req').classList.remove('open');go('s-login')">ENTRAR / CADASTRAR</button>
     </div>
   </div>
 </div>
@@ -819,11 +821,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <!-- CONFIRM DELETE -->
 <div class="confirm-del" id="confirm-del">
   <div class="cd-box">
-    <div class="cd-title">⚠️ Excluir sala?</div>
-    <div class="cd-sub">Esta ação é permanente. A sala e todo o histórico serão removidos.</div>
+    <div class="cd-title" data-i18n="del.title">⚠️ Excluir sala?</div>
+    <div class="cd-sub" data-i18n="del.sub">Esta ação é permanente. A sala e todo o histórico serão removidos.</div>
     <div class="cd-btns">
-      <button class="btn-g" style="flex:1" onclick="document.getElementById('confirm-del').classList.remove('open')">CANCELAR</button>
-      <button style="flex:2;padding:9px;background:rgba(255,69,96,.1);border:1px solid rgba(255,69,96,.3);border-radius:6px;color:var(--r);font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer" onclick="confirmarExcluirSala()">SIM, EXCLUIR</button>
+      <button class="btn-g" style="flex:1" data-i18n="del.cancel" onclick="document.getElementById('confirm-del').classList.remove('open')">CANCELAR</button>
+      <button style="flex:2;padding:9px;background:rgba(255,69,96,.1);border:1px solid rgba(255,69,96,.3);border-radius:6px;color:var(--r);font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer" data-i18n="del.confirm" onclick="confirmarExcluirSala()">SIM, EXCLUIR</button>
     </div>
   </div>
 </div>
@@ -832,17 +834,17 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <div id="s-room" class="screen">
   <div class="rh">
     <div class="rh-l">
-      <div class="rh-back" onclick="sairDaSalaEVoltar()">← LOBBY</div>
+      <div class="rh-back" data-i18n="room.back" onclick="sairDaSalaEVoltar()">← LOBBY</div>
       <div class="rh-name" id="room-name-tag">SALA</div>
     </div>
     <div class="rh-asset" id="room-asset-tag">WIN</div>
     <div class="rh-r">
       <div class="rh-dot"></div>
-      <div class="role-tag rt-member" id="room-role-tag">MEMBRO</div>
-      <div class="rh-mob-exit" id="rh-mob-exit" onclick="sairDaSala()">↩ SAIR</div>
+      <div class="role-tag rt-member" id="room-role-tag" data-i18n="room.member">MEMBRO</div>
+      <div class="rh-mob-exit" id="rh-mob-exit" data-i18n="room.exit" onclick="sairDaSala()">↩ SAIR</div>
     </div>
   </div>
-  <div id="pregao-status-bar">⏹ PREGÃO ENCERRADO — aguardando reabertura pelo criador</div>
+  <div id="pregao-status-bar" data-i18n="room.closed">⏹ PREGÃO ENCERRADO — aguardando reabertura pelo criador</div>
   <div class="room-body">
     <div class="chart-col">
       <div class="chart-toolbar">
@@ -1054,7 +1056,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="mob-perfil-hero">
       <div class="mob-perfil-av" id="mob-pav">?</div>
       <div class="mob-perfil-id" id="mob-pid">visitante</div>
-      <div class="mob-perfil-sub" id="mob-psub">Não autenticado</div>
+      <div class="mob-perfil-sub" id="mob-psub" data-i18n="mob.not_auth">Não autenticado</div>
     </div>
     <div class="mob-stats-grid">
       <div class="mob-stat-cell"><div class="mob-stat-val" id="mob-stat-dias">—</div><div class="mob-stat-lbl">DIAS</div></div>
@@ -1062,8 +1064,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="mob-stat-cell"><div class="mob-stat-val" id="mob-stat-sinais">—</div><div class="mob-stat-lbl">SINAIS</div></div>
     </div>
     <div class="mob-perfil-btns" id="mob-perfil-btns">
-      <button class="mob-btn-main" onclick="openMobLogin()">ENTRAR →</button>
-      <button class="mob-btn-sec" onclick="mobShowDesktop('s-cadastro')">CRIAR CONTA</button>
+      <button class="mob-btn-main" data-i18n="mob.enter_btn" onclick="openMobLogin()">ENTRAR →</button>
+      <button class="mob-btn-sec" data-i18n="mob.create_acc" onclick="mobShowDesktop('s-cadastro')">CRIAR CONTA</button>
     </div>
   </div>
 
@@ -1071,23 +1073,23 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <div class="mob-tabbar">
     <div class="mob-tab active" id="mtab-home" onclick="mobTab('home',this)">
       <div class="mob-tab-ico">⌂</div>
-      <div class="mob-tab-lbl">Início</div>
+      <div class="mob-tab-lbl" data-i18n="mob.home">Início</div>
     </div>
     <div class="mob-tab" id="mtab-salas" onclick="mobTab('salas',this)">
       <div class="mob-tab-ico">▶</div>
-      <div class="mob-tab-lbl">Salas</div>
+      <div class="mob-tab-lbl" data-i18n="mob.rooms">Salas</div>
     </div>
     <div class="mob-tab" id="mtab-mercado" onclick="mobTab('mercado',this)">
       <div class="mob-tab-ico">◈</div>
-      <div class="mob-tab-lbl">Mercado</div>
+      <div class="mob-tab-lbl" data-i18n="mob.market">Mercado</div>
     </div>
     <div class="mob-tab" id="mtab-preditivo" onclick="mobTab('preditivo',this)">
       <div class="mob-tab-ico">⬡</div>
-      <div class="mob-tab-lbl">Preditivo</div>
+      <div class="mob-tab-lbl" data-i18n="mob.predict">Preditivo</div>
     </div>
     <div class="mob-tab" id="mtab-perfil" onclick="mobTab('perfil',this)">
       <div class="mob-tab-ico">◎</div>
-      <div class="mob-tab-lbl">Perfil</div>
+      <div class="mob-tab-lbl" data-i18n="mob.profile">Perfil</div>
     </div>
   </div>
 
@@ -1137,17 +1139,17 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <div class="mob-overlay" id="mob-overlay" onclick="if(event.target===this)closeMobOverlay()">
     <div class="mob-sheet">
       <div class="mob-sheet-handle"></div>
-      <div class="mob-sheet-title">Entrar no TradeRoom</div>
-      <div class="field"><label>EMAIL</label><input type="email" id="ml-email" placeholder="seu@email.com" autocomplete="email"></div>
-      <div class="field"><label>SENHA</label>
+      <div class="mob-sheet-title" data-i18n="mob.login_title">Entrar no TradeRoom</div>
+      <div class="field"><label data-i18n="cad.email_lbl">EMAIL</label><input type="email" id="ml-email" placeholder="seu@email.com" autocomplete="email"></div>
+      <div class="field"><label data-i18n="login.pwd_lbl">SENHA</label>
         <div class="pwd-wrap">
-          <input type="password" id="ml-pwd" placeholder="Sua senha" autocomplete="current-password" onkeydown="if(event.key==='Enter')doMobLogin()">
-          <span class="pwd-toggle" onclick="togglePwd('ml-pwd',this)">MOSTRAR</span>
+          <input type="password" id="ml-pwd" placeholder="Sua senha" data-i18n-ph="login.pwd_ph" autocomplete="current-password" onkeydown="if(event.key==='Enter')doMobLogin()">
+          <span class="pwd-toggle" data-i18n="cad.show" onclick="togglePwd('ml-pwd',this)">MOSTRAR</span>
         </div>
       </div>
-      <button class="mob-btn-main" style="margin-top:4px" onclick="doMobLogin()">ENTRAR →</button>
-      <div class="divider" style="margin:12px 0"><div class="dl"></div><div class="dt">ou</div><div class="dl"></div></div>
-      <button class="mob-btn-sec" onclick="closeMobOverlay();mobShowDesktop('s-cadastro')">CRIAR CONTA</button>
+      <button class="mob-btn-main" style="margin-top:4px" data-i18n="mob.login_btn" onclick="doMobLogin()">ENTRAR →</button>
+      <div class="divider" style="margin:12px 0"><div class="dl"></div><div class="dt" data-i18n="login.or">ou</div><div class="dl"></div></div>
+      <button class="mob-btn-sec" data-i18n="mob.register" onclick="closeMobOverlay();mobShowDesktop('s-cadastro')">CRIAR CONTA</button>
     </div>
   </div>
 
@@ -1159,8 +1161,10 @@ const SUPABASE_KEY = 'sb_publishable_lpcSO7-IQJL0g2pF3UgQLw_AneC6pXw'
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 const FAKE_ID = '00000000-0000-0000-0000-000000000099'
+var currentLang = localStorage.getItem('tr_lang') || 'pt'
 
 loadSplashRooms();
+setLang(currentLang);
 
 // TESTE DIAGNÓSTICO — remover após confirmar
 (async function() {
@@ -1563,15 +1567,15 @@ function atualizarLobbyCard(roomId, updates) {
 async function doLogin() {
   const email = document.getElementById('l-email').value.trim()
   const pwd = document.getElementById('l-pwd').value
-  if (!email || !pwd) { toast('Preencha email e senha','t-r'); return }
+  if (!email || !pwd) { toast(T('v.fill'),'t-r'); return }
   const btn = document.getElementById('btn-login')
-  btn.textContent = 'ENTRANDO...'; btn.disabled = true
+  btn.textContent = T('login.loading'); btn.disabled = true
   const { data, error } = await sb.auth.signInWithPassword({ email, password: pwd })
-  btn.textContent = 'ENTRAR →'; btn.disabled = false
+  btn.textContent = T('login.btn'); btn.disabled = false
   if (error) { toast(error.message || 'Erro ao entrar','t-r'); return }
   await loadUserProfile(data.user)
   go('s-lobby')
-  toast('Bem-vindo, ' + currentUser.trader_id + '!','t-g')
+  toast(T('v.welcome').replace('{0}', currentUser.trader_id),'t-g')
 }
 
 async function cadFinalizar() {
@@ -1579,11 +1583,11 @@ async function cadFinalizar() {
   const p2 = document.getElementById('c-pwd2').value
   const email = document.getElementById('c-email').value.trim()
   const nome = document.getElementById('c-nome').value.trim()
-  if (!p1 || p1.length < 6) { toast('Senha deve ter ao menos 6 caracteres (digitados: ' + p1.length + ')', 't-r'); return }
-  if (p1 !== p2) { toast('Senhas nao conferem', 't-r'); return }
-  const btn = document.getElementById('btn-cad-fin'); btn.textContent = 'CRIANDO...'; btn.disabled = true
+  if (!p1 || p1.length < 6) { toast(T('v.pwd6') + ' (' + p1.length + ')', 't-r'); return }
+  if (p1 !== p2) { toast(T('v.pwdmatch'), 't-r'); return }
+  const btn = document.getElementById('btn-cad-fin'); btn.textContent = T('cad.creating'); btn.disabled = true
   const { data, error } = await sb.auth.signUp({ email, password: p1, options: { data: { nome, trader_id: currentId } } })
-  btn.textContent = 'CRIAR CONTA →'; btn.disabled = false
+  btn.textContent = T('cad.finish'); btn.disabled = false
   if (error) { toast('Erro: ' + (error.message || 'Tente novamente'), 't-r'); return }
   if (!data.user) { toast('Verifique seu email para confirmar o cadastro!', 't-b'); return }
   await sb.from('usuarios').insert({ id: data.user.id, email, trader_id: currentId })
@@ -1635,9 +1639,9 @@ var criadorMap = {}
 
 async function loadRooms() {
   const el = document.getElementById('rooms-list')
-  el.innerHTML = '<div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div>'
+  el.innerHTML = '<div class="loading-rooms"><span class="loading-spin"></span>' + T('rooms.loading') + '</div>'
   const { data, error } = await sb.from('salas').select('*').or('ativa.eq.true,ativa.is.null').order('criado_em', { ascending: false })
-  if (error) { el.innerHTML = '<div class="loading-rooms" style="color:var(--r)">Erro ao carregar salas.</div>'; return }
+  if (error) { el.innerHTML = '<div class="loading-rooms" style="color:var(--r)">' + T('rooms.error') + '</div>'; return }
   allRooms = data || []
   renderRooms('')
   updateCounts()
@@ -1668,12 +1672,12 @@ function renderRooms(filter) {
     return r.mercado === currentMkt && (!filter || r.nome.toLowerCase().includes(filter.toLowerCase()))
   })
 
-  if (!filtered.length) { el.innerHTML = '<div class="loading-rooms">Nenhuma sala ao vivo no momento.</div>'; return }
+  if (!filtered.length) { el.innerHTML = '<div class="loading-rooms">' + T('lobby.no_rooms') + '</div>'; return }
 
   var clsMap = { B3:'nb', Forex:'nr', Cripto:'ny' }
   var cls = clsMap[currentMkt] || 'nb'
 
-  var html = '<div class="sec-label">SALAS ABERTAS &mdash; ' + filtered.length + ' SALAS</div>'
+  var html = '<div class="sec-label">' + T('rooms.open_hdr') + ' &mdash; ' + filtered.length + ' ' + T('rooms.word') + '</div>'
   html += '<div class="neon-grid">'
 
   filtered.forEach(function(r) {
@@ -1686,8 +1690,8 @@ function renderRooms(filter) {
     var roomJson = JSON.stringify({ id:r.id, nome:r.nome, mercado:r.mercado, ativos:ativos, criador_id:r.criador_id }).replace(/"/g,'&quot;')
 
     var btnHtml = lotada
-      ? '<div class="btn-lotada">👥 LOTADA</div>'
-      : '<div class="btn-aberta" onclick="event.stopPropagation();enterRoom(' + roomJson + ')">🔓 ABERTA</div>'
+      ? '<div class="btn-lotada">👥 ' + T('rooms.full_btn') + '</div>'
+      : '<div class="btn-aberta" onclick="event.stopPropagation();enterRoom(' + roomJson + ')">🔓 ' + T('rooms.enter_btn') + '</div>'
 
     html += '<div class="nc ' + cls + '" data-room-id="' + r.id + '" ' + (lotada ? 'style="cursor:not-allowed;opacity:.75"' : 'onclick="enterRoom(' + roomJson + ')"') + '>'
       + '<div class="nc-bar ' + cls + '"></div>'
@@ -1731,7 +1735,7 @@ function switchMkt(mkt, el) {
 // ==================== ENTRAR SALA ====================
 async function enterRoom(data) {
   const _occ = data.ocupacao || 0; const _lim = data.limite || 10;
-  if (_occ >= _lim) { toast("Sala lotada! Tente outra.", "t-r"); return }
+  if (_occ >= _lim) { toast(T('v.room_full'), "t-r"); return }
   if (!currentUser.loggedIn) { document.getElementById('auth-req').classList.add('open'); return }
   currentRoom = data
   currentIsCriador = !!(data.criador_id && currentUser.id && data.criador_id === currentUser.id)
@@ -1800,7 +1804,7 @@ async function sairDaSala() {
     }
   }
   pararRealtime()
-  toast('Voce saiu da sala.','t-b')
+  toast(T('v.left_room'),'t-b')
   go('s-lobby')
 }
 
@@ -1991,26 +1995,27 @@ function openModal() {
   document.getElementById('modal-bg').classList.add('open')
 }
 function updateModalMkt(mkt) {
-  document.getElementById('m-title').textContent = { B3:'CRIAR SALA — B3', Forex:'CRIAR SALA — FOREX', Cripto:'CRIAR SALA — CRIPTO' }[mkt]
+  document.getElementById('m-title').textContent = T('modal.title_prefix') + ' — ' + mkt
   document.getElementById('m-criar-btn').className = 'btn-criar ' + { B3:'btn-criar-b3', Forex:'btn-criar-fx', Cripto:'btn-criar-cr' }[mkt]
+  document.getElementById('m-criar-btn').textContent = T('modal.create')
   const sc = { B3:'sel-b3', Forex:'sel-fx', Cripto:'sel-cr' }[mkt]; selectedAssets = []
   document.getElementById('m-assets').innerHTML = (ASSETS_BY_MKT[mkt]||[]).map(a => '<div class="asset-chip" id="chip-' + a.replace('/','_') + '" onclick="toggleAsset(\'' + a + '\',\'' + sc + '\')">' + a + '</div>').join('')
 }
 function toggleAsset(a, cls) {
   const chip = document.getElementById('chip-'+a.replace('/','_'))
   if (selectedAssets.includes(a)) { selectedAssets = selectedAssets.filter(x=>x!==a); chip.className='asset-chip' }
-  else { if (selectedAssets.length >= 2) { toast('Máximo 2 ativos por sala', 't-y'); return }; selectedAssets.push(a); chip.className='asset-chip '+cls }
+  else { if (selectedAssets.length >= 2) { toast(T('v.maxassets'), 't-y'); return }; selectedAssets.push(a); chip.className='asset-chip '+cls }
 }
 async function criarSala() {
   const nome = document.getElementById('m-name').value.trim()
   const mercado = document.getElementById('m-mercado').value
   const limite = parseInt(document.getElementById('m-limit').value)
-  if (!nome) { toast('De um nome a sala','t-r'); return }
-  const btn = document.getElementById('m-criar-btn'); btn.textContent = 'CRIANDO...'; btn.disabled = true
+  if (!nome) { toast(T('v.roomname'),'t-r'); return }
+  const btn = document.getElementById('m-criar-btn'); btn.textContent = T('modal.creating'); btn.disabled = true
   const { data, error } = await sb.from('salas').insert([{ nome, mercado, ativos:selectedAssets, limite, ativa:true, criador_id:currentUser.id||null }]).select()
   btn.textContent = '▶ CRIAR SALA'; btn.disabled = false
   if (error) { toast('Erro: '+(error.message||''),'t-r'); return }
-  closeModal(); toast('"'+nome+'" criada!','t-g'); await loadRooms()
+  closeModal(); toast('"'+nome+'" '+T('v.room_created'),'t-g'); await loadRooms()
   if (data && data[0]) setTimeout(function() { enterRoom({ id:data[0].id, nome, mercado, ativos:selectedAssets, criador_id:currentUser.id }) }, 500)
 }
 function closeModal() { document.getElementById('modal-bg').classList.remove('open') }
@@ -2092,9 +2097,9 @@ let currentId='trader_jo4x'
 function regenId() { currentId=ADJS[Math.floor(Math.random()*ADJS.length)]+SUFX[Math.floor(Math.random()*SUFX.length)]; document.getElementById('id-preview').textContent=currentId }
 function onNome(el) { const v=el.value.trim(); if(v.length>=2){const b=v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(' ')[0].replace(/[^a-z]/g,'').substring(0,8);currentId=b+SUFX[Math.floor(Math.random()*SUFX.length)];document.getElementById('id-preview').textContent=currentId} }
 function maskTel(el) { let v=el.value.replace(/\D/g,'').substring(0,11);if(v.length<=2)v=v.replace(/^(\d{0,2})/,'($1');else if(v.length<=7)v=v.replace(/^(\d{2})(\d{0,5})/,'($1) $2');else v=v.replace(/^(\d{2})(\d{5})(\d{0,4})/,'($1) $2-$3');el.value=v }
-function togglePwd(id,btn){const el=document.getElementById(id);const show=el.type==='password';el.type=show?'text':'password';btn.textContent=show?'OCULTAR':'MOSTRAR'}
+function togglePwd(id,btn){const el=document.getElementById(id);const show=el.type==='password';el.type=show?'text':'password';btn.textContent=show?T('cad.hide'):T('cad.show')}
 function checkStrength(el){const v=el.value;const score=[v.length>=8,/[A-Z]|[a-z]/.test(v),/\d/.test(v),/[^A-Za-z0-9]/.test(v)].filter(Boolean).length;const cols=['#ff4560','#f5a623','#0af','#00e5a0'];for(let i=0;i<4;i++)document.getElementById('str'+i).style.background=i<score?cols[score-1]:'var(--border2)'}
-function cadNext(){const nome=document.getElementById('c-nome').value.trim();const email=document.getElementById('c-email').value.trim();if(nome.length<2){toast('Informe seu nome','t-r');return}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Email invalido','t-r');return}document.getElementById('cad-step1').style.display='none';document.getElementById('cad-step2').style.display=''}
+function cadNext(){const nome=document.getElementById('c-nome').value.trim();const email=document.getElementById('c-email').value.trim();if(nome.length<2){toast(T('v.name'),'t-r');return}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast(T('v.email'),'t-r');return}document.getElementById('cad-step1').style.display='none';document.getElementById('cad-step2').style.display=''}
 
 // ==================== SPLASH ====================
 function splashEnter(){ go('s-lobby') }
@@ -2107,7 +2112,7 @@ async function loadSplashRooms() {
       .order('criado_em', { ascending: false }).limit(3)
     var rooms = res.data || []
     if (!rooms.length) {
-      el.innerHTML = '<div class="sp-rooms-empty">Nenhuma sala ao vivo agora</div>'
+      el.innerHTML = '<div class="sp-rooms-empty">' + T('sp.empty') + '</div>'
       return
     }
     var mktMap = { B3: ['sp-b3','B3'], Forex: ['sp-fx','FOREX'], Cripto: ['sp-cr','CRYPTO'] }
@@ -2130,7 +2135,369 @@ async function loadSplashRooms() {
   }
 }
 
-function setLang(l){document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
+var LANG={
+  pt:{
+    'sp.enter':'Entrar →','sp.connected':'traders conectados agora',
+    'sp.title':'O mercado nunca para.<br><span>Nem você.</span>',
+    'sp.subtitle':'Análise coletiva em tempo real entre traders de B3, Forex e Cripto.',
+    'sp.rooms_lbl':'SALAS AO VIVO','sp.empty':'Nenhuma sala ao vivo agora',
+    'back':'← VOLTAR',
+    'cad.title1':'Criar conta','cad.sub1':'Seus dados ficam seguros.',
+    'cad.name_lbl':'NOME COMPLETO','cad.name_ph':'João Silva',
+    'cad.email_lbl':'EMAIL','cad.tel_lbl':'TELEFONE','cad.tel_ph':'(11) 99999-9999',
+    'cad.id_lbl':'SEU ID NAS SALAS','cad.id_note':'Como todos te verão. Único e permanente.',
+    'cad.id_regen':'↻ OUTRO','cad.next':'CONTINUAR →',
+    'cad.title2':'Crie sua senha','cad.pwd_lbl':'SENHA',
+    'cad.pwd_ph':'Mínimo 6 caracteres','cad.show':'MOSTRAR','cad.hide':'OCULTAR',
+    'cad.cpwd_lbl':'CONFIRMAR SENHA','cad.cpwd_ph':'Repita a senha',
+    'cad.finish':'CRIAR CONTA →','cad.creating':'CRIANDO...',
+    'cad.title3':'Conta criada!','cad.note':'Anote sua senha agora.',
+    'cad.enter_lobby':'ENTRAR NO LOBBY →',
+    'login.title':'Entrar','login.sub':'Use seu email e senha.',
+    'login.pwd_lbl':'SENHA','login.pwd_ph':'Sua senha',
+    'login.btn':'ENTRAR →','login.loading':'ENTRANDO...','login.or':'ou','login.register':'CRIAR CONTA',
+    'modal.title_prefix':'CRIAR SALA','modal.name_lbl':'NOME DA SALA',
+    'modal.name_ph':'Ex: VENCEDORES, OS FODÕES...','modal.mkt_lbl':'MERCADO',
+    'modal.assets_lbl':'ATIVOS','modal.limit_lbl':'LIMITE DE TRADERS',
+    'modal.cancel':'CANCELAR','modal.create':'▶ CRIAR SALA','modal.creating':'CRIANDO...',
+    'auth.title':'Login necessário',
+    'auth.sub':'Para entrar em uma sala você precisa ter uma conta. É rápido e gratuito!',
+    'auth.cancel':'CANCELAR','auth.enter':'ENTRAR / CADASTRAR',
+    'del.title':'⚠️ Excluir sala?',
+    'del.sub':'Esta ação é permanente. A sala e todo o histórico serão removidos.',
+    'del.cancel':'CANCELAR','del.confirm':'SIM, EXCLUIR',
+    'lobby.search_ph':'Buscar sala...','lobby.new_room':'+ NOVA SALA',
+    'lobby.sponsored':'SALA PATROCINADA','lobby.sponsored_sub':'Espaço disponível para sua corretora',
+    'lobby.available':'DISPONÍVEL',
+    'lobby.sponsored_txt':'Alcance traders ativos da B3 com sua marca no centro do pregão.',
+    'lobby.know_more':'SAIBA MAIS →','lobby.live':'AO VIVO',
+    'lobby.traders':'traders','lobby.salas':'salas',
+    'lobby.most_active':'+ ativo','lobby.forex_24h':'forex',
+    'lobby.notifications':'NOTIFICAÇÕES','lobby.loading':'Carregando salas...',
+    'lobby.no_rooms':'Nenhuma sala ao vivo no momento.',
+    'rooms.loading':'Carregando salas...','rooms.error':'Erro ao carregar salas.',
+    'rooms.open_hdr':'SALAS ABERTAS','rooms.word':'SALAS',
+    'rooms.full_btn':'LOTADA','rooms.enter_btn':'ABERTA','rooms.closed_btn':'ENCERRADO',
+    'mob.home':'Início','mob.rooms':'Salas','mob.market':'Mercado',
+    'mob.predict':'Preditivo','mob.profile':'Perfil',
+    'mob.login_title':'Entrar no TradeRoom','mob.login_btn':'ENTRAR →',
+    'mob.or':'ou','mob.register':'CRIAR CONTA',
+    'mob.not_auth':'Não autenticado','mob.enter_btn':'ENTRAR →','mob.create_acc':'CRIAR CONTA',
+    'room.back':'← LOBBY','room.member':'MEMBRO','room.exit':'↩ SAIR',
+    'room.closed':'⏹ PREGÃO ENCERRADO — aguardando reabertura pelo criador',
+    'notif.b3':'Salas abertas para o pregão de hoje.','notif.forex':'London Session aberta.',
+    'v.name':'Informe seu nome','v.email':'Email inválido',
+    'v.fill':'Preencha email e senha','v.roomname':'Dê um nome à sala',
+    'v.maxassets':'Máximo 2 ativos por sala',
+    'v.pwd6':'Senha deve ter ao menos 6 caracteres','v.pwdmatch':'Senhas não conferem',
+    'v.welcome':'Bem-vindo, {0}!','v.room_full':'Sala lotada! Tente outra.','v.left_room':'Você saiu da sala.'
+  },
+  en:{
+    'sp.enter':'Enter →','sp.connected':'traders connected now',
+    'sp.title':'The market never stops.<br><span>Neither do you.</span>',
+    'sp.subtitle':'Real-time collective analysis among B3, Forex and Crypto traders.',
+    'sp.rooms_lbl':'LIVE ROOMS','sp.empty':'No live rooms right now',
+    'back':'← BACK',
+    'cad.title1':'Create account','cad.sub1':'Your data is safe.',
+    'cad.name_lbl':'FULL NAME','cad.name_ph':'John Smith',
+    'cad.email_lbl':'EMAIL','cad.tel_lbl':'PHONE','cad.tel_ph':'+1 (555) 000-0000',
+    'cad.id_lbl':'YOUR ROOM ID','cad.id_note':'How everyone will see you. Unique and permanent.',
+    'cad.id_regen':'↻ OTHER','cad.next':'CONTINUE →',
+    'cad.title2':'Create your password','cad.pwd_lbl':'PASSWORD',
+    'cad.pwd_ph':'Minimum 6 characters','cad.show':'SHOW','cad.hide':'HIDE',
+    'cad.cpwd_lbl':'CONFIRM PASSWORD','cad.cpwd_ph':'Repeat password',
+    'cad.finish':'CREATE ACCOUNT →','cad.creating':'CREATING...',
+    'cad.title3':'Account created!','cad.note':'Write down your password now.',
+    'cad.enter_lobby':'ENTER LOBBY →',
+    'login.title':'Sign in','login.sub':'Use your email and password.',
+    'login.pwd_lbl':'PASSWORD','login.pwd_ph':'Your password',
+    'login.btn':'SIGN IN →','login.loading':'SIGNING IN...','login.or':'or','login.register':'CREATE ACCOUNT',
+    'modal.title_prefix':'CREATE ROOM','modal.name_lbl':'ROOM NAME',
+    'modal.name_ph':'Ex: WINNERS, THE PROS...','modal.mkt_lbl':'MARKET',
+    'modal.assets_lbl':'ASSETS','modal.limit_lbl':'TRADER LIMIT',
+    'modal.cancel':'CANCEL','modal.create':'▶ CREATE ROOM','modal.creating':'CREATING...',
+    'auth.title':'Login required',
+    'auth.sub':'To enter a room you need an account. Quick and free!',
+    'auth.cancel':'CANCEL','auth.enter':'SIGN IN / REGISTER',
+    'del.title':'⚠️ Delete room?',
+    'del.sub':'This action is permanent. The room and all history will be removed.',
+    'del.cancel':'CANCEL','del.confirm':'YES, DELETE',
+    'lobby.search_ph':'Search room...','lobby.new_room':'+ NEW ROOM',
+    'lobby.sponsored':'SPONSORED ROOM','lobby.sponsored_sub':'Space available for your broker',
+    'lobby.available':'AVAILABLE',
+    'lobby.sponsored_txt':'Reach active B3 traders with your brand at the center of trading.',
+    'lobby.know_more':'LEARN MORE →','lobby.live':'LIVE',
+    'lobby.traders':'traders','lobby.salas':'rooms',
+    'lobby.most_active':'top','lobby.forex_24h':'forex',
+    'lobby.notifications':'NOTIFICATIONS','lobby.loading':'Loading rooms...',
+    'lobby.no_rooms':'No live rooms at the moment.',
+    'rooms.loading':'Loading rooms...','rooms.error':'Error loading rooms.',
+    'rooms.open_hdr':'OPEN ROOMS','rooms.word':'ROOMS',
+    'rooms.full_btn':'FULL','rooms.enter_btn':'OPEN','rooms.closed_btn':'CLOSED',
+    'mob.home':'Home','mob.rooms':'Rooms','mob.market':'Market',
+    'mob.predict':'Predict','mob.profile':'Profile',
+    'mob.login_title':'Sign in to TradeRoom','mob.login_btn':'SIGN IN →',
+    'mob.or':'or','mob.register':'CREATE ACCOUNT',
+    'mob.not_auth':'Not authenticated','mob.enter_btn':'SIGN IN →','mob.create_acc':'CREATE ACCOUNT',
+    'room.back':'← LOBBY','room.member':'MEMBER','room.exit':'↩ EXIT',
+    'room.closed':'⏹ SESSION CLOSED — waiting for creator to reopen',
+    'notif.b3':'Rooms open for today\'s session.','notif.forex':'London Session open.',
+    'v.name':'Enter your name','v.email':'Invalid email',
+    'v.fill':'Fill in email and password','v.roomname':'Give your room a name',
+    'v.maxassets':'Maximum 2 assets per room',
+    'v.pwd6':'Password must be at least 6 characters','v.pwdmatch':'Passwords don\'t match',
+    'v.welcome':'Welcome, {0}!','v.room_full':'Room full! Try another.','v.left_room':'You left the room.'
+  },
+  es:{
+    'sp.enter':'Entrar →','sp.connected':'traders conectados ahora',
+    'sp.title':'El mercado nunca para.<br><span>Tú tampoco.</span>',
+    'sp.subtitle':'Análisis colectivo en tiempo real entre traders de B3, Forex y Cripto.',
+    'sp.rooms_lbl':'SALAS EN VIVO','sp.empty':'Sin salas en vivo ahora',
+    'back':'← VOLVER',
+    'cad.title1':'Crear cuenta','cad.sub1':'Tus datos están seguros.',
+    'cad.name_lbl':'NOMBRE COMPLETO','cad.name_ph':'Juan García',
+    'cad.email_lbl':'EMAIL','cad.tel_lbl':'TELÉFONO','cad.tel_ph':'+34 600 000 000',
+    'cad.id_lbl':'TU ID EN LAS SALAS','cad.id_note':'Cómo todos te verán. Único y permanente.',
+    'cad.id_regen':'↻ OTRO','cad.next':'CONTINUAR →',
+    'cad.title2':'Crea tu contraseña','cad.pwd_lbl':'CONTRASEÑA',
+    'cad.pwd_ph':'Mínimo 6 caracteres','cad.show':'MOSTRAR','cad.hide':'OCULTAR',
+    'cad.cpwd_lbl':'CONFIRMAR CONTRASEÑA','cad.cpwd_ph':'Repite la contraseña',
+    'cad.finish':'CREAR CUENTA →','cad.creating':'CREANDO...',
+    'cad.title3':'¡Cuenta creada!','cad.note':'Anota tu contraseña ahora.',
+    'cad.enter_lobby':'ENTRAR AL LOBBY →',
+    'login.title':'Iniciar sesión','login.sub':'Usa tu email y contraseña.',
+    'login.pwd_lbl':'CONTRASEÑA','login.pwd_ph':'Tu contraseña',
+    'login.btn':'ENTRAR →','login.loading':'ENTRANDO...','login.or':'o','login.register':'CREAR CUENTA',
+    'modal.title_prefix':'CREAR SALA','modal.name_lbl':'NOMBRE DE SALA',
+    'modal.name_ph':'Ej: GANADORES, LOS PROS...','modal.mkt_lbl':'MERCADO',
+    'modal.assets_lbl':'ACTIVOS','modal.limit_lbl':'LÍMITE DE TRADERS',
+    'modal.cancel':'CANCELAR','modal.create':'▶ CREAR SALA','modal.creating':'CREANDO...',
+    'auth.title':'Login requerido',
+    'auth.sub':'Para entrar a una sala necesitas cuenta. ¡Rápido y gratis!',
+    'auth.cancel':'CANCELAR','auth.enter':'ENTRAR / REGISTRARSE',
+    'del.title':'⚠️ ¿Eliminar sala?',
+    'del.sub':'Esta acción es permanente. La sala y el historial serán eliminados.',
+    'del.cancel':'CANCELAR','del.confirm':'SÍ, ELIMINAR',
+    'lobby.search_ph':'Buscar sala...','lobby.new_room':'+ NUEVA SALA',
+    'lobby.sponsored':'SALA PATROCINADA','lobby.sponsored_sub':'Espacio disponible para tu broker',
+    'lobby.available':'DISPONIBLE',
+    'lobby.sponsored_txt':'Llega a traders activos de B3 con tu marca en el trading.',
+    'lobby.know_more':'SABER MÁS →','lobby.live':'EN VIVO',
+    'lobby.traders':'traders','lobby.salas':'salas',
+    'lobby.most_active':'+ activo','lobby.forex_24h':'forex',
+    'lobby.notifications':'NOTIFICACIONES','lobby.loading':'Cargando salas...',
+    'lobby.no_rooms':'Sin salas en vivo por el momento.',
+    'rooms.loading':'Cargando salas...','rooms.error':'Error al cargar salas.',
+    'rooms.open_hdr':'SALAS ABIERTAS','rooms.word':'SALAS',
+    'rooms.full_btn':'LLENA','rooms.enter_btn':'ABIERTA','rooms.closed_btn':'CERRADA',
+    'mob.home':'Inicio','mob.rooms':'Salas','mob.market':'Mercado',
+    'mob.predict':'Predicción','mob.profile':'Perfil',
+    'mob.login_title':'Entrar a TradeRoom','mob.login_btn':'ENTRAR →',
+    'mob.or':'o','mob.register':'CREAR CUENTA',
+    'mob.not_auth':'No autenticado','mob.enter_btn':'ENTRAR →','mob.create_acc':'CREAR CUENTA',
+    'room.back':'← LOBBY','room.member':'MIEMBRO','room.exit':'↩ SALIR',
+    'room.closed':'⏹ SESIÓN CERRADA — esperando reapertura por el creador',
+    'notif.b3':'Salas abiertas para la sesión de hoy.','notif.forex':'London Session abierta.',
+    'v.name':'Ingresa tu nombre','v.email':'Email inválido',
+    'v.fill':'Completa email y contraseña','v.roomname':'Dale un nombre a la sala',
+    'v.maxassets':'Máximo 2 activos por sala',
+    'v.pwd6':'La contraseña debe tener al menos 6 caracteres','v.pwdmatch':'Las contraseñas no coinciden',
+    'v.welcome':'¡Bienvenido, {0}!','v.room_full':'¡Sala llena! Prueba otra.','v.left_room':'Saliste de la sala.'
+  },
+  zh:{
+    'sp.enter':'进入 →','sp.connected':'位交易员在线',
+    'sp.title':'市场永不停歇，<br><span>你也一样。</span>',
+    'sp.subtitle':'与B3、外汇和加密货币交易员实时集体分析。',
+    'sp.rooms_lbl':'直播房间','sp.empty':'暂无直播房间',
+    'back':'← 返回',
+    'cad.title1':'创建账户','cad.sub1':'您的数据安全有保障。',
+    'cad.name_lbl':'全名','cad.name_ph':'张三',
+    'cad.email_lbl':'邮箱','cad.tel_lbl':'电话','cad.tel_ph':'+86 130 0000 0000',
+    'cad.id_lbl':'您的房间ID','cad.id_note':'所有人对您的称呼。唯一且永久。',
+    'cad.id_regen':'↻ 换一个','cad.next':'继续 →',
+    'cad.title2':'创建密码','cad.pwd_lbl':'密码',
+    'cad.pwd_ph':'至少6个字符','cad.show':'显示','cad.hide':'隐藏',
+    'cad.cpwd_lbl':'确认密码','cad.cpwd_ph':'重复密码',
+    'cad.finish':'创建账户 →','cad.creating':'创建中...',
+    'cad.title3':'账户已创建！','cad.note':'现在记下您的密码。',
+    'cad.enter_lobby':'进入大厅 →',
+    'login.title':'登录','login.sub':'使用您的邮箱和密码。',
+    'login.pwd_lbl':'密码','login.pwd_ph':'您的密码',
+    'login.btn':'登录 →','login.loading':'登录中...','login.or':'或','login.register':'创建账户',
+    'modal.title_prefix':'创建房间','modal.name_lbl':'房间名称',
+    'modal.name_ph':'例：高手云集、精英战队...','modal.mkt_lbl':'市场',
+    'modal.assets_lbl':'资产','modal.limit_lbl':'交易员上限',
+    'modal.cancel':'取消','modal.create':'▶ 创建房间','modal.creating':'创建中...',
+    'auth.title':'需要登录',
+    'auth.sub':'进入房间需要账户。注册快速且免费！',
+    'auth.cancel':'取消','auth.enter':'登录 / 注册',
+    'del.title':'⚠️ 删除房间？',
+    'del.sub':'此操作不可撤销。房间及所有历史记录将被删除。',
+    'del.cancel':'取消','del.confirm':'是的，删除',
+    'lobby.search_ph':'搜索房间...','lobby.new_room':'+ 新房间',
+    'lobby.sponsored':'赞助房间','lobby.sponsored_sub':'为您的经纪商提供展示空间',
+    'lobby.available':'可用',
+    'lobby.sponsored_txt':'将您的品牌带到B3活跃交易员的中心。',
+    'lobby.know_more':'了解更多 →','lobby.live':'直播',
+    'lobby.traders':'交易员','lobby.salas':'房间',
+    'lobby.most_active':'最活跃','lobby.forex_24h':'外汇',
+    'lobby.notifications':'通知','lobby.loading':'加载房间中...',
+    'lobby.no_rooms':'暂无直播房间。',
+    'rooms.loading':'加载房间中...','rooms.error':'加载房间出错。',
+    'rooms.open_hdr':'开放房间','rooms.word':'间',
+    'rooms.full_btn':'满员','rooms.enter_btn':'开放','rooms.closed_btn':'已关闭',
+    'mob.home':'首页','mob.rooms':'房间','mob.market':'市场',
+    'mob.predict':'预测','mob.profile':'个人资料',
+    'mob.login_title':'登录 TradeRoom','mob.login_btn':'登录 →',
+    'mob.or':'或','mob.register':'创建账户',
+    'mob.not_auth':'未认证','mob.enter_btn':'登录 →','mob.create_acc':'创建账户',
+    'room.back':'← 大厅','room.member':'成员','room.exit':'↩ 退出',
+    'room.closed':'⏹ 交易时段已关闭 — 等待创建者重新开放',
+    'notif.b3':'今日交易房间已开放。','notif.forex':'伦敦交易时段已开放。',
+    'v.name':'请输入您的姓名','v.email':'邮箱无效',
+    'v.fill':'请填写邮箱和密码','v.roomname':'请为房间命名',
+    'v.maxassets':'每个房间最多2个资产',
+    'v.pwd6':'密码至少需要6个字符','v.pwdmatch':'两次密码不一致',
+    'v.welcome':'欢迎，{0}！','v.room_full':'房间已满！请尝试其他房间。','v.left_room':'您已离开房间。'
+  },
+  ja:{
+    'sp.enter':'入室 →','sp.connected':'人のトレーダーが接続中',
+    'sp.title':'市場は止まらない。<br><span>あなたも。</span>',
+    'sp.subtitle':'B3、外国為替、暗号通貨のトレーダーによるリアルタイム集合分析。',
+    'sp.rooms_lbl':'ライブルーム','sp.empty':'ライブルームはありません',
+    'back':'← 戻る',
+    'cad.title1':'アカウント作成','cad.sub1':'データは安全に保管されます。',
+    'cad.name_lbl':'フルネーム','cad.name_ph':'山田 太郎',
+    'cad.email_lbl':'メール','cad.tel_lbl':'電話番号','cad.tel_ph':'090-0000-0000',
+    'cad.id_lbl':'ルームID','cad.id_note':'他のユーザーに表示されます。一意で永続的です。',
+    'cad.id_regen':'↻ 変更','cad.next':'続ける →',
+    'cad.title2':'パスワードを作成','cad.pwd_lbl':'パスワード',
+    'cad.pwd_ph':'最低6文字','cad.show':'表示','cad.hide':'非表示',
+    'cad.cpwd_lbl':'パスワード確認','cad.cpwd_ph':'パスワードを繰り返す',
+    'cad.finish':'アカウント作成 →','cad.creating':'作成中...',
+    'cad.title3':'アカウント作成完了！','cad.note':'今すぐパスワードを記録してください。',
+    'cad.enter_lobby':'ロビーに入る →',
+    'login.title':'ログイン','login.sub':'メールとパスワードを使用してください。',
+    'login.pwd_lbl':'パスワード','login.pwd_ph':'パスワード',
+    'login.btn':'ログイン →','login.loading':'ログイン中...','login.or':'または','login.register':'アカウント作成',
+    'modal.title_prefix':'ルーム作成','modal.name_lbl':'ルーム名',
+    'modal.name_ph':'例：上級者専用、プロトレーダー...','modal.mkt_lbl':'市場',
+    'modal.assets_lbl':'資産','modal.limit_lbl':'トレーダー上限',
+    'modal.cancel':'キャンセル','modal.create':'▶ ルーム作成','modal.creating':'作成中...',
+    'auth.title':'ログインが必要です',
+    'auth.sub':'ルームに入るにはアカウントが必要です。簡単・無料！',
+    'auth.cancel':'キャンセル','auth.enter':'ログイン / 登録',
+    'del.title':'⚠️ ルームを削除しますか？',
+    'del.sub':'この操作は永続的です。ルームとすべての履歴が削除されます。',
+    'del.cancel':'キャンセル','del.confirm':'はい、削除する',
+    'lobby.search_ph':'ルームを検索...','lobby.new_room':'+ 新規ルーム',
+    'lobby.sponsored':'スポンサールーム','lobby.sponsored_sub':'ブローカー向けスペース',
+    'lobby.available':'利用可能',
+    'lobby.sponsored_txt':'B3のアクティブなトレーダーにブランドを届けましょう。',
+    'lobby.know_more':'詳細 →','lobby.live':'ライブ',
+    'lobby.traders':'トレーダー','lobby.salas':'ルーム',
+    'lobby.most_active':'トップ','lobby.forex_24h':'外為',
+    'lobby.notifications':'通知','lobby.loading':'ルーム読込中...',
+    'lobby.no_rooms':'現在ライブルームはありません。',
+    'rooms.loading':'ルーム読込中...','rooms.error':'ルームの読込に失敗しました。',
+    'rooms.open_hdr':'オープンルーム','rooms.word':'ルーム',
+    'rooms.full_btn':'満員','rooms.enter_btn':'入室','rooms.closed_btn':'終了',
+    'mob.home':'ホーム','mob.rooms':'ルーム','mob.market':'市場',
+    'mob.predict':'予測','mob.profile':'プロフィール',
+    'mob.login_title':'TradeRoomにログイン','mob.login_btn':'ログイン →',
+    'mob.or':'または','mob.register':'アカウント作成',
+    'mob.not_auth':'未認証','mob.enter_btn':'ログイン →','mob.create_acc':'アカウント作成',
+    'room.back':'← ロビー','room.member':'メンバー','room.exit':'↩ 退出',
+    'room.closed':'⏹ セッション終了 — 作成者の再開を待機中',
+    'notif.b3':'本日のルームが開放されました。','notif.forex':'ロンドンセッションが開始されました。',
+    'v.name':'名前を入力してください','v.email':'メールアドレスが無効です',
+    'v.fill':'メールとパスワードを入力してください','v.roomname':'ルーム名を入力してください',
+    'v.maxassets':'ルームあたり最大2つの資産',
+    'v.pwd6':'パスワードは6文字以上必要です','v.pwdmatch':'パスワードが一致しません',
+    'v.welcome':'ようこそ、{0}！','v.room_full':'満員です！他のルームをお試しください。','v.left_room':'ルームを退出しました。'
+  },
+  ru:{
+    'sp.enter':'Войти →','sp.connected':'трейдеров подключено',
+    'sp.title':'Рынок никогда не останавливается.<br><span>И ты тоже.</span>',
+    'sp.subtitle':'Коллективный анализ в реальном времени среди трейдеров B3, Форекс и Крипто.',
+    'sp.rooms_lbl':'КОМНАТЫ В ЭФИРЕ','sp.empty':'Нет активных комнат',
+    'back':'← НАЗАД',
+    'cad.title1':'Создать аккаунт','cad.sub1':'Ваши данные в безопасности.',
+    'cad.name_lbl':'ПОЛНОЕ ИМЯ','cad.name_ph':'Иван Иванов',
+    'cad.email_lbl':'EMAIL','cad.tel_lbl':'ТЕЛЕФОН','cad.tel_ph':'+7 900 000-00-00',
+    'cad.id_lbl':'ВАШ ID В КОМНАТАХ','cad.id_note':'Как вас увидят все. Уникальный и постоянный.',
+    'cad.id_regen':'↻ ДРУГОЙ','cad.next':'ПРОДОЛЖИТЬ →',
+    'cad.title2':'Создайте пароль','cad.pwd_lbl':'ПАРОЛЬ',
+    'cad.pwd_ph':'Минимум 6 символов','cad.show':'ПОКАЗАТЬ','cad.hide':'СКРЫТЬ',
+    'cad.cpwd_lbl':'ПОДТВЕРДИТЬ ПАРОЛЬ','cad.cpwd_ph':'Повторите пароль',
+    'cad.finish':'СОЗДАТЬ АККАУНТ →','cad.creating':'СОЗДАЁМ...',
+    'cad.title3':'Аккаунт создан!','cad.note':'Запишите пароль прямо сейчас.',
+    'cad.enter_lobby':'ВОЙТИ В ЛОББИ →',
+    'login.title':'Войти','login.sub':'Используйте email и пароль.',
+    'login.pwd_lbl':'ПАРОЛЬ','login.pwd_ph':'Ваш пароль',
+    'login.btn':'ВОЙТИ →','login.loading':'ВХОДИМ...','login.or':'или','login.register':'СОЗДАТЬ АККАУНТ',
+    'modal.title_prefix':'СОЗДАТЬ КОМНАТУ','modal.name_lbl':'НАЗВАНИЕ КОМНАТЫ',
+    'modal.name_ph':'Напр: ПОБЕДИТЕЛИ, ПРОФИ...','modal.mkt_lbl':'РЫНОК',
+    'modal.assets_lbl':'АКТИВЫ','modal.limit_lbl':'ЛИМИТ ТРЕЙДЕРОВ',
+    'modal.cancel':'ОТМЕНА','modal.create':'▶ СОЗДАТЬ КОМНАТУ','modal.creating':'СОЗДАЁМ...',
+    'auth.title':'Требуется вход',
+    'auth.sub':'Для входа в комнату нужен аккаунт. Это быстро и бесплатно!',
+    'auth.cancel':'ОТМЕНА','auth.enter':'ВОЙТИ / ЗАРЕГИСТРИРОВАТЬСЯ',
+    'del.title':'⚠️ Удалить комнату?',
+    'del.sub':'Это действие постоянно. Комната и вся история будут удалены.',
+    'del.cancel':'ОТМЕНА','del.confirm':'ДА, УДАЛИТЬ',
+    'lobby.search_ph':'Поиск комнаты...','lobby.new_room':'+ НОВАЯ КОМНАТА',
+    'lobby.sponsored':'СПОНСОРСКАЯ КОМНАТА','lobby.sponsored_sub':'Пространство для вашего брокера',
+    'lobby.available':'ДОСТУПНО',
+    'lobby.sponsored_txt':'Достигните активных трейдеров B3 с вашим брендом.',
+    'lobby.know_more':'УЗНАТЬ БОЛЬШЕ →','lobby.live':'В ЭФИРЕ',
+    'lobby.traders':'трейдеров','lobby.salas':'комнат',
+    'lobby.most_active':'топ','lobby.forex_24h':'форекс',
+    'lobby.notifications':'УВЕДОМЛЕНИЯ','lobby.loading':'Загрузка комнат...',
+    'lobby.no_rooms':'Нет активных комнат в данный момент.',
+    'rooms.loading':'Загрузка комнат...','rooms.error':'Ошибка загрузки комнат.',
+    'rooms.open_hdr':'ОТКРЫТЫЕ КОМНАТЫ','rooms.word':'КОМНАТ',
+    'rooms.full_btn':'ЗАНЯТА','rooms.enter_btn':'ОТКРЫТА','rooms.closed_btn':'ЗАКРЫТА',
+    'mob.home':'Главная','mob.rooms':'Комнаты','mob.market':'Рынок',
+    'mob.predict':'Прогноз','mob.profile':'Профиль',
+    'mob.login_title':'Войти в TradeRoom','mob.login_btn':'ВОЙТИ →',
+    'mob.or':'или','mob.register':'СОЗДАТЬ АККАУНТ',
+    'mob.not_auth':'Не авторизован','mob.enter_btn':'ВОЙТИ →','mob.create_acc':'СОЗДАТЬ АККАУНТ',
+    'room.back':'← ЛОББИ','room.member':'УЧАСТНИК','room.exit':'↩ ВЫХОД',
+    'room.closed':'⏹ СЕССИЯ ЗАКРЫТА — ожидание открытия создателем',
+    'notif.b3':'Комнаты открыты для сегодняшней сессии.','notif.forex':'Лондонская сессия открыта.',
+    'v.name':'Введите ваше имя','v.email':'Неверный email',
+    'v.fill':'Заполните email и пароль','v.roomname':'Дайте название комнате',
+    'v.maxassets':'Максимум 2 актива на комнату',
+    'v.pwd6':'Пароль должен содержать не менее 6 символов','v.pwdmatch':'Пароли не совпадают',
+    'v.welcome':'Добро пожаловать, {0}!','v.room_full':'Комната занята! Попробуйте другую.','v.left_room':'Вы вышли из комнаты.'
+  }
+}
+
+function T(k){return(LANG[currentLang]||LANG.pt)[k]||LANG.pt[k]||k}
+
+function applyLang(l){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var t=(LANG[l]||LANG.pt)[el.getAttribute('data-i18n')]
+    if(t!==undefined)el.textContent=t
+  })
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el){
+    var t=(LANG[l]||LANG.pt)[el.getAttribute('data-i18n-html')]
+    if(t!==undefined)el.innerHTML=t
+  })
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
+    var t=(LANG[l]||LANG.pt)[el.getAttribute('data-i18n-ph')]
+    if(t!==undefined)el.placeholder=t
+  })
+  document.documentElement.lang=l==='pt'?'pt-BR':l
+}
+
+function setLang(l){
+  currentLang=l
+  localStorage.setItem('tr_lang',l)
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===l)})
+  applyLang(l)
+}
 ;(function(){
   const canvas=document.getElementById('sp-neural');if(!canvas)return;
   const ctx=canvas.getContext('2d');
@@ -2272,7 +2639,7 @@ function mobRenderRooms() {
   if (!list) return
   var rooms = mobCurFilter === 'all' ? allRooms : allRooms.filter(function(r){ return r.mercado === mobCurFilter })
   if (!rooms.length) {
-    list.innerHTML = '<div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">Nenhuma sala ao vivo no momento.</div>'
+    list.innerHTML = '<div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">' + T('lobby.no_rooms') + '</div>'
     return
   }
   var COL = {
@@ -2287,7 +2654,7 @@ function mobRenderRooms() {
     var lotada = ocupacao >= limite
     var encerrado = !!r.pregao_encerrado
     var ativo = (r.ativos && r.ativos.length) ? r.ativos.slice(0, 2).join(' · ') : r.mercado
-    var statusLabel = encerrado ? 'ENCERRADO' : (lotada ? 'LOTADA' : 'ENTRAR')
+    var statusLabel = encerrado ? T('rooms.closed_btn') : (lotada ? T('rooms.full_btn') : T('rooms.enter_btn'))
     var statusColor = encerrado ? 'var(--t4)' : (lotada ? 'var(--r)' : 'var(--g)')
     var disabled = lotada || encerrado
     return '<div class="mob-room-card" onclick="mobEntrar(\'' + r.id + '\')">' +
@@ -2763,7 +3130,7 @@ function closeMobOverlay() {
 async function doMobLogin() {
   var email = document.getElementById('ml-email').value.trim()
   var pwd   = document.getElementById('ml-pwd').value
-  if (!email || !pwd) { toast('Preencha email e senha', 't-r'); return }
+  if (!email || !pwd) { toast(T('v.fill'), 't-r'); return }
   var btn = document.querySelector('#mob-overlay .mob-btn-main')
   if (btn) { btn.textContent = 'ENTRANDO...'; btn.disabled = true }
   var res = await sb.auth.signInWithPassword({ email: email, password: pwd })
@@ -2771,7 +3138,7 @@ async function doMobLogin() {
   if (res.error) { toast(res.error.message || 'Erro ao entrar', 't-r'); return }
   await loadUserProfile(res.data.user)
   closeMobOverlay()
-  toast('Bem-vindo, ' + currentUser.trader_id + '!', 't-g')
+  toast(T('v.welcome').replace('{0}', currentUser.trader_id), 't-g')
   if (mobPendingRoomId) {
     var pid = mobPendingRoomId
     mobPendingRoomId = null
