@@ -1636,7 +1636,7 @@ var criadorMap = {}
 async function loadRooms() {
   const el = document.getElementById('rooms-list')
   el.innerHTML = '<div class="loading-rooms"><span class="loading-spin"></span>Carregando salas...</div>'
-  const { data, error } = await sb.from('salas').select('*').eq('ativa', true).order('criado_em', { ascending: false })
+  const { data, error } = await sb.from('salas').select('*').or('ativa.eq.true,ativa.is.null').order('criado_em', { ascending: false })
   if (error) { el.innerHTML = '<div class="loading-rooms" style="color:var(--r)">Erro ao carregar salas.</div>'; return }
   allRooms = data || []
   renderRooms('')
@@ -1695,7 +1695,7 @@ function renderRooms(filter) {
         + '<div class="nc-circle ' + cls + '">TR</div>'
         + '<div class="nc-info">'
           + '<div class="nc-sala">Sala</div>'
-          + '<div class="nc-nome">' + r.nome.toLowerCase() + '</div>'
+          + '<div class="nc-nome">' + (r.nome || '').toLowerCase() + '</div>'
         + '</div>'
         + '<div class="nc-btn-wrap">' + btnHtml + '</div>'
       + '</div>'
@@ -2103,7 +2103,7 @@ async function loadSplashRooms() {
   var el = document.getElementById('sp-rooms-list')
   if (!el) return
   try {
-    var res = await sb.from('salas').select('*').eq('ativa', true)
+    var res = await sb.from('salas').select('*').or('ativa.eq.true,ativa.is.null')
       .order('criado_em', { ascending: false }).limit(3)
     var rooms = res.data || []
     if (!rooms.length) {
@@ -2119,7 +2119,7 @@ async function loadSplashRooms() {
       return '<div class="sp-room" onclick="splashEnter()">'
         + '<div class="sp-room-left">'
         + '<span class="sp-badge ' + mkt[0] + '">' + mkt[1] + '</span>'
-        + '<div><div class="sp-room-name">' + r.nome + '</div></div>'
+        + '<div><div class="sp-room-name">' + (r.nome || '') + '</div></div>'
         + '</div>'
         + '<div class="sp-occ"><span class="sp-occ-bar"><span style="width:' + pct + '%"></span></span>'
         + '<span class="sp-occ-txt">' + ocupacao + '/' + limite + '</span></div>'
@@ -2293,7 +2293,7 @@ function mobRenderRooms() {
     return '<div class="mob-room-card" onclick="mobEntrar(\'' + r.id + '\')">' +
       '<div class="mob-room-badge" style="' + c.badge + '">' + r.mercado + '</div>' +
       '<div class="mob-room-info">' +
-        '<div class="mob-room-name">' + r.nome + '</div>' +
+        '<div class="mob-room-name">' + (r.nome || '') + '</div>' +
         '<div class="mob-room-host">' + ativo + ' · ' + ocupacao + '/' + limite + '</div>' +
       '</div>' +
       '<div class="mob-room-right">' +
