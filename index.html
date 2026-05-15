@@ -128,7 +128,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .dl{flex:1;height:1px;background:var(--border)}
 .dt{font-family:var(--mono);font-size:10px;color:var(--t4)}
 #s-lobby{min-height:100vh}
-.market-tabs{display:flex;background:var(--bg1);border-bottom:1px solid var(--border);padding:0 16px;gap:2px;flex-shrink:0}
+.market-tabs{display:flex;background:var(--bg1);border-bottom:1px solid var(--border);padding:0 16px;gap:2px;flex-shrink:0;position:relative;z-index:51}
 .mtab{display:flex;align-items:center;gap:6px;padding:10px 14px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:all .18s;letter-spacing:.5px}
 .mtab:hover{color:var(--t2)}
 .mtab.ab3{color:#00aaff;border-bottom-color:#00aaff}.mtab.afx{color:#ff2040;border-bottom-color:#ff2040}.mtab.acr{color:#ffe000;border-bottom-color:#ffe000}.mtab.aprd{color:#a78bfa;border-bottom-color:#a78bfa}
@@ -791,7 +791,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="mtab ab3" id="mtab-b3" onclick="switchMkt('B3',this)"><div class="mtab-dot" style="background:#00aaff"></div>B3<span class="mtab-n nb3" id="cnt-b3">0</span></div>
     <div class="mtab" id="mtab-fx" onclick="switchMkt('Forex',this)"><div class="mtab-dot" style="background:#ff2040"></div>FOREX<span class="mtab-n nfx" id="cnt-fx">0</span></div>
     <div class="mtab" id="mtab-cr" onclick="switchMkt('Cripto',this)"><div class="mtab-dot" style="background:#ffe000"></div>CRIPTO<span class="mtab-n ncr" id="cnt-cr">0</span></div>
-    <div class="mtab" id="mtab-prd" onclick="switchToPreditivo(this)" style="margin-left:auto"><div class="mtab-dot" style="background:#a78bfa"></div>PREDITIVO</div>
+    <div style="width:1px;background:var(--border);margin:8px 8px"></div>
+    <div class="mtab" id="mtab-prd" onclick="switchToPreditivo(this)"><div class="mtab-dot" style="background:#a78bfa"></div>PREDITIVO</div>
   </div>
   <div class="lobby-body">
     <div class="lobby-main">
