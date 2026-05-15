@@ -1794,20 +1794,26 @@ function renderRooms(filter) {
 
 function filterRooms(v) { renderRooms(v) }
 function switchMkt(mkt, el) {
-  document.getElementById('desk-preditivo').style.display = 'none'
-  document.getElementById('lobby-body').style.display = 'flex'
-  document.getElementById('new-btn').style.display = ''
+  const _dp = document.getElementById('desk-preditivo')
+  const _lb = document.getElementById('lobby-body')
+  const _nb = document.getElementById('new-btn')
+  if (_dp) _dp.style.display = 'none'
+  if (_lb) _lb.style.display = 'flex'
+  if (_nb) _nb.style.display = ''
   currentMkt = mkt
   document.querySelectorAll('.mtab').forEach(t => { t.className = 'mtab' })
   el.classList.add({ B3:'ab3', Forex:'afx', Cripto:'acr' }[mkt])
-  document.getElementById('new-btn').className = 'new-btn ' + { B3:'nb3-btn', Forex:'nfx-btn', Cripto:'ncr-btn' }[mkt]
+  if (_nb) _nb.className = 'new-btn ' + { B3:'nb3-btn', Forex:'nfx-btn', Cripto:'ncr-btn' }[mkt]
   renderRooms(document.getElementById('search-inp').value)
 }
 
 function switchToPreditivo(el) {
-  document.getElementById('lobby-body').style.display = 'none'
-  document.getElementById('new-btn').style.display = 'none'
-  document.getElementById('desk-preditivo').style.display = 'block'
+  const _lb = document.getElementById('lobby-body')
+  const _nb = document.getElementById('new-btn')
+  const _dp = document.getElementById('desk-preditivo')
+  if (_lb) _lb.style.display = 'none'
+  if (_nb) _nb.style.display = 'none'
+  if (_dp) _dp.style.display = 'block'
   document.querySelectorAll('.mtab').forEach(t => { t.className = 'mtab' })
   el.classList.add('aprd')
   if (!enquetes.length) loadPreditivo()
