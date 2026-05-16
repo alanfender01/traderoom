@@ -34,6 +34,15 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .profile-chip:hover{border-color:var(--g)}
 .pc-av{width:26px;height:26px;border-radius:50%;background:rgba(0,229,160,.15);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--g)}
 .pc-id{font-family:var(--mono);font-size:11px;color:var(--t1)}
+.profile-wrap{position:relative}
+.profile-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:6px;min-width:160px;z-index:200;display:none;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.profile-menu.open{display:block}
+.pm-user{font-family:var(--mono);font-size:10px;color:var(--t4);padding:6px 12px 4px;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pm-divider{height:1px;background:var(--border);margin:4px 0}
+.pm-item{font-family:var(--mono);font-size:11px;padding:8px 12px;border-radius:5px;cursor:pointer;transition:background .15s;color:var(--t2);display:flex;align-items:center;gap:8px}
+.pm-item:hover{background:var(--bg3);color:var(--t1)}
+.pm-logout{color:var(--r)!important}
+.pm-logout:hover{background:rgba(255,69,96,.08)!important;color:var(--r)!important}
 .btn-p{padding:12px 28px;background:var(--g);border:none;border-radius:7px;color:#080a0c;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:opacity .15s}
 .btn-p:hover{opacity:.85}
 .btn-g{padding:12px 24px;background:transparent;border:1px solid var(--border2);border-radius:7px;color:var(--t2);font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s}
@@ -786,9 +795,16 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <div id="s-lobby" class="screen">
   <div class="topnav">
     <div class="tn-logo" onclick="go('s-lobby')">TRADE<span>ROOM</span></div>
-    <div class="profile-chip" onclick="toast('Perfil em breve!','t-b')">
-      <div class="pc-av" id="lobby-av">TR</div>
-      <span class="pc-id" id="lobby-uid">visitante</span>
+    <div class="profile-wrap">
+      <div class="profile-chip" id="profile-chip" onclick="toggleProfileMenu()">
+        <div class="pc-av" id="lobby-av">TR</div>
+        <span class="pc-id" id="lobby-uid">visitante</span>
+      </div>
+      <div class="profile-menu" id="profile-menu">
+        <div class="pm-user" id="pm-username">visitante</div>
+        <div class="pm-divider"></div>
+        <div class="pm-item pm-logout" onclick="doDesktopLogout()">⏻ SAIR</div>
+      </div>
     </div>
   </div>
   <div class="market-tabs">
@@ -1708,6 +1724,7 @@ sb.auth.onAuthStateChange(async function(event, session) {
     currentUser = { trader_id: 'visitante', loggedIn: false }
     updateUserUI()
     if (typeof mobUpdatePerfil === 'function') mobUpdatePerfil()
+    go('s-splash')
   }
 })
 
@@ -1738,11 +1755,33 @@ function updateUserUI() {
   const av = (currentUser.trader_id || 'TR').substring(0,2).toUpperCase()
   document.getElementById('lobby-av').textContent = av
   document.getElementById('lobby-uid').textContent = currentUser.trader_id || 'visitante'
+  var pmUser = document.getElementById('pm-username')
+  if (pmUser) pmUser.textContent = currentUser.trader_id || 'visitante'
   var btn = document.getElementById('btn-nova-enq')
   if (btn) btn.style.display = isAdmin() ? '' : 'none'
   var mobBtn = document.getElementById('mob-btn-nova-enq')
   if (mobBtn) mobBtn.style.display = isAdmin() ? '' : 'none'
 }
+
+function toggleProfileMenu() {
+  if (!currentUser.loggedIn) { go('s-login'); return }
+  var menu = document.getElementById('profile-menu')
+  if (menu) menu.classList.toggle('open')
+}
+
+async function doDesktopLogout() {
+  var menu = document.getElementById('profile-menu')
+  if (menu) menu.classList.remove('open')
+  await sb.auth.signOut()
+}
+
+document.addEventListener('click', function(e) {
+  var menu = document.getElementById('profile-menu')
+  var chip = document.getElementById('profile-chip')
+  if (menu && menu.classList.contains('open') && !menu.contains(e.target) && chip && !chip.contains(e.target)) {
+    menu.classList.remove('open')
+  }
+})
 
 // ==================== ROOMS ====================
 var criadorMap = {}
