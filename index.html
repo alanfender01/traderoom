@@ -1134,7 +1134,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="mob-topbar">
       <div class="mob-tlogo">PREDITIVO <span>ENQUETES</span></div>
     </div>
-    <div style="padding:8px 16px 6px;font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px;border-bottom:1px solid var(--border);flex-shrink:0">MERCADO PREDITIVO · VOTE E ACOMPANHE</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px 6px;border-bottom:1px solid var(--border);flex-shrink:0">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--t4);letter-spacing:2px">MERCADO PREDITIVO · VOTE E ACOMPANHE</div>
+      <button id="mob-btn-nova-enq" class="btn-nova-enq" onclick="openModalEnq()" style="display:none">+ NOVA ENQUETE</button>
+    </div>
     <div id="mob-enquetes-list" style="padding:16px;overflow-y:auto;flex:1">
       <div style="padding:40px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t4)">Carregando enquetes...</div>
     </div>
@@ -1737,6 +1740,8 @@ function updateUserUI() {
   document.getElementById('lobby-uid').textContent = currentUser.trader_id || 'visitante'
   var btn = document.getElementById('btn-nova-enq')
   if (btn) btn.style.display = isAdmin() ? '' : 'none'
+  var mobBtn = document.getElementById('mob-btn-nova-enq')
+  if (mobBtn) mobBtn.style.display = isAdmin() ? '' : 'none'
 }
 
 // ==================== ROOMS ====================
@@ -2853,6 +2858,7 @@ function renderEnqueteCard(e) {
       '</div>' +
     '</div>' +
     '<div class="mob-poll-votes">' + total + ' voto' + (total !== 1 ? 's' : '') + '</div>' +
+    (isAdmin() && !encerrada ? '<button class="enq-close-btn" onclick="encerrarEnquete(\'' + e.id + '\')">⏹ ENCERRAR ENQUETE</button>' : '') +
   '</div>'
 }
 
