@@ -38,13 +38,23 @@ GRANT SELECT ON enquetes      TO anon, authenticated;
 GRANT SELECT ON enquete_votos TO anon, authenticated;
 GRANT INSERT ON enquete_votos TO authenticated;
 
+-- Correções aplicadas:
+-- 1. SET search_path = public  → obrigatório para SECURITY DEFINER no Supabase
+-- 2. SET row_security = off    → desativa RLS dentro da função; sem isso o INSERT
+--    em enquete_votos falha porque auth.uid() é NULL no contexto do owner (postgres)
+--    e a policy "auth.uid() = usuario_id" rejeita silenciosamente
+-- 3. GRANT EXECUTE adicionado abaixo → sem ele authenticated não consegue chamar o RPC
 CREATE OR REPLACE FUNCTION votar_enquete(
   p_enquete_id UUID,
   p_usuario_id UUID,
   p_voto       BOOLEAN
 )
 RETURNS JSONB
-LANGUAGE plpgsql SECURITY DEFINER AS $$
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+SET row_security = off
+AS $$
 DECLARE
   v_enquete enquetes%ROWTYPE;
 BEGIN
@@ -76,6 +86,8 @@ EXCEPTION WHEN unique_violation THEN
   RETURN jsonb_build_object('ok', false, 'erro', 'Você já votou nesta enquete');
 END;
 $$;
+
+GRANT EXECUTE ON FUNCTION votar_enquete(UUID, UUID, BOOLEAN) TO authenticated;
 
 -- Enquete de teste (NOW() com TIMESTAMPTZ já é UTC — sem ambiguidade de fuso)
 INSERT INTO enquetes (pergunta, encerra_em)
