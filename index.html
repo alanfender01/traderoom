@@ -498,7 +498,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   /* Chat: mensagens ocupam o espaço restante */
   #s-room #side-chat{flex:1;min-height:0;overflow:hidden}
   #s-room .chat-msgs{flex:1;overflow-y:auto;min-height:0}
-  #s-room .chat-inp-row{padding:5px 6px;flex-shrink:0}
+  #s-room .chat-inp-row{padding:5px 6px;flex-shrink:0;padding-bottom:max(8px,env(safe-area-inset-bottom,8px))}
   #s-room .chat-inp{font-size:11px;padding:6px 8px}
 
   /* ─── Botão Sair no header (FREQUENTADOR) ──────── */
