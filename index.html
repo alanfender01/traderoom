@@ -856,6 +856,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="ls-title" data-i18n="lobby.notifications">NOTIFICAÇÕES</div>
       <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--g)"></div><span class="ni-type" style="color:var(--g)">B3</span><span class="ni-time">agora</span></div><div class="ni-text" data-i18n="notif.b3">Salas abertas para o pregão de hoje.</div></div>
       <div class="notif"><div class="ni-hd"><div class="ni-dot" style="background:var(--b)"></div><span class="ni-type" style="color:var(--b)">FOREX</span><span class="ni-time">08:30</span></div><div class="ni-text" data-i18n="notif.forex">London Session aberta.</div></div>
+      <div id="home-enquete-widget">ENQUETE</div>
     </div>
   </div>
   <div id="desk-preditivo" style="display:none">
@@ -1735,7 +1736,7 @@ function go(id) {
   if (!el) return
   el.classList.add('on')
   if (id === 's-lobby') {
-    pararRealtime(); loadRooms(); iniciarLobbyRealtime(); loadFeed()
+    pararRealtime(); loadRooms(); iniciarLobbyRealtime(); loadFeed(); loadHomeEnquete()
     var lb = document.getElementById('lobby-body'); if (lb) lb.style.display = 'flex'
     var dp = document.getElementById('desk-preditivo'); if (dp) dp.style.display = 'none'
     var nb = document.getElementById('new-btn'); if (nb) nb.style.display = ''
@@ -2985,6 +2986,22 @@ async function criarEnquete() {
   toast('Enquete criada!', 't-g')
   loadPreditivo()
 }
+async function loadHomeEnquete() {
+  var widget = document.getElementById('home-enquete-widget')
+  if (!widget) return
+  var res = await sb.from('enquetes').select('*').gt('encerra_em', new Date().toISOString()).order('criado_em', { ascending: false }).limit(1)
+  if (res.error || !res.data || !res.data.length) { widget.style.display = 'none'; return }
+  var e = res.data[0]
+  var idx = enquetes.findIndex(function(x) { return x.id === e.id })
+  if (idx === -1) enquetes.push(e); else enquetes[idx] = e
+  if (currentUser.loggedIn && meusVotos[e.id] === undefined) {
+    var vres = await sb.from('enquete_votos').select('voto').eq('usuario_id', currentUser.id).eq('enquete_id', e.id).single()
+    if (vres.data) meusVotos[e.id] = vres.data.voto
+  }
+  widget.style.display = ''
+  widget.innerHTML = renderEnqueteCard(e)
+}
+
 async function encerrarEnquete(id) {
   var res = await sb.from('enquetes').update({ encerra_em: new Date().toISOString() }).eq('id', id)
   if (res.error) { toast('Erro: ' + res.error.message, 't-r'); return }
@@ -3077,6 +3094,7 @@ async function votar(enqueteId, voto) {
   var fCard = document.getElementById('feed-enq-' + enqueteId)
   if (fCard && idx !== -1) { var tmp3 = document.createElement('div'); tmp3.innerHTML = renderFeedEnquete(enquetes[idx]); fCard.replaceWith(tmp3.firstChild) }
   toast('Voto registrado!', 't-g')
+  if (document.getElementById('home-enquete-widget')) loadHomeEnquete()
 }
 
 // ==================== FEED REAL ====================
